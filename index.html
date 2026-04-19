@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>colddev</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Inter, sans-serif;
+  background:#0b0b0c;
+  color:#e6e6e6;
+  overflow-x:hidden;
+}
+
+/* PRELOADER */
+#preloader{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.loader-box{
+  width:90%;
+  max-width:600px;
+  border-radius:16px;
+  overflow:hidden;
+  background:#111;
+}
+.loader-box video{
+  width:100%;
+  display:block;
+}
+.progress{
+  height:3px;
+  background:#222;
+}
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#aaa,#fff);
+  animation:load 3s linear forwards;
+}
+@keyframes load{
+  to{width:100%}
+}
+
+/* BACKGROUND */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* LAYOUT */
+.container{
+  max-width:880px;
+  margin:auto;
+  padding:120px 20px;
+}
+
+/* TEXT */
+h1{
+  font-size:34px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+.sub{
+  color:#aaa;
+  font-size:15px;
+  margin-bottom:30px;
+  line-height:1.5;
+}
+h2{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+/* BUTTON */
+.btn{
+  display:inline-block;
+  padding:10px 16px;
+  border:1px solid #444;
+  color:#fff;
+  text-decoration:none;
+  margin-right:10px;
+  transition:.25s;
+}
+.btn:hover{
+  background:#fff;
+  color:#000;
+}
+
+/* SECTION */
+.section{
+  margin-top:100px;
+}
+
+/* CODE */
+.code{
+  margin-top:40px;
+  color:#bbb;
+  font-family:monospace;
+}
+
+/* SCROLL ANIMATION */
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:all .8s ease;
+}
+.reveal.show{
+  opacity:1;
+  transform:none;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  h1{font-size:26px}
+  .container{padding:80px 16px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="loader-box">
+    <video autoplay muted playsinline>
+      <source src="/loader.mp4" type="video/mp4">
+    </video>
+    <div class="progress">
+      <div class="progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+<canvas id="bg"></canvas>
+
+<div class="container">
+
+  <h1 class="reveal">colddev</h1>
+
+  <div class="sub reveal">
+    создатель инструментов и систем<br>
+    боты, скрипты, сайты под ключ
+  </div>
+
+  <div class="reveal">
+    <a href="#projects" class="btn">проекты</a>
+    <a href="https://t.me/CODEandprofit" class="btn">telegram</a>
+  </div>
+
+  <div class="code reveal" id="code"></div>
+
+  <div class="section reveal" id="projects">
+    <h2>проекты</h2>
+
+    <b>Kufar Sniper Bot</b>
+
+    <p style="color:#aaa;margin-top:10px;">
+      объявления в момент публикации<br>
+      без обновлений, несколько позиций, обход api
+    </p>
+
+    <a href="https://t.me/+2M5vA5hPntAxNTVi" class="btn" style="margin-top:15px;">
+      получить доступ
+    </a>
+
+    <div style="margin-top:20px;color:#999;font-size:14px;">
+      • &lt; 1 сек реакция<br>
+      • 24/7 работа<br>
+      • приватные инструменты
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <h2>заказать</h2>
+
+    <p style="color:#aaa;">
+      напишу бота, сайт или скрипт под задачу
+    </p>
+
+    <a href="https://t.me/CODEandprofit" class="btn" style="margin-top:15px;">
+      заказать
+    </a>
+  </div>
+
+</div>
+
+<script>
+/* PRELOADER */
+setTimeout(()=>{
+  document.getElementById("preloader").style.display="none";
+},3000);
+
+/* TYPE */
+const text='print("Привет!")';
+let i=0;
+function type(){
+  if(i<text.length){
+    document.getElementById("code").innerHTML+=text[i];
+    i++;
+    setTimeout(type,40);
+  }
+}
+type();
+
+/* SCROLL */
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add("show");
+    }
+  });
+},{threshold:0.15});
+
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+/* BG */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+let dots=[];
+for(let i=0;i<70;i++){
+  dots.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    vx:(Math.random()-0.5)*0.5,
+    vy:(Math.random()-0.5)*0.5
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  for(let i=0;i<dots.length;i++){
+    let d=dots[i];
+
+    d.x+=d.vx;
+    d.y+=d.vy;
+
+    if(d.x<0||d.x>canvas.width)d.vx*=-1;
+    if(d.y<0||d.y>canvas.height)d.vy*=-1;
+
+    ctx.fillStyle="#aaa";
+    ctx.fillRect(d.x,d.y,2,2);
+
+    for(let j=i+1;j<dots.length;j++){
+      let d2=dots[j];
+      let dist=Math.hypot(d.x-d2.x,d.y-d2.y);
+
+      if(dist<120){
+        ctx.strokeStyle="rgba(200,200,200,0.1)";
+        ctx.beginPath();
+        ctx.moveTo(d.x,d.y);
+        ctx.lineTo(d2.x,d2.y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
