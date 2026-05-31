@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Geist_Mono, Caveat } from 'next/font/google'
+import { Inter, Source_Code_Pro } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -7,15 +7,16 @@ const inter = Inter({
   subsets: ["latin", "cyrillic"],
   variable: '--font-inter'
 });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: '--font-caveat',
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "700"],
+  variable: '--font-source-code-pro',
 });
 
 export const metadata: Metadata = {
-  title: 'Веб-разработчик | Создание сайтов, боты, автоматизация',
-  description: 'Создаю современные сайты, телеграм ботов, скрипты автоматизации и системы лидогенерации. Превращаю идеи в работающие digital-решения.',
+  title: 'NWO',
+  description: 'NWO.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -42,10 +43,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={`${inter.variable} ${caveat.variable} bg-background`}>
-      <body className="font-sans antialiased">{children}
+    <html lang="ru" className={`${inter.variable} ${sourceCodePro.variable} bg-[#212121]`}>
+      <body className="antialiased">{children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
 }
+
