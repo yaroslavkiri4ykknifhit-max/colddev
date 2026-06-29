@@ -5,24 +5,17 @@ import { Cases } from "@/components/cases"
 import { Stats } from "@/components/stats"
 import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
-import { GridBackground } from "@/components/grid-background"
-import { ColdDevBackground } from "@/components/colddev-bg"
-import SoftAurora from "@/components/soft-aurora"
+import LiquidChrome from "@/components/liquid-chrome"
 
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-x-hidden">
-      <GridBackground />
-      <ColdDevBackground />
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-45">
-        <SoftAurora
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-55">
+        <LiquidChrome
+          baseColor={[0.12, 0.11, 0.12]}
           speed={0.4}
-          scale={1.2}
-          brightness={0.8}
-          color1="#7EBDC2"
-          color2="#BB4430"
-          enableMouseInteraction={true}
-          mouseInfluence={0.2}
+          amplitude={0.3}
+          interactive={true}
         />
       </div>
       <div className="relative z-10">
