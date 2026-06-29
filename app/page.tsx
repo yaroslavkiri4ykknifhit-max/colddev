@@ -1,21 +1,26 @@
+import { Header } from "@/components/header"
+import { Hero } from "@/components/hero"
+import { Services } from "@/components/services"
+import { Cases } from "@/components/cases"
+import { Stats } from "@/components/stats"
+import { Contact } from "@/components/contact"
+import { Footer } from "@/components/footer"
+import { GridBackground } from "@/components/grid-background"
+import { ColdDevBackground } from "@/components/colddev-bg"
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#212121] text-[#c0c0c0] font-mono select-none">
-      <div className="text-center text-[1.45rem] leading-[2.1rem] tracking-normal">
-        <div>NWO.</div>
-        <div>ENTER:</div>
-        <div>
-          <span>[ </span>
-          <a
-            href="https://t.me/+qbeP6wZuBXBiZGZi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#0055ff] hover:text-[#3377ff] underline decoration-[1.5px] underline-offset-[3px]"
-          >
-            ссылка
-          </a>
-          <span> ]</span>
-        </div>
+    <main className="relative min-h-screen overflow-x-hidden">
+      <GridBackground />
+      <ColdDevBackground />
+      <div className="relative z-10">
+        <Header />
+        <Hero />
+        <Services />
+        <Stats />
+        <Cases />
+        <Contact />
+        <Footer />
       </div>
     </main>
   )

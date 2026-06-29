@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { ArrowUpRight, FolderGit2 } from "lucide-react"
+import { GlassSurface } from "@/components/ui/glass-surface"
 
 const cases = [
   {
@@ -97,7 +98,21 @@ function CaseCard({
         />
 
         {/* Тело карточки во всю ширину */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#2E2A2B] p-6 md:p-8 backdrop-blur-xl shadow-2xl transition-all duration-500 hover:border-[#BB4430]/20">
+        <GlassSurface
+          borderRadius={24}
+          borderWidth={0.06}
+          brightness={30}
+          opacity={0.3}
+          blur={15}
+          displace={3}
+          backgroundOpacity={0.08}
+          saturation={1.2}
+          distortionScale={-80}
+          redOffset={2}
+          greenOffset={8}
+          blueOffset={15}
+          className="relative overflow-hidden rounded-3xl border border-white/10 p-6 md:p-8 shadow-2xl transition-all duration-500 hover:border-[#BB4430]/20"
+        >
           
           {/* Интерактивный блик */}
           <div className="pointer-events-none absolute -inset-px bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -178,7 +193,7 @@ function CaseCard({
           <div className="pointer-events-none absolute left-6 bottom-4 text-[6rem] font-black text-white/[0.008] select-none leading-none">
             0{caseItem.id}
           </div>
-        </div>
+        </GlassSurface>
       </motion.div>
     </motion.div>
   )

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Source_Code_Pro } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Toaster } from 'sonner'
 import './globals.css'
 
 const inter = Inter({ 
@@ -15,9 +16,9 @@ const sourceCodePro = Source_Code_Pro({
 });
 
 export const metadata: Metadata = {
-  title: 'NWO',
-  description: 'NWO.',
-  generator: 'v0.app',
+  title: 'COLDDEV | Студия веб-разработки и дизайна',
+  description: 'Создание современных сайтов, Telegram-ботов, автоматизация бизнес-процессов и лидогенерация. Превращаем идеи в работающие инструменты для вашего бизнеса.',
+  generator: 'COLDDEV',
   icons: {
     icon: [
       {
@@ -44,7 +45,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${inter.variable} ${sourceCodePro.variable} bg-[#212121]`}>
-      <body className="antialiased">{children}
+      <body className="antialiased">
+        {children}
+        <Toaster theme="dark" closeButton richColors position="bottom-right" />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

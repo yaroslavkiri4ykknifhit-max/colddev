@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { GlassSurface } from "@/components/ui/glass-surface"
 
 const services = [
   {
@@ -92,13 +93,31 @@ export function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300"
+            className="h-full flex"
           >
-            <div className="text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
-              {service.icon}
-            </div>
-            <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-            <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+            <GlassSurface
+              borderRadius={16}
+              borderWidth={0.06}
+              brightness={30}
+              opacity={0.3}
+              blur={12}
+              displace={2}
+              backgroundOpacity={0.05}
+              saturation={1.1}
+              distortionScale={-30}
+              redOffset={1}
+              greenOffset={4}
+              blueOffset={8}
+              className="group p-8 border border-border hover:border-primary/50 transition-all duration-300 w-full text-left"
+            >
+              <div className="flex flex-col h-full w-full">
+                <div className="text-primary mb-6 group-hover:scale-110 transition-transform duration-300 w-fit">
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-white">{service.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-sm flex-grow">{service.description}</p>
+              </div>
+            </GlassSurface>
           </motion.div>
         ))}
       </div>

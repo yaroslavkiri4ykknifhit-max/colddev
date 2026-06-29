@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion"
 import { useState } from "react"
+import { GlassSurface } from "@/components/ui/glass-surface"
+import { toast } from "sonner"
 
 export function Contact() {
   const [formState, setFormState] = useState({
@@ -12,8 +14,17 @@ export function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Здесь будет логика отправки формы
+    if (!formState.name.trim() || !formState.contact.trim() || !formState.message.trim()) {
+      toast.error("Пожалуйста, заполните все поля формы")
+      return
+    }
     console.log("Form submitted:", formState)
+    toast.success("Заявка отправлена! Свяжемся с вами в ближайшее время.")
+    setFormState({
+      name: "",
+      contact: "",
+      message: ""
+    })
   }
 
   return (
@@ -76,65 +87,81 @@ export function Contact() {
             </div>
           </motion.div>
           
-          {/* Right side - Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Имя
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formState.name}
-                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                  placeholder="Как вас зовут?"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="contact" className="block text-sm font-medium mb-2">
-                  Telegram или Email
-                </label>
-                <input
-                  type="text"
-                  id="contact"
-                  value={formState.contact}
-                  onChange={(e) => setFormState({ ...formState, contact: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                  placeholder="@username или email@example.com"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Расскажите о проекте
-                </label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  value={formState.message}
-                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"
-                  placeholder="Опишите вашу идею или задачу..."
-                />
-              </div>
-              
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
-              >
-                Отправить заявку
-              </motion.button>
-            </form>
+            <GlassSurface
+              borderRadius={24}
+              borderWidth={0.06}
+              brightness={30}
+              opacity={0.3}
+              blur={12}
+              displace={2}
+              backgroundOpacity={0.06}
+              saturation={1.1}
+              distortionScale={-40}
+              redOffset={1}
+              greenOffset={5}
+              blueOffset={10}
+              className="p-8 border border-border w-full text-left"
+            >
+              <form onSubmit={handleSubmit} className="space-y-6 w-full">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2 text-white">
+                    Имя
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={formState.name}
+                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-[#3D393A]/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-white"
+                    placeholder="Как вас зовут?"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="contact" className="block text-sm font-medium mb-2 text-white">
+                    Telegram или Email
+                  </label>
+                  <input
+                    type="text"
+                    id="contact"
+                    value={formState.contact}
+                    onChange={(e) => setFormState({ ...formState, contact: e.target.value })}
+                    className="w-full px-4 py-3 bg-[#3D393A]/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-white"
+                    placeholder="@username или email@example.com"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium mb-2 text-white">
+                    Расскажите о проекте
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={5}
+                    value={formState.message}
+                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                    className="w-full px-4 py-3 bg-[#3D393A]/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none text-white"
+                    placeholder="Опишите вашу идею или задачу..."
+                  />
+                </div>
+                
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity cursor-pointer"
+                >
+                  Отправить заявку
+                </motion.button>
+              </form>
+            </GlassSurface>
           </motion.div>
         </div>
       </div>
