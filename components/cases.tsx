@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { ArrowUpRight, FolderGit2 } from "lucide-react"
 import { GlassSurface } from "@/components/ui/glass-surface"
+import BorderGlow from "@/components/ui/border-glow"
 
 const cases = [
   {
@@ -98,21 +99,32 @@ function CaseCard({
         />
 
         {/* Тело карточки во всю ширину */}
-        <GlassSurface
+        <BorderGlow
+          edgeSensitivity={30}
+          glowColor="9 59 46"
+          backgroundColor="#2E2A2B"
           borderRadius={24}
-          borderWidth={0.06}
-          brightness={30}
-          opacity={0.3}
-          blur={15}
-          displace={3}
-          backgroundOpacity={0.08}
-          saturation={1.2}
-          distortionScale={-80}
-          redOffset={2}
-          greenOffset={8}
-          blueOffset={15}
-          className="relative overflow-hidden rounded-3xl border border-white/10 p-6 md:p-8 shadow-2xl transition-all duration-500 hover:border-[#BB4430]/20"
+          glowRadius={50}
+          glowIntensity={0.8}
+          colors={['#7EBDC2', '#BB4430', '#BCBBB8']}
+          className="w-full"
         >
+          <GlassSurface
+            borderRadius={24}
+            borderWidth={0.06}
+            brightness={30}
+            opacity={0.3}
+            blur={15}
+            displace={3}
+            backgroundOpacity={0}
+            saturation={1.2}
+            distortionScale={-80}
+            redOffset={2}
+            greenOffset={8}
+            blueOffset={15}
+            className="relative overflow-hidden p-6 md:p-8 shadow-2xl transition-all duration-500"
+            style={{ background: 'transparent' }}
+          >
           
           {/* Интерактивный блик */}
           <div className="pointer-events-none absolute -inset-px bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -194,6 +206,7 @@ function CaseCard({
             0{caseItem.id}
           </div>
         </GlassSurface>
+        </BorderGlow>
       </motion.div>
     </motion.div>
   )

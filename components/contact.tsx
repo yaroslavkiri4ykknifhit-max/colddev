@@ -49,42 +49,64 @@ export function Contact() {
             </p>
             
             <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
-                  </svg>
+              <GlassSurface
+                borderRadius={16}
+                borderWidth={0.05}
+                brightness={30}
+                opacity={0.3}
+                blur={8}
+                displace={1}
+                backgroundOpacity={0.04}
+                className="w-full text-left p-5"
+              >
+                <div className="flex items-center gap-4 w-full">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
+                      <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="font-medium text-white">Telegram</div>
+                    <a 
+                      href="https://t.me/c0lddev" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      @c0lddev
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-medium">Telegram</div>
-                  <a 
-                    href="https://t.me/c0lddev" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    @c0lddev
-                  </a>
-                </div>
-              </div>
+              </GlassSurface>
               
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
+              <GlassSurface
+                borderRadius={16}
+                borderWidth={0.05}
+                brightness={30}
+                opacity={0.3}
+                blur={8}
+                displace={1}
+                backgroundOpacity={0.04}
+                className="w-full text-left p-5"
+              >
+                <div className="flex items-center gap-4 w-full">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="font-medium text-white">Email</div>
+                    <a 
+                      href="mailto:yaroslav.paraonov@gmail.com" 
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      yaroslav.paraonov@gmail.com
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-medium">Email</div>
-                  <a 
-                    href="mailto:yaroslav.paraonov@gmail.com" 
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    yaroslav.paraonov@gmail.com
-                  </a>
-                </div>
-              </div>
+              </GlassSurface>
             </div>
           </motion.div>
           

@@ -1,6 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { GlassSurface } from "@/components/ui/glass-surface"
+import BorderGlow from "@/components/ui/border-glow"
 
 const stats = [
   { value: "50+", label: "Проектов" },
@@ -11,31 +13,48 @@ const stats = [
 
 export function Stats() {
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-24">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
-        >
+    <section className="py-20 px-6 md:px-12 lg:px-24">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="text-center"
+              className="h-full flex"
             >
-              <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-2">
-                {stat.value}
-              </div>
-              <div className="text-muted-foreground">{stat.label}</div>
+              <BorderGlow
+                edgeSensitivity={20}
+                glowColor="184 36 63"
+                backgroundColor="#2E2A2B"
+                borderRadius={16}
+                glowRadius={30}
+                glowIntensity={0.7}
+                colors={['#7EBDC2', '#BB4430', '#BCBBB8']}
+                className="w-full h-full"
+              >
+                <GlassSurface
+                  borderRadius={16}
+                  borderWidth={0.05}
+                  brightness={30}
+                  opacity={0.3}
+                  blur={10}
+                  displace={1}
+                  backgroundOpacity={0}
+                  className="p-6 flex flex-col justify-center items-center text-center w-full h-full"
+                  style={{ background: 'transparent' }}
+                >
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary mb-2 tracking-tight">
+                    {stat.value}
+                  </div>
+                  <div className="text-muted-foreground text-xs md:text-sm font-medium">{stat.label}</div>
+                </GlassSurface>
+              </BorderGlow>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )
