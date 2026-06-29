@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { GlassSurface } from "@/components/ui/glass-surface"
+import BorderGlow from "@/components/ui/border-glow"
 
 const services = [
   {
@@ -95,29 +96,41 @@ export function Services() {
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className="h-full flex"
           >
-            <GlassSurface
+            <BorderGlow
+              edgeSensitivity={30}
+              glowColor="184 36 63"
+              backgroundColor="#2E2A2B"
               borderRadius={16}
-              borderWidth={0.06}
-              brightness={30}
-              opacity={0.3}
-              blur={12}
-              displace={2}
-              backgroundOpacity={0.05}
-              saturation={1.1}
-              distortionScale={-30}
-              redOffset={1}
-              greenOffset={4}
-              blueOffset={8}
-              className="group p-8 border border-border hover:border-primary/50 transition-all duration-300 w-full text-left"
+              glowRadius={40}
+              glowIntensity={0.8}
+              colors={['#7EBDC2', '#BB4430', '#BCBBB8']}
+              className="w-full h-full"
             >
-              <div className="flex flex-col h-full w-full">
-                <div className="text-primary mb-6 group-hover:scale-110 transition-transform duration-300 w-fit">
-                  {service.icon}
+              <GlassSurface
+                borderRadius={16}
+                borderWidth={0.06}
+                brightness={30}
+                opacity={0.3}
+                blur={12}
+                displace={2}
+                backgroundOpacity={0}
+                saturation={1.1}
+                distortionScale={-30}
+                redOffset={1}
+                greenOffset={4}
+                blueOffset={8}
+                className="group p-8 w-full h-full text-left"
+                style={{ background: 'transparent' }}
+              >
+                <div className="flex flex-col h-full w-full">
+                  <div className="text-primary mb-6 group-hover:scale-110 transition-transform duration-300 w-fit">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3 text-white">{service.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm flex-grow">{service.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">{service.title}</h3>
-                <p className="text-muted-foreground leading-relaxed text-sm flex-grow">{service.description}</p>
-              </div>
-            </GlassSurface>
+              </GlassSurface>
+            </BorderGlow>
           </motion.div>
         ))}
       </div>

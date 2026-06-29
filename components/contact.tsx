@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useState } from "react"
 import { GlassSurface } from "@/components/ui/glass-surface"
 import { toast } from "sonner"
+import BorderGlow from "@/components/ui/border-glow"
 
 export function Contact() {
   const [formState, setFormState] = useState({
@@ -94,21 +95,32 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="w-full"
           >
-            <GlassSurface
+            <BorderGlow
+              edgeSensitivity={30}
+              glowColor="184 36 63"
+              backgroundColor="#2E2A2B"
               borderRadius={24}
-              borderWidth={0.06}
-              brightness={30}
-              opacity={0.3}
-              blur={12}
-              displace={2}
-              backgroundOpacity={0.06}
-              saturation={1.1}
-              distortionScale={-40}
-              redOffset={1}
-              greenOffset={5}
-              blueOffset={10}
-              className="p-8 border border-border w-full text-left"
+              glowRadius={40}
+              glowIntensity={0.8}
+              colors={['#7EBDC2', '#BB4430', '#BCBBB8']}
+              className="w-full"
             >
+              <GlassSurface
+                borderRadius={24}
+                borderWidth={0.06}
+                brightness={30}
+                opacity={0.3}
+                blur={12}
+                displace={2}
+                backgroundOpacity={0}
+                saturation={1.1}
+                distortionScale={-40}
+                redOffset={1}
+                greenOffset={5}
+                blueOffset={10}
+                className="p-8 w-full text-left"
+                style={{ background: 'transparent' }}
+              >
               <form onSubmit={handleSubmit} className="space-y-6 w-full">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2 text-white">
@@ -162,6 +174,7 @@ export function Contact() {
                 </motion.button>
               </form>
             </GlassSurface>
+            </BorderGlow>
           </motion.div>
         </div>
       </div>
