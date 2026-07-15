@@ -5,10 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Если вы используете домен *.github.io/colddev, то basePath должен быть "/colddev".
-  // Если у вас привязан свой личный кастомный домен (например, yaroslav-digital.com),
-  // то basePath должен быть пустой строкой "".
-  basePath: process.env.NODE_ENV === "production" ? "/colddev" : "",
+  // Поскольку у вас привязан собственный кастомный домен colddev.pro,
+  // basePath должен быть пустым (""), иначе пути к CSS и JS ломаются.
+  basePath: "",
 };
 
 export default nextConfig;
