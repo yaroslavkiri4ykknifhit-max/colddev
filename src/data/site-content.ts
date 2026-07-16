@@ -1,304 +1,309 @@
 export interface Project {
   id: string;
+  filename: string;
   title: string;
   category: string;
+  date: string;
+  size: string;
+  status: "STABLE" | "BETA" | "DEPRECATED";
   description: string;
   tasks: string[];
   technologies: string[];
   result: string;
-  image: string; // placeholder or generated
 }
 
-export interface Benefit {
+export interface Service {
   id: string;
+  filename: string;
   title: string;
+  version: string;
+  size: string;
   description: string;
-  badge?: string;
-  type: "design" | "speed" | "responsive" | "seo" | "analytics" | "ads" | "telegram" | "automation";
+  state: "READY" | "RUNNING" | "PAUSED";
+  progress: number; // 0-100
 }
 
 export interface Testimonial {
   id: string;
-  name: string;
-  role: string;
-  company: string;
+  nickname: string;
+  date: string;
+  msgNum: string;
+  avatar: string; // 1-3
+  status: "Elite Member" | "Sysop" | "Guest";
   text: string;
-  avatar: string;
+  icqOnline: boolean;
 }
 
 export interface FAQItem {
+  id: string;
+  category: "getting-started" | "development" | "telegram" | "ads" | "support";
   question: string;
   answer: string;
 }
 
 export const siteContent = {
   hero: {
-    label: "Сайты, реклама и автоматизация бизнеса",
-    title: "Создаю digital-продукты, которые приносят клиентов",
-    description: "Разрабатываю сайты, Telegram-ботов и рекламные системы под ключ — от идеи и дизайна до запуска и привлечения заявок.",
-    cta: {
-      primary: "Обсудить проект",
-      secondary: "Посмотреть работы"
-    },
-    features: [
-      "Websites",
-      "Google Ads",
-      "Telegram",
-      "Mini Apps",
-      "Automation",
-      "UI/UX"
-    ]
+    title: "YAROSLAV.EXE",
+    subtitle: "PERSONAL INTERNET TERMINAL",
+    tagline: "Создаю сайты, Telegram-ботов, Mini Apps и рекламные системы для бизнеса. От первого экрана до первой заявки.",
+    marqueeText: " ★ WELCOME TO YAROSLAV.EXE TERMINAL ★ WEB DEVELOPMENT ★ TELEGRAM BOTS ★ MINI APPS ★ GOOGLE ADS ★ AUTOMATION ★ SYSTEM STATUS: AVAILABLE FOR WORK ★ VISITORS WELCOME ★ "
   },
-  benefits: [
+  services: [
+    {
+      id: "website",
+      filename: "WEB_SITE_BUILDER.EXE",
+      title: "Разработка Веб-сайтов",
+      version: "v4.2.0",
+      size: "812 KB",
+      description: "Создание лендингов, промо-сайтов, интернет-магазинов и сложных веб-систем с высокой конверсией.",
+      state: "READY",
+      progress: 100
+    },
+    {
+      id: "telegram-bot",
+      filename: "TELEGRAM_BOT.EXE",
+      title: "Telegram Боты",
+      version: "v2.5.1",
+      size: "420 KB",
+      description: "Автоматизация ответов, фильтрации лидов, сбора платежей и уведомлений прямо в ваш Telegram-чат.",
+      state: "RUNNING",
+      progress: 92
+    },
+    {
+      id: "mini-app",
+      filename: "MINI_APP.EXE",
+      title: "Telegram Mini Apps",
+      version: "v1.0.8",
+      size: "1.2 MB",
+      description: "Интерактивные интерфейсы, запускаемые внутри мессенджера Telegram (веб-приложения в чате).",
+      state: "READY",
+      progress: 100
+    },
+    {
+      id: "google-ads",
+      filename: "GOOGLE_ADS.EXE",
+      title: "Контекстная Реклама",
+      version: "v3.1.0",
+      size: "340 KB",
+      description: "Настройка Google Ads и Яндекс.Директ для мгновенного привлечения целевых клиентов.",
+      state: "READY",
+      progress: 85
+    },
     {
       id: "design",
-      title: "Современный дизайн",
-      description: "Индивидуальный визуальный стиль, который выделяет бренд и формирует доверие с первого экрана.",
-      badge: "Эксклюзивность",
-      type: "design"
-    },
-    {
-      id: "speed",
-      title: "Высокая скорость загрузки",
-      description: "Оптимизация кода, изображений и использование Next.js позволяют сайтам загружаться мгновенно.",
-      badge: "99+ PageSpeed",
-      type: "speed"
-    },
-    {
-      id: "responsive",
-      title: "Адаптация под мобильные",
-      description: "Идеальное отображение на всех типах экранов — от старых смартфонов до огромных 4K мониторов.",
-      badge: "Mobile-First",
-      type: "responsive"
-    },
-    {
-      id: "seo",
-      title: "SEO-структура",
-      description: "Семантический HTML, правильные мета-теги и быстрая индексация поисковыми системами.",
-      badge: "Google & Yandex",
-      type: "seo"
-    },
-    {
-      id: "analytics",
-      title: "Интеграция аналитики",
-      description: "Настройка Яндекс.Метрики и Google Analytics с отслеживанием целей, конверсий и поведения пользователей.",
-      badge: "Data-Driven",
-      type: "analytics"
-    },
-    {
-      id: "ads",
-      title: "Подключение рекламы",
-      description: "Настройка Google Ads и таргетированной рекламы под ключ для мгновенного привлечения лидов.",
-      badge: "Трафик",
-      type: "ads"
-    },
-    {
-      id: "telegram",
-      title: "Telegram-интеграции",
-      description: "Разработка удобных Telegram Mini Apps и автоматических ботов для коммуникации и продаж.",
-      badge: "Web3 & Apps",
-      type: "telegram"
+      filename: "DESIGN_SYSTEM.EXE",
+      title: "UX/UI Дизайн",
+      version: "v1.1.0",
+      size: "2.1 MB",
+      description: "Проектирование логической структуры, прототипирование путей пользователя и детальный дизайн макетов.",
+      state: "READY",
+      progress: 100
     },
     {
       id: "automation",
-      title: "Автоматизация заявок",
-      description: "Интеграция с CRM-системами, уведомления в Telegram-чаты, автоотправка писем и распределение лидов.",
-      badge: "Эффективность",
-      type: "automation"
+      filename: "AUTOMATION.EXE",
+      title: "Интеграции и CRM",
+      version: "v2.0.4",
+      size: "512 KB",
+      description: "Связывание сайтов с CRM (Bitrix24, amoCRM), распределение лидов, автоматическая отчетность.",
+      state: "RUNNING",
+      progress: 98
     }
-  ] as Benefit[],
+  ] as Service[],
   projects: [
     {
-      id: "agency",
-      title: "Платформа кадрового агентства",
-      category: "Веб-разработка & Автоматизация",
-      description: "Разработка высоконагруженного сайта для поиска сотрудников с интеграцией CRM-системы и базой данных.",
-      tasks: ["Архитектура приложения", "Интеграция CRM", "Личный кабинет соискателя"],
+      id: "recruiting",
+      filename: "BUDEYA_RECRUITING.exe",
+      title: "Платформа кадрового агентства Apex",
+      category: "Веб-приложение / CRM",
+      date: "2025-11-20",
+      size: "4.8 MB",
+      status: "STABLE",
+      description: "Сложная система подбора кандидатов с личным кабинетом, фильтрацией откликов и автоматической рассылкой резюме.",
+      tasks: ["Архитектура базы данных", "Личный кабинет соискателя", "Автоматические воронки подбора"],
       technologies: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL"],
-      result: "Время обработки откликов снизилось на 60%, количество заявок выросло на 35%.",
-      image: "agency-mockup"
+      result: "Время квалификации откликов уменьшилось на 60%, конверсия выросла."
     },
     {
-      id: "autoservice",
-      title: "Telegram Mini App для автосервиса",
-      category: "Telegram Mini App",
-      description: "Мини-приложение внутри Telegram для записи на техническое обслуживание, выбора услуг и онлайн-оплаты.",
-      tasks: ["Дизайн UI/UX", "Разработка Mini App", "Интеграция эквайринга"],
-      technologies: ["React", "Telegram Web App API", "Tailwind CSS", "Node.js"],
-      result: "Более 40% записей теперь проходят полностью автоматически через Telegram.",
-      image: "auto-mockup"
+      id: "mini-app-car",
+      filename: "MIRARI_MINI_APP.exe",
+      title: "CarService Telegram Mini App",
+      category: "Telegram Web App",
+      date: "2026-02-14",
+      size: "2.4 MB",
+      status: "STABLE",
+      description: "Мини-приложение для записи на СТО, каталога запчастей и онлайн-оплаты внутри мессенджера Telegram.",
+      tasks: ["Дизайн UX/UI", "Разработка Mini App", "Интеграция Stripe эквайринга"],
+      technologies: ["React", "Telegram API", "Tailwind CSS", "Node.js"],
+      result: "Более 40% записей перешли в автоматический режим через Telegram."
     },
     {
-      id: "localbiz",
-      title: "Лендинг для локального бизнеса",
-      category: "Дизайн & Разработка & Google Ads",
-      description: "Премиальный одностраничный сайт для студии детейлинга с настроенной контекстной рекламой.",
-      tasks: ["Проектирование и дизайн", "Вёрстка с GSAP анимациями", "Настройка Google Ads"],
-      technologies: ["Next.js", "Framer Motion", "Tailwind CSS", "Google Ads API"],
-      result: "Конверсия сайта составила 9.2%, стабильный поток лидов по цене ниже рынка.",
-      image: "detailing-mockup"
+      id: "local-detailing",
+      filename: "LOCAL_BUSINESS_SITE.html",
+      title: "Лендинг Студии Детейлинга Carbon",
+      category: "Промо-сайт / Реклама",
+      date: "2026-04-10",
+      size: "1.1 MB",
+      status: "STABLE",
+      description: "Стильный лендинг премиум детейлинг центра с комплексным маркетингом и настройкой контекстной рекламы.",
+      tasks: ["Проектирование прототипа", "Ретро-эффекты и анимации", "Запуск кампаний в Google Ads"],
+      technologies: ["Next.js", "Framer Motion", "Google Ads API"],
+      result: "Конверсия сайта составила 9.2%, снижена стоимость заявки."
     },
     {
-      id: "bot",
-      title: "Telegram-бот для обработки заявок",
-      category: "Автоматизация & Чат-боты",
-      description: "Многофункциональный бот с панелью администратора для квалификации лидов и рассылок.",
-      tasks: ["Проектирование логики", "Разработка Node.js бота", "Интеграция с CRM"],
+      id: "sales-bot",
+      filename: "SALES_BOT_v2.4.exe",
+      title: "Интеллектуальный чат-бот для продаж",
+      category: "Telegram Бот",
+      date: "2026-05-30",
+      size: "950 KB",
+      status: "BETA",
+      description: "Многофункциональный бот для автоматизации первичной обработки и квалификации лидов.",
+      tasks: ["Логическая структура диалога", "Написание бэкенда бота", "Интеграция CRM"],
       technologies: ["Node.js", "Grammy API", "MongoDB", "Express"],
-      result: "Автоматизировано 80% входящих типовых вопросов, менеджеры работают только со сложными лидами.",
-      image: "bot-mockup"
+      result: "Автоматизировано 80% типовых обращений на этапе сбора требований."
     }
   ] as Project[],
-  results: [
+  processSteps: [
     {
-      value: "20+",
-      label: "Реализованных проектов",
-      subtext: "Качественная работа от концепции до запуска"
+      id: 1,
+      title: "Анализ и Техническое задание",
+      description: "Изучаю цели бизнеса, анализирую конкурентов, пишу детальную спецификацию и требования к системе."
     },
     {
-      value: "90+",
-      label: "Показатель PageSpeed",
-      subtext: "Сверхбыстрая скорость загрузки страниц"
+      id: 2,
+      title: "Проектирование и Прототип",
+      description: "Создаю структурную схему экранов, прорабатываю пути пользователя для максимальной конверсии."
     },
     {
-      value: "100%",
-      label: "Сайты под любой экран",
-      subtext: "Идеальная адаптивность на любом мобильном устройстве"
+      id: 3,
+      title: "Ретро/Премиум Дизайн",
+      description: "Разрабатываю визуальный стиль, собираю дизайн-систему, рисую макеты интерфейсов."
     },
     {
-      value: "15 мин",
-      label: "Автоматизация заявок",
-      subtext: "Мгновенное уведомление в Telegram о каждом лиде"
+      id: 4,
+      title: "Программирование и Сборка",
+      description: "Пишу чистый, оптимизированный код на Next.js, настраиваю анимации и серверный рендеринг."
     },
     {
-      value: "45%+",
-      label: "Рост конверсий",
-      subtext: "За счет сквозной аналитики и оптимизации рекламы"
+      id: 5,
+      title: "Подключение API и CRM",
+      description: "Интегрирую ботов, платежные шлюзы, CRM, базы данных и системы аналитики."
+    },
+    {
+      id: 6,
+      title: "Тестирование и Запуск",
+      description: "Тестирую работу системы во всех браузерах и экранах, переношу на сервер, подключаю домен."
     }
   ],
-  process: [
+  pricingCd: [
     {
-      step: "01",
-      title: "Анализ задачи",
-      description: "Изучаю ваш бизнес, нишу, конкурентов и целевую аудиторию. Формирую детальное техническое задание."
-    },
-    {
-      step: "02",
-      title: "Прототип и структура",
-      description: "Создаю логическую структуру страниц и интерактивный прототип, чтобы согласовать путь пользователя."
-    },
-    {
-      step: "03",
-      title: "Дизайн",
-      description: "Разрабатываю премиальный тёмный дизайн-макет с упором на современные интерфейсные тренды и глубину деталей."
-    },
-    {
-      step: "04",
-      title: "Разработка и интеграции",
-      description: "Переношу дизайн в код на Next.js. Подключаю Telegram-ботов, CRM, аналитику и настраиваю анимации."
-    },
-    {
-      step: "05",
-      title: "Запуск и поддержка",
-      description: "Запускаю сайт на сервере, подключаю домен, настраиваю рекламу и оказываю техническую поддержку."
-    }
-  ],
-  pricing: [
-    {
-      id: "landing",
-      name: "Landing",
-      priceKey: "landing",
-      description: "Для презентации одного товара, услуги или быстрого старта в маркетинге.",
+      id: "lite",
+      name: "YAROSLAV WEB LITE",
+      version: "v1.0",
+      priceKey: "lite",
+      requirements: "Windows 98/XP, 128MB RAM, 56K Modem",
       features: [
-        "Уникальная структура и прототип",
-        "Премиальный UX/UI дизайн",
-        "Адаптивная вёрстка (Next.js/Tailwind)",
-        "Базовая SEO оптимизация",
-        "Настройка аналитики (Яндекс/Google)",
-        "Интеграция формы с Telegram/CRM"
+        "Уникальный дизайн",
+        "Адаптивная верстка",
+        "Интеграция формы с Telegram",
+        "Базовая SEO подготовка",
+        "Яндекс.Метрика / Google Analytics"
       ]
     },
     {
-      id: "business",
-      name: "Business",
-      priceKey: "business",
-      description: "Комплексное решение для малого и среднего бизнеса, готовое к трафику.",
+      id: "pro",
+      name: "YAROSLAV WEB PROFESSIONAL",
+      version: "v2.5",
+      priceKey: "pro",
+      requirements: "Windows 2000/XP, 512MB RAM, DSL Connection",
       features: [
-        "Многостраничный сайт или сложный лендинг",
-        "Индивидуальный дизайн-концепт",
-        "Анимации интерфейса (Framer Motion)",
-        "Полное SEO и микроразметка",
-        "Настройка целей и сквозной аналитики",
-        "Подготовка под запуск Google/таргет рекламы",
-        "1 месяц техподдержки после запуска"
+        "Индивидуальный дизайн",
+        "Анимации Framer Motion",
+        "Многостраничный сайт",
+        "Настройка Google Ads рекламы",
+        "Расширенная интеграция с CRM",
+        "1 месяц технической поддержки"
       ],
-      popular: true
+      featured: true
     },
     {
-      id: "custom",
-      name: "Custom",
-      priceKey: "custom",
-      description: "Для нестандартных задач, требующих интеграции с Telegram или сложного бэкенда.",
+      id: "ultimate",
+      name: "YAROSLAV WEB ULTIMATE",
+      version: "v4.0",
+      priceKey: "ultimate",
+      requirements: "Windows XP/Vista, 1GB RAM, BroadBand LAN",
       features: [
-        "Индивидуальная веб-архитектура",
         "Разработка Telegram Mini App",
-        "Создание Telegram-бота для обработки заявок",
-        "Интеграция со сторонними API сервисами",
-        "Автоматизация внутренних процессов бизнеса",
-        "Персональное сопровождение и развитие"
+        "Создание Telegram-бота",
+        "Автоматизация бизнес-процессов",
+        "Сложные бэкенд интеграции",
+        "Полноценная продуктовая разработка"
       ]
     }
   ],
   testimonials: [
     {
       id: "1",
-      name: "Александр Радкевич",
-      role: "CEO",
-      company: "Apex HR",
-      text: "Разработка платформы кадрового агентства превзошла наши ожидания. Интеграция с CRM позволила разгрузить менеджеров. Скорость работы сайта потрясающая, дизайн выглядит очень современно.",
-      avatar: "AR"
+      nickname: "Alex_HR_Boss",
+      date: "2025-12-01 18:24",
+      msgNum: "#248",
+      avatar: "1",
+      status: "Elite Member",
+      text: "Разработка платформы Apex HR была сделана на высшем уровне. Автоматический разбор кандидатов экономит кучу времени. Сборка стабильная, лагов нет.",
+      icqOnline: true
     },
     {
       id: "2",
-      name: "Дмитрий Коваль",
-      role: "Основатель",
-      company: "Detailing Club",
-      text: "Заказывали лендинг и настройку Google Ads. Поток клиентов начался с первой недели после запуска. Конверсия сайта держится на высоком уровне. Рекомендую как надежного специалиста.",
-      avatar: "DK"
+      nickname: "Carbon_Detailer",
+      date: "2026-04-18 11:05",
+      msgNum: "#312",
+      avatar: "2",
+      status: "Guest",
+      text: "Отличный лендинг! Google Ads сразу начал давать заявки, реклама окупилась в первый месяц. Дизайн действительно привлекает внимание клиентов.",
+      icqOnline: false
     },
     {
       id: "3",
-      name: "Екатерина Верес",
-      role: "Руководитель маркетинга",
-      company: "CarService Pro",
-      text: "Telegram Mini App — это просто находка. Клиенты в восторге от возможности записаться на СТО в пару кликов прямо в мессенджере. Работа сделана быстро и профессионально.",
-      avatar: "EV"
+      nickname: "CarService_Pro",
+      date: "2026-02-20 15:40",
+      msgNum: "#295",
+      avatar: "3",
+      status: "Sysop",
+      text: "Mini App в Telegram — это бомба. Запись на сервис работает автоматически. Рекомендую Ярослава как профи в автоматизации и ботах.",
+      icqOnline: true
     }
   ] as Testimonial[],
   faq: [
     {
-      question: "Сколько занимает разработка сайта?",
-      answer: "Сроки зависят от сложности проекта. Простой Landing Page занимает 7–14 дней. Бизнес-сайт или интернет-магазин — от 3 до 5 недель. Разработка сложных кастомных платформ и Telegram Mini Apps обсуждается индивидуально."
+      id: "faq-1",
+      category: "getting-started",
+      question: "Что нужно предоставить перед стартом?",
+      answer: "Желательно иметь описание вашего продукта, логотип (при наличии) и примеры сайтов, стиль которых вам импонирует. Если этого нет, я помогу составить структуру и написать базовые тексты."
     },
     {
-      question: "Что нужно предоставить перед началом работы?",
-      answer: "Перед началом работы желательно иметь текстовое описание услуг или товаров, логотип (при наличии) и примеры сайтов, которые вам нравятся. Если этого нет, я помогу составить структуру и написать тексты."
+      id: "faq-2",
+      category: "development",
+      question: "Сколько времени занимает разработка сайта?",
+      answer: "Простой Landing Page занимает 7–14 дней. Полноценный корпоративный сайт — от 3 до 5 недель. Разработка сложных кастомных приложений и Mini Apps обсуждается индивидуально."
     },
     {
-      question: "Можно ли подключить рекламу после запуска?",
-      answer: "Да, конечно. Все сайты проектируются с учетом требований для SEO и рекламного трафика. Настройка рекламных кампаний в Google Ads и таргетированной рекламы может быть запущена сразу после переноса сайта на ваш домен."
+      id: "faq-3",
+      category: "telegram",
+      question: "Что такое Telegram Mini Apps?",
+      answer: "Это полноценные веб-приложения, которые открываются прямо внутри мессенджера Telegram. Они позволяют совершать покупки, записываться на услуги и взаимодействовать с пользователем без необходимости скачивать сторонние приложения."
     },
     {
-      question: "Работаете ли вы с существующими сайтами?",
-      answer: "В основном я занимаюсь разработкой проектов с нуля, так как это гарантирует чистоту кода, скорость загрузки и современную архитектуру. Но в некоторых случаях возможен редизайн или доработка существующего сайта."
+      id: "faq-4",
+      category: "ads",
+      question: "Можно ли настроить рекламу после запуска?",
+      answer: "Да. Все разработанные сайты оптимизированы под высокие рекламные нагрузки и требования SEO. Я настраиваю рекламные кампании в Google Ads и Яндекс.Директ для быстрого привлечения первых клиентов."
     },
     {
-      question: "Можно ли разработать Telegram-бота или Mini App отдельно?",
-      answer: "Да. Вы можете заказать разработку Telegram-бота или Telegram Mini App как самостоятельный продукт для автоматизации продаж, поддержки пользователей или геймификации."
-    },
-    {
+      id: "faq-5",
+      category: "support",
       question: "Предоставляется ли поддержка после запуска?",
-      answer: "Да, после запуска сайта я бесплатно предоставляю 30 дней технической поддержки для исправления возможных ошибок. Далее мы можем договориться о ежемесячном обслуживании или разовых доработках."
+      answer: "Да, после публикации проекта я бесплатно предоставляю 30 дней технической поддержки для исправления возможных неполадок. Также мы можем договориться о ежемесячном сопровождении."
     }
   ] as FAQItem[]
 };

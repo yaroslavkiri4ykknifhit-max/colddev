@@ -1,22 +1,25 @@
 export const siteConfig = {
-  brandName: "YAROSLAV DIGITAL",
-  description: "Премиальная веб-разработка, дизайн, автоматизация бизнеса и настройка рекламы под ключ.",
-  url: "https://yaroslav-digital.com",
+  brandName: "YAROSLAV.EXE",
+  title: "YAROSLAV.EXE — DIGITAL DEVELOPMENT TERMINAL",
+  description: "Безумный и атмосферный терминал веб-мастера из 2004 года. Сайты, Telegram-боты, реклама и автоматизация.",
+  url: "http://colddev.pro",
   contacts: {
     telegram: "https://t.me/yaroslav_digital", // Заглушка
-    email: "contact@yaroslav-digital.com",
-    phone: "+375 (29) 123-45-67", // Заглушка
-    address: "Минск, Беларусь"
+    email: "webmaster@colddev.pro",
+    icq: "329-874-510", // Ретро UIN заглушка
+    msn: "yaroslav@msn.com", // MSN Messenger заглушка
+    phone: "+375 (29) 123-45-67",
+    address: "SERVER ROOM 0x4B, EARTH"
   },
   pricing: {
-    landing: "от 1 500 BYN",
-    business: "от 3 500 BYN",
-    custom: "от 6 000 BYN"
+    lite: "1 500 BYN",
+    pro: "3 500 BYN",
+    ultimate: "6 000 BYN"
   },
   stats: {
-    projectsCount: "20+",
-    pageSpeedScore: "90+",
-    conversionRate: "+45%",
-    adEfficiency: "3.5x"
+    visitsCount: 133742, // Счетчик посещений
+    sinceDate: "2004-09-12",
+    connection: "56K Dial-Up",
+    serverStatus: "ONLINE (99.8% Uptime)"
   }
 };
