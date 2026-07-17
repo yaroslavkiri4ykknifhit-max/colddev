@@ -1,25 +1,24 @@
 export const siteConfig = {
-  brandName: "YAROSLAV.EXE",
-  title: "YAROSLAV.EXE — DIGITAL DEVELOPMENT TERMINAL",
-  description: "Безумный и атмосферный терминал веб-мастера из 2004 года. Сайты, Telegram-боты, реклама и автоматизация.",
-  url: "http://colddev.pro",
+  brandName: "COLDDEV",
+  title: "COLDDEV — сайты и реклама для бизнеса",
+  description:
+    "Создаём сайты, запускаем Яндекс Директ и показываем весь ход работы в прозрачном клиентском кабинете.",
+  url: "https://colddev.pro",
   contacts: {
-    telegram: "https://t.me/yaroslav_digital", // Заглушка
-    email: "webmaster@colddev.pro",
-    icq: "329-874-510", // Ретро UIN заглушка
-    msn: "yaroslav@msn.com", // MSN Messenger заглушка
-    phone: "+375 (29) 123-45-67",
-    address: "SERVER ROOM 0x4B, EARTH"
+    telegramUsername: "c0lddev",
+    telegramUrl: "https://t.me/c0lddev",
   },
-  pricing: {
-    lite: "1 500 BYN",
-    pro: "3 500 BYN",
-    ultimate: "6 000 BYN"
+  erip: {
+    title: "ЕРИП",
+    path: [
+      "Банковские и финансовые услуги",
+      "Банки, НКФО",
+      "МТБанк",
+      "Пополнение дебетовой карты",
+    ],
+    contractNumber: "34223187",
   },
-  stats: {
-    visitsCount: 133742, // Счетчик посещений
-    sinceDate: "2004-09-12",
-    connection: "56K Dial-Up",
-    serverStatus: "ONLINE (99.8% Uptime)"
-  }
+  adminEmail: "yaroslav.paraonov@gmail.com",
+  googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
+  apiUrl: process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ?? "",
 };

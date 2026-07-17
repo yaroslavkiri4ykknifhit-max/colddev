@@ -26,6 +26,9 @@ jobs:
         run: npm ci
 
       - name: Build site
+        env:
+          NEXT_PUBLIC_APPS_SCRIPT_URL: ${{ vars.NEXT_PUBLIC_APPS_SCRIPT_URL }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
         run: npm run build
 
       - name: Deploy to GitHub Pages
