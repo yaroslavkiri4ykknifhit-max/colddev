@@ -133,11 +133,18 @@ function adminMutate(input) {
   const sheetName = entitySheet(input.entity);
   const value = input.value || {};
   const id = String(value.id || Utilities.getUuid());
-  const normalized = normalizeForSheet(input.entity, Object.assign({}, value, { id: id }));
   if (input.operation === 'delete') {
     remove(sheetName, id);
     return { id: id, deleted: true };
   }
+  const current = input.operation === 'update' ? (findOne(sheetName, 'id', id) || {}) : {};
+  const hydrated = Object.assign({}, value, { id: id });
+  if (input.entity === 'projects' && !hydrated.accessCode) hydrated.accessHash = current.access_hash || '';
+  if (input.entity === 'invoices') {
+    if (!hydrated.receiptFileId) hydrated.receiptFileId = current.receipt_file_id || '';
+    if (!hydrated.receiptName) hydrated.receiptName = current.receipt_name || '';
+  }
+  const normalized = normalizeForSheet(input.entity, hydrated);
   upsert(sheetName, normalized);
   append(SHEETS.ACTIVITY, { id: Utilities.getUuid(), title: input.operation === 'create' ? 'Создана запись' : 'Обновлена запись', detail: input.entity + ' · ' + id, date: new Date().toISOString() });
   return normalized;

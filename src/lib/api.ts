@@ -14,12 +14,25 @@ async function request<T>(action: string, payload: Record<string, unknown>) {
     throw new Error("API Google Apps Script ещё не подключён");
   }
 
-  const response = await fetch(siteConfig.apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ action, ...payload }),
-    redirect: "follow",
-  });
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 30000);
+  let response: Response;
+  try {
+    response = await fetch(siteConfig.apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, ...payload }),
+      redirect: "follow",
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("Google отвечает слишком долго. Попробуйте ещё раз через несколько секунд.");
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
+  }
 
   const result = (await response.json()) as {
     ok: boolean;
