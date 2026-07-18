@@ -30,6 +30,12 @@ export default function LoginPage() {
     }
   };
 
+  const formatProjectId = (value: string) => value.toUpperCase().replace(/\s+/g, "").slice(0, 16);
+  const formatAccessCode = (value: string) => {
+    const characters = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
+    return characters.match(/.{1,4}/g)?.join("-") ?? "";
+  };
+
   return (
     <main className="auth-page">
       <section className="auth-side">
@@ -54,7 +60,7 @@ export default function LoginPage() {
                 spellCheck={false}
                 placeholder="Например, CD-0007"
                 value={projectId}
-                onChange={(event) => setProjectId(event.target.value)}
+                onChange={(event) => setProjectId(formatProjectId(event.target.value))}
                 required
               />
             </div>
@@ -69,7 +75,7 @@ export default function LoginPage() {
                   spellCheck={false}
                   placeholder="••••-••••-••••"
                   value={accessCode}
-                  onChange={(event) => setAccessCode(event.target.value)}
+                  onChange={(event) => setAccessCode(formatAccessCode(event.target.value))}
                   required
                 />
                 <button

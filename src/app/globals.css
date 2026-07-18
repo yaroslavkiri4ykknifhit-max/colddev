@@ -2220,6 +2220,29 @@ body { overflow-x: hidden; }
 .receipt-flow-card .button-ghost { color: #18192b; background: white; border-color: white; }
 .receipt-flow-card .button-ghost:hover { color: #1557ff; background: #f2f3ff; }
 
+/* Comfortable reading in the client cabinet and admin panel */
+.product-page { font-weight: 560; }
+.product-page .product-main { font-weight: 590; }
+.product-page :is(h1, h2, h3, h4) { font-weight: 820; }
+.product-page .product-nav button { font-weight: 760; }
+.product-page .product-topbar p,
+.product-page .view-heading p,
+.product-page .card p,
+.product-page small,
+.product-page time { font-weight: 600; }
+.product-page :is(input, textarea, select) { font-weight: 640; }
+.admin-entity-modal .field label { font-weight: 760; }
+.admin-record-row > div > p,
+.data-table td,
+.data-table small { font-weight: 610; }
+.auth-content > p,
+.auth-order-section,
+.auth-form { font-weight: 590; }
+.auth-form input { font-weight: 650; }
+.project-code-reset { padding: 15px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 12px; border: 1px solid #d9d5ff; border-radius: 14px; background: #f7f6ff; }
+.project-code-reset .field { min-width: 0; }
+.project-code-reset .button { margin-bottom: 1px; white-space: nowrap; }
+
 /* Admin path and save state */
 .admin-next-action { margin-bottom: 14px; padding: 26px 29px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-color: #d9d5ff; background: linear-gradient(115deg, #f6f4ff, white 75%); }
 .admin-step-kicker { color: var(--neo-violet); font-size: 9px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
@@ -2287,6 +2310,8 @@ body { overflow-x: hidden; }
   .receipt-flow-card h2 { font-size: 32px; }
   .receipt-flow-actions { width: 100%; flex-direction: column; }
   .receipt-flow-actions .button { width: 100%; }
+  .project-code-reset { grid-template-columns: 1fr; }
+  .project-code-reset .button { width: 100%; }
   .admin-path { padding: 10px; gap: 7px; }
   .admin-path-step { min-height: 100px; padding: 10px; }
   .admin-path-step strong { font-size: 10px; }

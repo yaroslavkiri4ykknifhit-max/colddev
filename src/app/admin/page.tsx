@@ -195,6 +195,9 @@ export default function AdminPage() {
         generatedAccessCode = createAccessCode();
         payload.accessCode = generatedAccessCode;
       }
+      if (original && entity === "projects" && String(payload.accessCode ?? "").trim()) {
+        generatedAccessCode = String(payload.accessCode);
+      }
 
       const result = await colddevApi.adminMutation(credential, entity, original ? "update" : "create", payload);
       const savedValue: Record<string, unknown> = { ...payload, id: String(result.id ?? payload.id ?? "") };
@@ -370,7 +373,7 @@ function ClientFields({ values, update }: FormFieldsProps) {
 }
 
 function ProjectFields({ values, update, snapshot, editing }: FormFieldsProps & { snapshot: AdminSnapshot; editing: boolean }) {
-  return <><SelectField label="Клиент" value={values.clientId} onChange={(value) => update("clientId", value)} options={snapshot.clients.map((client) => ({ value: client.id, label: `${client.company} · ${client.name}` }))} required full /><Field label="Название проекта" value={values.title} onChange={(value) => update("title", value)} placeholder="Например, сайт для стоматологии" required full /><SelectField label="Тип проекта" value={values.type} onChange={(value) => update("type", value)} options={["Лендинг", "Корпоративный сайт", "Интернет-магазин", "Яндекс Директ", "Сайт + реклама", "Доработка сайта"].map((value) => ({ value, label: value }))} /><SelectField label="Статус" value={values.status} onChange={(value) => update("status", value)} options={["В работе", "На согласовании", "Приостановлен", "Завершён"].map((value) => ({ value, label: value }))} /><Field label="Готовность" value={values.progress} onChange={(value) => update("progress", value)} type="number" min="0" max="100" hint="От 0 до 100%" required /><Field label="Плановая дата" value={values.deadline} onChange={(value) => update("deadline", value)} type="date" required /><Field label="Что делаем сейчас" value={values.currentAction} onChange={(value) => update("currentAction", value)} placeholder="Один конкретный текущий шаг" required full /><TextArea label="Комментарий клиенту" value={values.managerComment} onChange={(value) => update("managerComment", value)} placeholder="Простыми словами: что сделано и что будет дальше" full /><Field label="Тестовая версия сайта" value={values.previewUrl} onChange={(value) => update("previewUrl", value)} type="url" placeholder="https://..." /><Field label="Рабочий сайт" value={values.siteUrl} onChange={(value) => update("siteUrl", value)} type="url" placeholder="https://..." />{editing && <Field label="Новый код доступа" value={values.accessCode} onChange={(value) => update("accessCode", value)} placeholder="Оставьте пустым, чтобы не менять" hint="Меняйте только если старый код нужно отключить." full />}</>;
+  return <><SelectField label="Клиент" value={values.clientId} onChange={(value) => update("clientId", value)} options={snapshot.clients.map((client) => ({ value: client.id, label: `${client.company} · ${client.name}` }))} required full /><Field label="Название проекта" value={values.title} onChange={(value) => update("title", value)} placeholder="Например, сайт для стоматологии" required full /><SelectField label="Тип проекта" value={values.type} onChange={(value) => update("type", value)} options={["Лендинг", "Корпоративный сайт", "Интернет-магазин", "Яндекс Директ", "Сайт + реклама", "Доработка сайта"].map((value) => ({ value, label: value }))} /><SelectField label="Статус" value={values.status} onChange={(value) => update("status", value)} options={["В работе", "На согласовании", "Приостановлен", "Завершён"].map((value) => ({ value, label: value }))} /><Field label="Готовность" value={values.progress} onChange={(value) => update("progress", value)} type="number" min="0" max="100" hint="От 0 до 100%" required /><Field label="Плановая дата" value={values.deadline} onChange={(value) => update("deadline", value)} type="date" required /><Field label="Что делаем сейчас" value={values.currentAction} onChange={(value) => update("currentAction", value)} placeholder="Один конкретный текущий шаг" required full /><TextArea label="Комментарий клиенту" value={values.managerComment} onChange={(value) => update("managerComment", value)} placeholder="Простыми словами: что сделано и что будет дальше" full /><Field label="Тестовая версия сайта" value={values.previewUrl} onChange={(value) => update("previewUrl", value)} type="url" placeholder="https://..." /><Field label="Рабочий сайт" value={values.siteUrl} onChange={(value) => update("siteUrl", value)} type="url" placeholder="https://..." />{editing && <div className="project-code-reset field-full"><Field label="Код доступа клиента" value={values.accessCode} onChange={(value) => update("accessCode", formatAccessCode(value))} placeholder="Например, 8VEQ-B2AQ-TDNE" hint="Оставьте пустым, чтобы сохранить текущий код." /><button type="button" className="button button-ghost" onClick={() => update("accessCode", createAccessCode())}>Сгенерировать новый код</button></div>}</>;
 }
 
 function StageFields({ values, update, snapshot }: FormFieldsProps & { snapshot: AdminSnapshot }) {
@@ -512,6 +515,11 @@ function createAccessCode() {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const random = crypto.getRandomValues(new Uint32Array(12));
   return Array.from(random, (value) => alphabet[value % alphabet.length]).join("").match(/.{1,4}/g)?.join("-") ?? "";
+}
+
+function formatAccessCode(value: string) {
+  const characters = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
+  return characters.match(/.{1,4}/g)?.join("-") ?? "";
 }
 
 function applyLocalMutation(snapshot: AdminSnapshot, entity: AdminEntity, value: Record<string, unknown>): AdminSnapshot {
