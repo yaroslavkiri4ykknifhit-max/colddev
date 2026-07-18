@@ -35,11 +35,11 @@ export default function LoginPage() {
           <ArrowLeft size={15} /> Вернуться на сайт
         </Link>
         <div className="auth-content">
-          <span className="eyebrow"><LockKeyhole size={14} /> Кабинет клиента</span>
-          <h1>ВАШ ПРОЕКТ.<br />ВСЕГДА РЯДОМ.</h1>
+          <span className="eyebrow"><LockKeyhole size={14} /> Вход для действующих клиентов</span>
+          <h1>ВАШ ЗАКАЗ.<br />ВСЁ ПОД КОНТРОЛЕМ.</h1>
           <p>
-            Введите данные, которые вы получили после старта работы. Один вход
-            открывает все проекты вашей компании.
+            Кабинет доступен тем, кто уже оформил заказ в COLDDEV. Введите ID
+            проекта и персональный код, которые мы прислали после старта работ.
           </p>
           <form className="auth-form" onSubmit={submit}>
             <div className="field">
@@ -80,12 +80,11 @@ export default function LoginPage() {
       </section>
       <aside className="auth-visual">
         <div className="auth-quote">
-          <span>COLDDEV / клиентская система</span>
+          <span>COLDDEV / ваш проект без неизвестности</span>
           <blockquote>НИКАКИХ<br />«НУ ЧТО ТАМ?»</blockquote>
-          <p>Прогресс, этапы, рекламные отчёты и оплаты собраны в одном месте.</p>
+          <p>Сразу видно, что готово, что делаем сейчас, когда запуск и какие счета нужно оплатить.</p>
         </div>
       </aside>
     </main>
   );
 }
-

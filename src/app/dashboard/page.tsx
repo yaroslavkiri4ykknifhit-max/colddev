@@ -34,11 +34,11 @@ type View = "overview" | "stages" | "updates" | "site" | "ads" | "payments" | "o
 const navItems: Array<{ id: View; label: string; icon: typeof Home }> = [
   { id: "overview", label: "Обзор", icon: Home },
   { id: "stages", label: "Этапы", icon: Layers3 },
-  { id: "updates", label: "Ход работы", icon: Clock3 },
-  { id: "site", label: "Сайт", icon: Globe2 },
-  { id: "ads", label: "Реклама", icon: Megaphone },
-  { id: "payments", label: "Оплата", icon: CircleDollarSign },
-  { id: "offers", label: "Улучшить проект", icon: Sparkles },
+  { id: "updates", label: "Что уже сделано", icon: Clock3 },
+  { id: "site", label: "Сайт и ссылки", icon: Globe2 },
+  { id: "ads", label: "Реклама и заявки", icon: Megaphone },
+  { id: "payments", label: "Счета и оплата", icon: CircleDollarSign },
+  { id: "offers", label: "Что можно добавить", icon: Sparkles },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -145,9 +145,9 @@ export default function DashboardPage() {
     <main className="product-page">
       <div className="product-shell">
         <aside className={`product-sidebar ${sidebarOpen ? "is-open" : ""}`}>
-          <div className="sidebar-top"><Logo /><button className="mobile-nav-toggle" onClick={() => setSidebarOpen(false)}><X size={17} /></button></div>
+          <div className="sidebar-top"><Logo /><button className="mobile-nav-toggle" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)}><X size={17} /></button></div>
           <div className="sidebar-project">
-            <label htmlFor="project-select">Текущий проект</label>
+            <label htmlFor="project-select">Выберите проект</label>
             <select id="project-select" value={project.id} onChange={(event) => setProjectId(event.target.value)}>
               {data.projects.map((item) => <option value={item.id} key={item.id}>{item.id} · {item.name}</option>)}
             </select>
@@ -159,15 +159,15 @@ export default function DashboardPage() {
             })}
           </nav>
           <div className="sidebar-bottom">
-            <a className="sidebar-support" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><span>Нужна помощь?</span><strong><Send size={14} /> Написать @c0lddev</strong></a>
+            <a className="sidebar-support" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><span>Остался вопрос?</span><strong><Send size={14} /> Написать Ярославу</strong></a>
             <button className="sidebar-logout" onClick={logout}><LogOut size={13} /> Выйти</button>
           </div>
         </aside>
         <section className="product-main">
           <header className="product-topbar">
-            <div><h1>{project.id} / {project.name}</h1><p>Обновлено {formatDate(project.lastUpdatedAt)}</p></div>
+            <div><h1>Проект: {project.name}</h1><p>Номер {project.id} · обновлено {formatDate(project.lastUpdatedAt)}</p></div>
             <div className="topbar-actions">
-              <button className="mobile-nav-toggle" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button>
+              <button className="mobile-nav-toggle" aria-label="Открыть меню" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button>
               <div className="user-chip"><span className="user-avatar">{data.client.name.split(" ").map((part) => part[0]).join("").slice(0,2)}</span><div><strong>{data.client.name}</strong><span>{data.client.company}</span></div></div>
             </div>
           </header>
@@ -204,19 +204,29 @@ function Overview({ project, stages, updates, invoices, setView }: { project: Pr
   const nextStage = stages.find((stage) => stage.status === "active") ?? stages.find((stage) => stage.status === "waiting");
   const unpaid = invoices.find((invoice) => invoice.status === "Ожидает оплаты");
   return <>
-    <div className="overview-hero card">
-      <div className="overview-hero-top"><StatusBadge status={project.status} /><h2>{project.name}</h2></div>
-      <div className="overview-hero-bottom"><div><div className="large-progress"><span style={{ width: `${project.progress}%` }} /></div><div className="progress-text"><span>Общая готовность</span><strong>{project.progress}%</strong></div></div><div className="deadline-block"><span>Плановый запуск</span><strong>{formatDate(project.deadline)}</strong></div></div>
+    <div className="client-current-card card">
+      <div className="client-current-copy">
+        <div className="client-current-top"><span>Что происходит сейчас</span><StatusBadge status={project.status} /></div>
+        <h2>{project.currentAction}</h2>
+        <p>{project.managerComment}</p>
+        <div className="client-action-state"><Check size={17} /><div><strong>Сейчас от вас ничего не требуется</strong><span>Если понадобится решение или файл, это сообщение изменится.</span></div></div>
+      </div>
+      <div className="client-progress-panel">
+        <span>Проект готов</span>
+        <strong>{project.progress}%</strong>
+        <div className="large-progress"><span style={{ width: `${project.progress}%` }} /></div>
+        <small>Плановый запуск: {formatDate(project.deadline)}</small>
+      </div>
     </div>
     <div className="stats-grid">
-      <div className="stat-card card"><span>Статус</span><strong>{project.status}</strong><small>Проект движется по плану</small></div>
-      <div className="stat-card card"><span>Этапы</span><strong>{completed} / {stages.length}</strong><small>завершено</small></div>
-      <div className="stat-card card"><span>Сейчас</span><strong>{nextStage?.title ?? "Готово"}</strong><small>{nextStage?.description ?? "Все этапы завершены"}</small></div>
-      <div className="stat-card card"><span>К оплате</span><strong>{unpaid ? formatMoney(unpaid.amount) : "0 BYN"}</strong><small>{unpaid ? `до ${formatShortDate(unpaid.dueAt)}` : "нет счетов"}</small></div>
+      <div className="stat-card card"><span>Готово этапов</span><strong>{completed} из {stages.length}</strong><small>Все этапы можно открыть в меню</small></div>
+      <div className="stat-card card"><span>Текущий этап</span><strong>{nextStage?.title ?? "Проект готов"}</strong><small>{nextStage?.description ?? "Все работы завершены"}</small></div>
+      <div className="stat-card card"><span>Плановая дата</span><strong>{formatShortDate(project.deadline)}</strong><small>Дата запуска проекта</small></div>
+      <div className="stat-card card"><span>Ближайшая оплата</span><strong>{unpaid ? formatMoney(unpaid.amount) : "Нет"}</strong><small>{unpaid ? `Оплатить до ${formatShortDate(unpaid.dueAt)}` : "Все счета оплачены"}</small></div>
     </div>
     <div className="dashboard-columns">
-      <div className="card"><div className="card-heading"><h3>Последние обновления</h3><button onClick={() => setView("updates")}>Смотреть все</button></div><div className="timeline">{updates.slice(0,3).map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title}</h4><p>{update.description}</p></div><time>{formatShortDate(update.date)}</time></div>)}</div></div>
-      <div className="action-card card"><span>Текущее действие</span><h3>{project.currentAction}</h3><p>{project.managerComment}</p></div>
+      <div className="card"><div className="card-heading"><h3>Последние обновления по проекту</h3><button onClick={() => setView("updates")}>Открыть всю историю</button></div><div className="timeline">{updates.slice(0,3).map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title}</h4><p>{update.description}</p></div><time>{formatShortDate(update.date)}</time></div>)}</div></div>
+      <div className="action-card card"><span>Главное на сегодня</span><h3>{unpaid ? `Есть счёт на ${formatMoney(unpaid.amount)}` : "От вас ничего не требуется"}</h3><p>{unpaid ? `Его нужно оплатить до ${formatDate(unpaid.dueAt)}. Реквизиты и загрузка чека находятся в разделе «Счета и оплата».` : "Работа идёт по плану. Следующее важное действие появится здесь."}</p>{unpaid && <button className="button button-primary button-small" onClick={() => setView("payments")}>Перейти к оплате <ArrowUpRight size={14} /></button>}</div>
     </div>
   </>;
 }
@@ -242,7 +252,38 @@ function AdsView({ reports }: { reports: DashboardData["reports"] }) {
 
 function PaymentsView({ invoices, invoiceToPay, setInvoiceToPay, receiptFile, setReceiptFile, uploading, uploadReceipt, copyText }: { invoices: Invoice[]; invoiceToPay: string; setInvoiceToPay: (id: string) => void; receiptFile: File | null; setReceiptFile: (file: File | null) => void; uploading: boolean; uploadReceipt: () => void; copyText: (value: string) => void }) {
   const selected = invoices.find((item) => item.id === invoiceToPay);
-  return <><div className="view-heading"><div><h2>Оплата</h2><p>Счета, реквизиты ЕРИП и история платежей</p></div></div><div className="invoice-list">{invoices.map((invoice) => <article className="invoice-card card" key={invoice.id}><div><h3>{invoice.title}</h3><p>{invoice.id} · выставлен {formatShortDate(invoice.createdAt)}</p></div><div className="invoice-amount"><span>Сумма</span><strong>{formatMoney(invoice.amount)}</strong></div><div className="invoice-due"><span>Срок оплаты</span><strong>{formatDate(invoice.dueAt)}</strong></div><StatusBadge status={invoice.status} /></article>)}</div>{invoices.some((item) => item.status === "Ожидает оплаты") && <div className="payment-panel" style={{marginTop:12}}><div className="erip-card card"><span className="eyebrow eyebrow-invert">Оплата через ЕРИП</span><h3>{selected ? formatMoney(selected.amount) : "Выберите счёт"}</h3><ul className="erip-path">{siteConfig.erip.path.map((part) => <li key={part}>→ {part}</li>)}</ul><div className="erip-contract"><div><span>Номер договора</span><strong>{siteConfig.erip.contractNumber}</strong></div><button className="copy-button" onClick={() => copyText(siteConfig.erip.contractNumber)} title="Скопировать"><Copy size={16} /></button></div></div><div className="upload-card card"><h3>Сообщить об оплате</h3><p>Выберите счёт и приложите чек. После проверки статус изменится на «Оплачено».</p><div className="field"><label htmlFor="invoice-select">Счёт</label><select id="invoice-select" value={invoiceToPay} onChange={(event) => setInvoiceToPay(event.target.value)}>{invoices.filter((item) => item.status === "Ожидает оплаты").map((item) => <option value={item.id} key={item.id}>{item.title} · {formatMoney(item.amount)}</option>)}</select></div><label className="upload-zone" style={{marginTop:12}}><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => setReceiptFile(event.target.files?.[0] ?? null)} /><UploadCloud size={25} /><strong>{receiptFile ? "Выбрать другой файл" : "Прикрепить чек"}</strong><span>JPG, PNG, WEBP или PDF · до 10 МБ</span></label>{receiptFile && <div className="upload-file">{receiptFile.name} · {(receiptFile.size/1024/1024).toFixed(2)} МБ</div>}<button className="button button-primary" style={{width:"100%",marginTop:12}} disabled={!receiptFile || uploading} onClick={uploadReceipt}>{uploading ? "Загружаем…" : "Я оплатил"}</button></div></div>}</>;
+  const hasPendingInvoice = invoices.some((item) => item.status === "Ожидает оплаты");
+
+  return <>
+    <div className="view-heading"><div><h2>Счета и оплата</h2><p>Здесь видно, сколько, когда и как нужно оплатить</p></div></div>
+    <div className="invoice-list">
+      {invoices.map((invoice) => <article className="invoice-card card" key={invoice.id}>
+        <div><h3>{invoice.title}</h3><p>{invoice.id} · выставлен {formatShortDate(invoice.createdAt)}</p></div>
+        <div className="invoice-amount"><span>Сумма</span><strong>{formatMoney(invoice.amount)}</strong></div>
+        <div className="invoice-due"><span>Оплатить до</span><strong>{formatDate(invoice.dueAt)}</strong></div>
+        <StatusBadge status={invoice.status} />
+      </article>)}
+    </div>
+    {hasPendingInvoice && <div className="payment-panel" style={{marginTop:12}}>
+      <div className="erip-card card">
+        <span className="eyebrow eyebrow-invert">Как оплатить через ЕРИП</span>
+        <span className="erip-amount-label">Сумма выбранного счёта</span>
+        <h3>{selected ? formatMoney(selected.amount) : "Выберите счёт"}</h3>
+        <ol className="erip-path">
+          {siteConfig.erip.path.map((part, index) => <li key={part}><span>{index + 1}</span><strong>{part}</strong></li>)}
+        </ol>
+        <div className="erip-contract"><div><span>Номер договора</span><strong>{siteConfig.erip.contractNumber}</strong></div><button className="copy-button" onClick={() => copyText(siteConfig.erip.contractNumber)} title="Скопировать номер договора"><Copy size={16} /></button></div>
+      </div>
+      <div className="upload-card card">
+        <h3>После оплаты приложите чек</h3>
+        <p>Выберите оплаченный счёт и загрузите изображение или PDF. Мы проверим платёж и поменяем статус на «Оплачено».</p>
+        <div className="field"><label htmlFor="invoice-select">Какой счёт оплатили</label><select id="invoice-select" value={invoiceToPay} onChange={(event) => setInvoiceToPay(event.target.value)}>{invoices.filter((item) => item.status === "Ожидает оплаты").map((item) => <option value={item.id} key={item.id}>{item.title} · {formatMoney(item.amount)}</option>)}</select></div>
+        <label className="upload-zone" style={{marginTop:12}}><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => setReceiptFile(event.target.files?.[0] ?? null)} /><UploadCloud size={25} /><strong>{receiptFile ? "Выбрать другой файл" : "Выбрать чек на устройстве"}</strong><span>JPG, PNG, WEBP или PDF · до 10 МБ</span></label>
+        {receiptFile && <div className="upload-file">{receiptFile.name} · {(receiptFile.size/1024/1024).toFixed(2)} МБ</div>}
+        <button className="button button-primary" style={{width:"100%",marginTop:12}} disabled={!receiptFile || uploading} onClick={uploadReceipt}>{uploading ? "Загружаем чек…" : "Подтвердить: я оплатил"}</button>
+      </div>
+    </div>}
+  </>;
 }
 
 function OffersView({ project, services }: { project: Project; services: DashboardData["services"] }) {

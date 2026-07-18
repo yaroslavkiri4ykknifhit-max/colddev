@@ -15,21 +15,21 @@ export function SiteHeader() {
         <Logo />
         <nav className={open ? "header-nav is-open" : "header-nav"}>
           <Link href="/#services" onClick={() => setOpen(false)}>
-            Услуги
-          </Link>
-          <Link href="/#process" onClick={() => setOpen(false)}>
-            Процесс
-          </Link>
-          <Link href="/#portfolio" onClick={() => setOpen(false)}>
-            Работы
+            Что получите
           </Link>
           <Link href="/#cabinet" onClick={() => setOpen(false)}>
-            Кабинет
+            Личный кабинет
+          </Link>
+          <Link href="/#process" onClick={() => setOpen(false)}>
+            Как работаем
+          </Link>
+          <Link href="/#portfolio" onClick={() => setOpen(false)}>
+            Кейсы
           </Link>
         </nav>
         <div className="header-actions">
-          <Link className="button button-ghost header-login" href="/login">
-            Войти
+          <Link className="button neo-header-login header-login" href="/login">
+            Войти в кабинет
           </Link>
           <a
             className="button button-dark header-telegram"
@@ -37,7 +37,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noreferrer"
           >
-            <Send size={16} /> Обсудить проект
+            <Send size={16} /> Получить расчёт
           </a>
           <button
             className="menu-toggle"

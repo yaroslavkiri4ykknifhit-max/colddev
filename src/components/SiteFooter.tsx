@@ -10,15 +10,15 @@ export function SiteFooter() {
         <div>
           <Logo />
           <p className="footer-note">
-            Сайты, реклама и прозрачная работа<br />для бизнеса.
+            Сайт приводит клиентов.<br />Кабинет показывает всю работу.
           </p>
         </div>
         <div className="footer-links">
           <span className="eyebrow">Навигация</span>
-          <Link href="/#services">Услуги</Link>
+          <Link href="/#services">Что вы получите</Link>
           <Link href="/#process">Как работаем</Link>
           <Link href="/#portfolio">Портфолио</Link>
-          <Link href="/login">Кабинет клиента</Link>
+          <Link href="/login">Войти в кабинет</Link>
         </div>
         <div className="footer-links">
           <span className="eyebrow">Контакт</span>
