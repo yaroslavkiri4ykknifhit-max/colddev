@@ -13,7 +13,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="shell header-inner">
         <Logo />
-        <nav className={open ? "header-nav is-open" : "header-nav"}>
+        <nav className={open ? "header-nav is-open" : "header-nav"} aria-label="Основная навигация">
           <Link href="/#services" onClick={() => setOpen(false)}>
             Что получите
           </Link>
@@ -26,6 +26,15 @@ export function SiteHeader() {
           <Link href="/#portfolio" onClick={() => setOpen(false)}>
             Кейсы
           </Link>
+          <a
+            className="header-mobile-order"
+            href={siteConfig.contacts.orderUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => setOpen(false)}
+          >
+            Получить расчёт <Send size={16} />
+          </a>
         </nav>
         <div className="header-actions">
           <Link className="button neo-header-login header-login" href="/login">
@@ -33,7 +42,7 @@ export function SiteHeader() {
           </Link>
           <a
             className="button button-dark header-telegram"
-            href={siteConfig.contacts.telegramUrl}
+            href={siteConfig.contacts.orderUrl}
             target="_blank"
             rel="noreferrer"
           >

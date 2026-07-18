@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
+  icons: {
+    icon: "/colddev-logo-card.png",
+    apple: "/colddev-logo-card.png",
+  },
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
@@ -16,18 +20,19 @@ export const metadata: Metadata = {
     siteName: siteConfig.brandName,
     locale: "ru_RU",
     type: "website",
+    images: [{ url: "/colddev-logo-card.png", width: 1242, height: 1242, alt: "COLDDEV" }],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1557ff",
+  themeColor: "#5e54eb",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru">
+    <html lang="ru" data-scroll-behavior="smooth">
       <body>{children}</body>
     </html>
   );

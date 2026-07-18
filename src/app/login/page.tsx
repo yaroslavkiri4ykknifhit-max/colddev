@@ -1,9 +1,11 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, LoaderCircle, LockKeyhole } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Eye, EyeOff, LoaderCircle, LockKeyhole, Rocket } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "@/components/Logo";
+import { siteConfig } from "@/config/site";
 import { colddevApi } from "@/lib/api";
 
 export default function LoginPage() {
@@ -11,6 +13,7 @@ export default function LoginPage() {
   const [accessCode, setAccessCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showCode, setShowCode] = useState(false);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -47,6 +50,8 @@ export default function LoginPage() {
               <input
                 id="project-id"
                 autoComplete="username"
+                autoCapitalize="characters"
+                spellCheck={false}
                 placeholder="Например, CD-0007"
                 value={projectId}
                 onChange={(event) => setProjectId(event.target.value)}
@@ -55,24 +60,53 @@ export default function LoginPage() {
             </div>
             <div className="field">
               <label htmlFor="access-code">Код доступа</label>
-              <input
-                id="access-code"
-                type="password"
-                autoComplete="current-password"
-                placeholder="••••-••••-••••"
-                value={accessCode}
-                onChange={(event) => setAccessCode(event.target.value)}
-                required
-              />
+              <div className="password-input-wrap">
+                <input
+                  id="access-code"
+                  type={showCode ? "text" : "password"}
+                  autoComplete="current-password"
+                  autoCapitalize="characters"
+                  spellCheck={false}
+                  placeholder="••••-••••-••••"
+                  value={accessCode}
+                  onChange={(event) => setAccessCode(event.target.value)}
+                  required
+                />
+                <button
+                  className="password-toggle"
+                  type="button"
+                  aria-label={showCode ? "Скрыть код" : "Показать код"}
+                  onClick={() => setShowCode((value) => !value)}
+                >
+                  {showCode ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
-            {error && <div className="auth-error">{error}</div>}
+            {error && <div className="auth-error" role="alert">{error}</div>}
             <button className="button button-primary button-large" disabled={loading}>
               {loading ? <LoaderCircle className="spin" size={19} /> : <>Войти в кабинет <ArrowRight size={19} /></>}
             </button>
           </form>
+          <div className="auth-order-section">
+            <span>Ещё нет проекта в COLDDEV?</span>
+            <a className="auth-order-card" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">
+              <span className="auth-order-icon"><Rocket size={21} /></span>
+              <span className="auth-order-copy">
+                <strong>Оформить заказ</strong>
+                <small>Расскажите о задаче — получите следующий шаг и ориентир по стоимости</small>
+              </span>
+              <ArrowUpRight className="auth-order-arrow" size={20} />
+            </a>
+            <a className="auth-support-link" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer">
+              Нужны данные для входа? Написать Ярославу <ArrowUpRight size={14} />
+            </a>
+          </div>
         </div>
       </section>
       <aside className="auth-visual">
+        <div className="auth-visual-logo" aria-hidden="true">
+          <Image src="/colddev-mark.png" width={900} height={900} alt="" priority />
+        </div>
         <div className="auth-quote">
           <span>COLDDEV / ваш проект в ясной картине</span>
           <blockquote>ВЫ ВИДИТЕ<br />ВСЁ.</blockquote>

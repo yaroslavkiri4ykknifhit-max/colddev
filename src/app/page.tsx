@@ -21,6 +21,7 @@ import {
   SiNextdotjs,
   SiTelegram,
 } from "react-icons/si";
+import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -112,14 +113,17 @@ export default function Home() {
                 проектируем сайты, запускаем рекламу и ведём работу до заявки.
               </p>
               <div className="neo-hero-actions">
-                <a
-                  className="button button-primary button-large"
-                  href={siteConfig.contacts.telegramUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Получить расчёт <ArrowUpRight size={18} />
-                </a>
+                <div className="primary-cta-wrap">
+                  <a
+                    className="button button-primary button-large"
+                    href={siteConfig.contacts.orderUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Получить расчёт <ArrowUpRight size={18} />
+                  </a>
+                  <small>Ответ в Telegram · план и ориентир по стоимости</small>
+                </div>
                 <div className="client-entry-wrap">
                   <Link className="button neo-login-button button-large" href="/login">
                     Уже клиент? Войти <ArrowRight size={18} />
@@ -128,7 +132,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="neo-human-note">
-                <span>Я</span>
+                <span><Image src="/colddev-mark.png" width={56} height={56} alt="" /></span>
                 <p><strong>Проект ведёт Ярослав лично.</strong> Один человек отвечает за задачу от первого сообщения до запуска.</p>
               </div>
             </div>
@@ -147,7 +151,7 @@ export default function Home() {
               </div>
               <div className="scene-dashboard">
                 <div className="scene-dashboard-top">
-                  <span className="scene-mark">C/</span>
+                  <span className="scene-mark"><Image src="/colddev-mark.png" width={56} height={56} alt="" /></span>
                   <div><small>ПРОЕКТ CD-0007</small><strong>Сайт для Forma</strong></div>
                   <span className="scene-status">В работе</span>
                 </div>
@@ -218,8 +222,8 @@ export default function Home() {
         <section className="platform-section">
           <div className="shell platform-inner">
             <div className="platform-copy">
-              <span>Работаем на нормальной инфраструктуре</span>
-              <strong>Надёжная основа для сайта, кабинета, аналитики и рекламы.</strong>
+              <span>Основа проекта</span>
+              <strong>Сайт, кабинет, аналитика и реклама работают на проверенной инфраструктуре.</strong>
             </div>
             <div className="platform-logos">
               {platforms.map((platform) => {
@@ -241,14 +245,17 @@ export default function Home() {
               <div className="cabinet-access-note">
                 <FileCheck2 />
                 <p><strong>Только для клиентов</strong>Кабинет выдаётся после оформления заказа. Вход — по ID проекта и персональному коду.</p>
-                <Link href="/login">Перейти ко входу <ArrowRight /></Link>
+                <div className="cabinet-access-actions">
+                  <Link href="/login">Перейти ко входу <ArrowRight /></Link>
+                  <a href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Оформить заказ <ArrowUpRight /></a>
+                </div>
               </div>
             </div>
 
             <div className="cabinet-showcase-grid">
               <div className="cabinet-screen">
                 <div className="cabinet-screen-bar">
-                  <span className="scene-mark">C/</span>
+                  <span className="scene-mark"><Image src="/colddev-mark.png" width={56} height={56} alt="" /></span>
                   <div><small>ДОБРЫЙ ДЕНЬ, АЛЕКСЕЙ</small><strong>Ваш проект понятен с первого экрана</strong></div>
                   <span className="scene-status">В работе</span>
                 </div>
@@ -331,6 +338,10 @@ export default function Home() {
                 <div className="case-meta"><div><span>Кейс №02</span><h3>Результат рекламы в понятных цифрах</h3></div><ArrowUpRight /></div>
               </article>
             </div>
+            <div className="cases-order-strip">
+              <div><span>Ваш проект может стать следующим</span><strong>Обсудим задачу и соберём понятный план запуска</strong></div>
+              <a className="button button-primary button-large" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Обсудить свой проект <ArrowUpRight /></a>
+            </div>
           </div>
         </section>
 
@@ -355,10 +366,11 @@ export default function Home() {
           <div className="shell">
             <div className="neo-final-card">
               <div className="liquid-ring" />
+              <div className="final-brand-mark" aria-hidden="true"><Image src="/colddev-mark.png" width={420} height={420} alt="" /></div>
               <span className="neo-kicker neo-kicker-light">Обсудим следующий шаг</span>
               <h2>ВАШ БИЗНЕС РАСТЁТ.<br />САЙТ И РЕКЛАМА<br />РАБОТАЮТ НА РЕЗУЛЬТАТ.</h2>
               <p>Напишите, чем занимается ваш бизнес. В ответ получите понятный следующий шаг и ориентир по стоимости.</p>
-              <a className="button button-white button-large" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><Send /> Написать @c0lddev</a>
+              <a className="button button-white button-large" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer"><Send /> Написать @c0lddev</a>
             </div>
           </div>
         </section>

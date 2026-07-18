@@ -7,6 +7,7 @@ export const siteConfig = {
   contacts: {
     telegramUsername: "c0lddev",
     telegramUrl: "https://t.me/c0lddev",
+    orderUrl: `https://t.me/c0lddev?text=${encodeURIComponent("Здравствуйте! Хочу обсудить сайт или рекламу для моего бизнеса.")}`,
   },
   erip: {
     title: "ЕРИП",
