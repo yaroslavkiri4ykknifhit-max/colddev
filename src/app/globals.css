@@ -2241,7 +2241,9 @@ body { overflow-x: hidden; }
 .product-page .product-nav button svg { width: 22px; height: 22px; flex: 0 0 auto; stroke-width: 2.2; }
 .product-page .activity-icon svg,
 .product-page .offer-icon svg,
-.product-page .empty-state > svg { width: 25px; height: 25px; stroke-width: 2.2; }
+.product-page .empty-state > svg,
+.product-page .client-next-icon svg { width: 27px; height: 27px; stroke-width: 2.2; }
+.product-page .payment-done-icon svg { width: 43px; height: 43px; stroke-width: 2.2; }
 .auth-content > p,
 .auth-order-section,
 .auth-form { font-weight: 590; }

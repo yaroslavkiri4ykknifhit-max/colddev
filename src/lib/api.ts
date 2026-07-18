@@ -27,7 +27,7 @@ async function request<T>(action: string, payload: Record<string, unknown>, opti
     });
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      throw new Error("Google обрабатывает файл дольше обычного. Чек мог уже сохраниться — обновите кабинет через 10 секунд. Если счёт всё ещё ждёт оплаты, попробуйте ещё раз.");
+      throw new Error("Сервис отвечает дольше обычного. Обновите страницу через несколько секунд и попробуйте ещё раз. Если это была загрузка чека, он мог уже сохраниться — проверьте статус счёта.");
     }
     throw error;
   } finally {
