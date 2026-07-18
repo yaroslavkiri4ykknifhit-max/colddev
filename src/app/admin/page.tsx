@@ -8,6 +8,7 @@ import {
   ChevronDown,
   CircleDollarSign,
   ClipboardList,
+  Copy,
   FolderKanban,
   LayoutDashboard,
   LogOut,
@@ -48,6 +49,7 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modal, setModal] = useState<{ entity: AdminSection; item?: Record<string, unknown> } | null>(null);
+  const [newProjectAccess, setNewProjectAccess] = useState<{ projectId: string; accessCode: string; projectName: string } | null>(null);
   const [toast, setToast] = useState("");
 
   const authenticate = async (value: string) => {
@@ -92,10 +94,40 @@ export default function AdminPage() {
 
   const saveEntity = async (entity: AdminSection, values: Record<string, unknown>, original?: Record<string, unknown>) => {
     try {
-      await colddevApi.adminMutation(credential, entity, original ? "update" : "create", original ? { ...original, ...values } : values);
-      if (snapshot) setSnapshot(applyLocalMutation(snapshot, entity, original ? { ...original, ...values } : values));
+      const payload: Record<string, unknown> = original ? { ...original, ...values } : { ...values };
+      let generatedAccessCode = "";
+
+      if (!original && snapshot && entity === "clients") {
+        payload.id = nextReadableId("CL", snapshot.clients.map((item) => item.id));
+      }
+
+      if (!original && snapshot && entity === "projects") {
+        payload.id = nextReadableId("CD", snapshot.projects.map((item) => item.id));
+        generatedAccessCode = createAccessCode();
+        payload.accessCode = generatedAccessCode;
+      }
+
+      const result = await colddevApi.adminMutation(credential, entity, original ? "update" : "create", payload);
+      const savedValue: Record<string, unknown> = { ...payload, id: String(result.id ?? payload.id ?? "") };
+
+      if (snapshot) {
+        try {
+          setSnapshot(await colddevApi.getAdminSnapshot(credential));
+        } catch {
+          setSnapshot(applyLocalMutation(snapshot, entity, savedValue));
+        }
+      }
+
       setModal(null);
-      setToast("Изменения сохранены");
+      if (entity === "projects" && generatedAccessCode) {
+        setNewProjectAccess({
+          projectId: String(savedValue.id),
+          accessCode: generatedAccessCode,
+          projectName: String(savedValue.title ?? "Новый проект"),
+        });
+      } else {
+        setToast("Изменения сохранены");
+      }
     } catch (error) {
       setToast(error instanceof Error ? error.message : "Не удалось сохранить изменения");
     }
@@ -140,6 +172,7 @@ export default function AdminPage() {
         </section>
       </div>
       {modal && <EntityModal entity={modal.entity} item={modal.item} snapshot={snapshot} onClose={() => setModal(null)} onSave={(values) => saveEntity(modal.entity, values, modal.item)} />}
+      {newProjectAccess && <ProjectAccessModal credentials={newProjectAccess} onClose={() => setNewProjectAccess(null)} />}
       {toast && <div className="toast"><Check size={16} /> {toast}</div>}
     </main>
   );
@@ -191,6 +224,14 @@ function EntityModal({ entity, item, snapshot, onClose, onSave }: { entity: Admi
     deadline: String(item?.deadline ?? "2026-08-30"),
     price: String(item?.price ?? ""),
     category: String(item?.category ?? "Сайт"),
+    telegram: String(item?.telegram ?? ""),
+    email: String(item?.email ?? ""),
+    clientId: String(item?.clientId ?? snapshot.clients[0]?.id ?? ""),
+    projectId: String(item?.projectId ?? snapshot.projects[0]?.id ?? ""),
+    currentAction: String(item?.currentAction ?? "Подготовка проекта"),
+    managerComment: String(item?.managerComment ?? "Работа началась. Следующее обновление появится в кабинете."),
+    siteUrl: String(item?.siteUrl ?? ""),
+    previewUrl: String(item?.previewUrl ?? ""),
   }));
   const update = (key: string, value: string) => setValues((current) => ({ ...current, [key]: value }));
   const isClient = entity === "clients";
@@ -200,9 +241,9 @@ function EntityModal({ entity, item, snapshot, onClose, onSave }: { entity: Admi
   const isWork = ["stages", "updates", "ads"].includes(entity);
   const isPortfolio = ["portfolio", "cases"].includes(entity);
   return <div className="modal-backdrop" role="presentation" onMouseDown={(event) => {if (event.target === event.currentTarget) onClose();}}><section className="modal" role="dialog" aria-modal="true"><div className="modal-header"><h2>{title}</h2><button className="icon-button" onClick={onClose}><X size={15} /></button></div><div className="modal-form">
-    {isClient && <><Field label="Имя клиента" value={values.name} onChange={(value) => update("name", value)} /><Field label="Компания" value={values.company} onChange={(value) => update("company", value)} /><Field label="Telegram" value={String(item?.telegram ?? "")} onChange={(value) => update("telegram", value)} /><Field label="Email" value={String(item?.email ?? "")} onChange={(value) => update("email", value)} /></>}
-    {isProject && <><Field label="Название проекта" value={values.title} onChange={(value) => update("title", value)} /><Field label="Тип проекта" value={values.type} onChange={(value) => update("type", value)} /><Field label="Готовность, %" value={values.progress} onChange={(value) => update("progress", value)} type="number" /><Field label="Дедлайн" value={values.deadline} onChange={(value) => update("deadline", value)} type="date" /><Field label="Код доступа" value={String(item?.accessCode ?? "")} onChange={(value) => update("accessCode", value)} /><div className="field field-full"><label>Клиент</label><select value={String(item?.clientId ?? snapshot.clients[0]?.id)} onChange={(event) => update("clientId", event.target.value)}>{snapshot.clients.map((client) => <option key={client.id} value={client.id}>{client.company}</option>)}</select></div></>}
-    {isInvoice && <><Field label="Название услуги" value={values.title} onChange={(value) => update("title", value)} /><Field label="Сумма, BYN" value={values.amount} onChange={(value) => update("amount", value)} type="number" /><Field label="Срок оплаты" value={values.deadline} onChange={(value) => update("deadline", value)} type="date" /><div className="field field-full"><label>Проект</label><select value={String(item?.projectId ?? snapshot.projects[0]?.id)} onChange={(event) => update("projectId", event.target.value)}>{snapshot.projects.map((project) => <option key={project.id} value={project.id}>{project.id} · {project.name}</option>)}</select></div></>}
+    {isClient && <><Field label="Имя клиента" value={values.name} onChange={(value) => update("name", value)} /><Field label="Компания" value={values.company} onChange={(value) => update("company", value)} /><Field label="Telegram" value={values.telegram} onChange={(value) => update("telegram", value)} /><Field label="Email" value={values.email} onChange={(value) => update("email", value)} /></>}
+    {isProject && <><Field label="Название проекта" value={values.title} onChange={(value) => update("title", value)} /><Field label="Тип проекта" value={values.type} onChange={(value) => update("type", value)} /><Field label="Готовность, %" value={values.progress} onChange={(value) => update("progress", value)} type="number" /><Field label="Дедлайн" value={values.deadline} onChange={(value) => update("deadline", value)} type="date" /><div className="field field-full"><label>Клиент</label><select value={values.clientId} onChange={(event) => update("clientId", event.target.value)}>{snapshot.clients.map((client) => <option key={client.id} value={client.id}>{client.company}</option>)}</select></div><Field label="Что делаем сейчас" value={values.currentAction} onChange={(value) => update("currentAction", value)} full /><Field label="Комментарий клиенту" value={values.managerComment} onChange={(value) => update("managerComment", value)} full /><Field label="Ссылка на текущую версию" value={values.previewUrl} onChange={(value) => update("previewUrl", value)} /><Field label="Рабочий сайт" value={values.siteUrl} onChange={(value) => update("siteUrl", value)} />{item && <Field label="Новый код доступа (необязательно)" value={String(values.accessCode ?? "")} onChange={(value) => update("accessCode", value)} full />}</>}
+    {isInvoice && <><Field label="Название услуги" value={values.title} onChange={(value) => update("title", value)} /><Field label="Сумма, BYN" value={values.amount} onChange={(value) => update("amount", value)} type="number" /><Field label="Срок оплаты" value={values.deadline} onChange={(value) => update("deadline", value)} type="date" /><div className="field field-full"><label>Проект</label><select value={values.projectId} onChange={(event) => update("projectId", event.target.value)}>{snapshot.projects.map((project) => <option key={project.id} value={project.id}>{project.id} · {project.name}</option>)}</select></div></>}
     {isService && <><Field label="Название услуги" value={values.title} onChange={(value) => update("title", value)} /><Field label="Цена" value={values.price} onChange={(value) => update("price", value)} type="number" /><Field label="Описание" value={values.description} onChange={(value) => update("description", value)} full /><div className="field"><label>Формат цены</label><select value={String(item?.priceMode ?? "fixed")} onChange={(event) => update("priceMode", event.target.value)}><option value="fixed">Фиксированная</option><option value="from">От</option><option value="request">По запросу</option></select></div></>}
     {isWork && <><Field label="Заголовок" value={values.title} onChange={(value) => update("title", value)} /><Field label="Проект" value={String(item?.projectId ?? snapshot.projects[0]?.id)} onChange={(value) => update("projectId", value)} /><Field label="Описание" value={values.description} onChange={(value) => update("description", value)} full /><Field label="Период / дата" value={values.category} onChange={(value) => update("category", value)} /></>}
     {isPortfolio && <><Field label="Название" value={values.title} onChange={(value) => update("title", value)} /><Field label="Категория" value={values.category} onChange={(value) => update("category", value)} /><Field label="Описание" value={values.description} onChange={(value) => update("description", value)} full /><Field label="Результат / показатель" value={values.result} onChange={(value) => update("result", value)} full /></>}
@@ -213,6 +254,40 @@ function EntityModal({ entity, item, snapshot, onClose, onSave }: { entity: Admi
 
 function Field({ label, value, onChange, type = "text", full = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; full?: boolean }) {
   return <div className={`field ${full ? "field-full" : ""}`}><label>{label}</label><input type={type} value={value} onChange={(event) => onChange(event.target.value)} /></div>;
+}
+
+function ProjectAccessModal({ credentials, onClose }: { credentials: { projectId: string; accessCode: string; projectName: string }; onClose: () => void }) {
+  const [copied, setCopied] = useState("");
+  const copy = async (label: string, value: string) => {
+    await navigator.clipboard.writeText(value);
+    setCopied(label);
+  };
+
+  return <div className="modal-backdrop"><section className="modal access-result-modal" role="dialog" aria-modal="true" aria-labelledby="access-result-title">
+    <div className="modal-header"><h2 id="access-result-title">Проект создан</h2><button className="icon-button" onClick={onClose}><X size={15} /></button></div>
+    <div className="access-result-content">
+      <span className="admin-mode">ДАННЫЕ ДЛЯ ВХОДА КЛИЕНТА</span>
+      <h3>{credentials.projectName}</h3>
+      <p>Скопируйте и отправьте клиенту оба значения. Код показывается здесь один раз — в таблице хранится только его защищённый хеш.</p>
+      <div className="access-result-row"><div><span>ID проекта</span><strong>{credentials.projectId}</strong></div><button onClick={() => copy("ID", credentials.projectId)}><Copy size={16} />{copied === "ID" ? "Скопировано" : "Копировать"}</button></div>
+      <div className="access-result-row"><div><span>Код доступа</span><strong>{credentials.accessCode}</strong></div><button onClick={() => copy("Код", credentials.accessCode)}><Copy size={16} />{copied === "Код" ? "Скопировано" : "Копировать"}</button></div>
+      <button className="button button-primary" onClick={onClose}>Готово, я сохранил данные</button>
+    </div>
+  </section></div>;
+}
+
+function nextReadableId(prefix: "CL" | "CD", ids: string[]) {
+  const max = ids.reduce((current, id) => {
+    const match = id.match(new RegExp(`^${prefix}-(\\d+)$`));
+    return match ? Math.max(current, Number(match[1])) : current;
+  }, 0);
+  return `${prefix}-${String(max + 1).padStart(4, "0")}`;
+}
+
+function createAccessCode() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const random = crypto.getRandomValues(new Uint32Array(12));
+  return Array.from(random, (value) => alphabet[value % alphabet.length]).join("").match(/.{1,4}/g)?.join("-") ?? "";
 }
 
 function applyLocalMutation(snapshot: AdminSnapshot, entity: AdminSection, value: Record<string, unknown>): AdminSnapshot {
