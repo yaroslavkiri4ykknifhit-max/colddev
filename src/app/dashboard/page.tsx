@@ -172,7 +172,6 @@ export default function DashboardPage() {
             </div>
           </header>
           <div className="product-content">
-            {colddevApi.isDemoMode && <div className="notice">Это демонстрационный кабинет. Данные и загрузка чека работают локально и не отправляются в Google Drive.</div>}
             {view === "overview" && <Overview project={project} stages={projectStages} updates={projectUpdates} invoices={projectInvoices} setView={setView} />}
             {view === "stages" && <StagesView project={project} stages={projectStages} />}
             {view === "updates" && <UpdatesView updates={projectUpdates} />}
@@ -209,7 +208,7 @@ function Overview({ project, stages, updates, invoices, setView }: { project: Pr
         <div className="client-current-top"><span>Что происходит сейчас</span><StatusBadge status={project.status} /></div>
         <h2>{project.currentAction}</h2>
         <p>{project.managerComment}</p>
-        <div className="client-action-state"><Check size={17} /><div><strong>Сейчас от вас ничего не требуется</strong><span>Если понадобится решение или файл, это сообщение изменится.</span></div></div>
+        <div className="client-action-state"><Check size={17} /><div><strong>Сейчас всё идёт по плану</strong><span>Следующий шаг появится здесь, когда понадобится ваше решение или файл.</span></div></div>
       </div>
       <div className="client-progress-panel">
         <span>Проект готов</span>
@@ -222,11 +221,11 @@ function Overview({ project, stages, updates, invoices, setView }: { project: Pr
       <div className="stat-card card"><span>Готово этапов</span><strong>{completed} из {stages.length}</strong><small>Все этапы можно открыть в меню</small></div>
       <div className="stat-card card"><span>Текущий этап</span><strong>{nextStage?.title ?? "Проект готов"}</strong><small>{nextStage?.description ?? "Все работы завершены"}</small></div>
       <div className="stat-card card"><span>Плановая дата</span><strong>{formatShortDate(project.deadline)}</strong><small>Дата запуска проекта</small></div>
-      <div className="stat-card card"><span>Ближайшая оплата</span><strong>{unpaid ? formatMoney(unpaid.amount) : "Нет"}</strong><small>{unpaid ? `Оплатить до ${formatShortDate(unpaid.dueAt)}` : "Все счета оплачены"}</small></div>
+      <div className="stat-card card"><span>Ближайшая оплата</span><strong>{unpaid ? formatMoney(unpaid.amount) : "Счета закрыты"}</strong><small>{unpaid ? `Оплатить до ${formatShortDate(unpaid.dueAt)}` : "Все платежи подтверждены"}</small></div>
     </div>
     <div className="dashboard-columns">
       <div className="card"><div className="card-heading"><h3>Последние обновления по проекту</h3><button onClick={() => setView("updates")}>Открыть всю историю</button></div><div className="timeline">{updates.slice(0,3).map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title}</h4><p>{update.description}</p></div><time>{formatShortDate(update.date)}</time></div>)}</div></div>
-      <div className="action-card card"><span>Главное на сегодня</span><h3>{unpaid ? `Есть счёт на ${formatMoney(unpaid.amount)}` : "От вас ничего не требуется"}</h3><p>{unpaid ? `Его нужно оплатить до ${formatDate(unpaid.dueAt)}. Реквизиты и загрузка чека находятся в разделе «Счета и оплата».` : "Работа идёт по плану. Следующее важное действие появится здесь."}</p>{unpaid && <button className="button button-primary button-small" onClick={() => setView("payments")}>Перейти к оплате <ArrowUpRight size={14} /></button>}</div>
+      <div className="action-card card"><span>Главное на сегодня</span><h3>{unpaid ? `Счёт на ${formatMoney(unpaid.amount)}` : "Работа идёт по плану"}</h3><p>{unpaid ? `Срок оплаты — ${formatDate(unpaid.dueAt)}. Реквизиты и загрузка чека находятся в разделе «Счета и оплата».` : "Следующий важный шаг появится здесь автоматически."}</p>{unpaid && <button className="button button-primary button-small" onClick={() => setView("payments")}>Перейти к оплате <ArrowUpRight size={14} /></button>}</div>
     </div>
   </>;
 }
@@ -236,16 +235,16 @@ function StagesView({ project, stages }: { project: Project; stages: DashboardDa
 }
 
 function UpdatesView({ updates }: { updates: DashboardData["updates"] }) {
-  return <><div className="view-heading"><div><h2>Ход работы</h2><p>История изменений и заметки по проекту</p></div></div><div className="card"><div className="timeline">{updates.length ? updates.map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title} · {update.category}</h4><p>{update.description}</p>{update.linkUrl && <a href={update.linkUrl} target="_blank" rel="noreferrer" className="button button-ghost button-small">Открыть результат <ArrowUpRight size={13} /></a>}</div><time>{formatDate(update.date)}</time></div>) : <EmptyState title="Обновлений пока нет" text="Первая запись появится после начала работ." />}</div></div></>;
+  return <><div className="view-heading"><div><h2>Ход работы</h2><p>История изменений и заметки по проекту</p></div></div><div className="card"><div className="timeline">{updates.length ? updates.map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title} · {update.category}</h4><p>{update.description}</p>{update.linkUrl && <a href={update.linkUrl} target="_blank" rel="noreferrer" className="button button-ghost button-small">Открыть результат <ArrowUpRight size={13} /></a>}</div><time>{formatDate(update.date)}</time></div>) : <EmptyState title="Обновления появятся здесь" text="Первая запись появится после начала работ." />}</div></div></>;
 }
 
 function SiteView({ project, stages }: { project: Project; stages: DashboardData["stages"] }) {
-  return <><div className="view-heading"><div><h2>Сайт</h2><p>Ссылки и технический статус проекта</p></div>{project.previewUrl && <a className="button button-primary" href={project.previewUrl} target="_blank" rel="noreferrer">Открыть превью <ArrowUpRight size={16} /></a>}</div><div className="stats-grid"><div className="stat-card card"><span>Состояние</span><strong>В разработке</strong><small>Технических проблем нет</small></div><div className="stat-card card"><span>Версия</span><strong>0.{project.progress}</strong><small>Последняя сборка</small></div><div className="stat-card card"><span>Готово этапов</span><strong>{stages.filter((item) => item.status === "done").length}</strong><small>из {stages.length}</small></div><div className="stat-card card"><span>Домен</span><strong>{project.siteUrl ? "Подключён" : "Ожидает"}</strong><small>{project.siteUrl ?? "будет подключён перед запуском"}</small></div></div><div className="report-summary card"><span className="eyebrow">Комментарий менеджера</span><p>{project.managerComment}</p></div></>;
+  return <><div className="view-heading"><div><h2>Сайт</h2><p>Ссылки и технический статус проекта</p></div>{project.previewUrl && <a className="button button-primary" href={project.previewUrl} target="_blank" rel="noreferrer">Открыть превью <ArrowUpRight size={16} /></a>}</div><div className="stats-grid"><div className="stat-card card"><span>Состояние</span><strong>В разработке</strong><small>Технический статус под контролем</small></div><div className="stat-card card"><span>Версия</span><strong>0.{project.progress}</strong><small>Последняя сборка</small></div><div className="stat-card card"><span>Готово этапов</span><strong>{stages.filter((item) => item.status === "done").length}</strong><small>из {stages.length}</small></div><div className="stat-card card"><span>Домен</span><strong>{project.siteUrl ? "Подключён" : "Ожидает"}</strong><small>{project.siteUrl ?? "будет подключён перед запуском"}</small></div></div><div className="report-summary card"><span className="eyebrow">Комментарий менеджера</span><p>{project.managerComment}</p></div></>;
 }
 
 function AdsView({ reports }: { reports: DashboardData["reports"] }) {
   const report = reports[0];
-  if (!report) return <><div className="view-heading"><div><h2>Реклама</h2><p>Статистика Яндекс Директа</p></div></div><div className="card"><EmptyState title="Рекламных отчётов пока нет" text="Показатели появятся после запуска кампаний." /></div></>;
+  if (!report) return <><div className="view-heading"><div><h2>Реклама</h2><p>Статистика Яндекс Директа</p></div></div><div className="card"><EmptyState title="Рекламные отчёты появятся здесь" text="Показатели появятся после запуска кампаний." /></div></>;
   const costPerLead = report.leads ? report.spend / report.leads : 0;
   return <><div className="view-heading"><div><h2>Реклама</h2><p>{report.period}</p></div><StatusBadge status="В работе" /></div><div className="reports-grid"><div className="report-card card"><span>Показы</span><strong>{formatNumber(report.impressions)}</strong><small>охват объявлений</small></div><div className="report-card card"><span>Клики</span><strong>{formatNumber(report.clicks)}</strong><small>{((report.clicks/report.impressions)*100).toFixed(1)}% CTR</small></div><div className="report-card card"><span>Расход</span><strong>{formatMoney(report.spend)}</strong><small>осталось {formatMoney(report.budgetLeft)}</small></div><div className="report-card card"><span>Заявки</span><strong>{report.leads}</strong><small>{formatMoney(costPerLead)} за заявку</small></div></div><div className="report-summary card"><span className="eyebrow">Комментарий по периоду</span><p>{report.comment}</p></div></>;
 }

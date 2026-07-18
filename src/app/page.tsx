@@ -32,32 +32,32 @@ const services = [
     icon: MousePointerClick,
     title: "Сайт, который объясняет и продаёт",
     text: "За несколько секунд человек понимает, что вы предлагаете, почему вам можно доверять и куда нажать, чтобы купить.",
-    accent: "Не «визитка». Рабочий инструмент продаж.",
+    accent: "Понятный маршрут от первого экрана до заявки.",
   },
   {
     id: "02",
     icon: Target,
-    title: "Яндекс Директ без слива бюджета",
-    text: "Собираем горячий спрос, разделяем кампании и показываем цифры человеческим языком — без рекламной магии.",
-    accent: "Вы видите расход, заявки и цену результата.",
+    title: "Яндекс Директ с понятной экономикой",
+    text: "Собираем горячий спрос, разделяем кампании и показываем цифры человеческим языком.",
+    accent: "В каждом отчёте видны расход, заявки и цена обращения.",
   },
   {
     id: "03",
     icon: LayoutDashboard,
-    title: "Вся работа — в личном кабинете",
-    text: "Этапы, сроки, обновления, реклама, счета и файлы собраны в одном месте. Не нужно искать важное по перепискам.",
-    accent: "Никаких «ну что там?». Ответ уже на экране.",
+    title: "Личный кабинет с полной картиной",
+    text: "Этапы, сроки, обновления, реклама, счета и файлы собраны в одном месте.",
+    accent: "Весь проект у вас перед глазами.",
   },
 ];
 
 const process = [
   ["01", "Разбираемся в бизнесе", "Смотрим продукт, клиентов, конкурентов и считаем, что действительно нужно сделать."],
   ["02", "Собираем систему", "Структура, тексты, дизайн, разработка, аналитика и реклама работают на одну цель."],
-  ["03", "Показываем каждый шаг", "После заказа выдаём доступ в кабинет. Там всегда видны статус, сроки и результат."],
+  ["03", "Показываем каждый шаг", "После заказа выдаём доступ в кабинет. Там видны статус, сроки и результат."],
 ];
 
 const cabinetItems = [
-  ["Что делаем сейчас", "Текущий этап и комментарий без технического языка", Eye],
+  ["Что делаем сейчас", "Текущий этап и комментарий простым языком", Eye],
   ["Когда будет готово", "Прогресс, завершённые шаги и плановая дата", Clock3],
   ["Что дала реклама", "Показы, клики, заявки, расходы и цена обращения", BarChart3],
   ["Что и когда оплачивать", "Счета, ЕРИП, чеки и понятные статусы платежей", WalletCards],
@@ -75,7 +75,7 @@ const faqs = [
   {
     question: "Кому доступен личный кабинет?",
     answer:
-      "Кабинет получают клиенты COLDDEV после оформления заказа. Мы выдаём ID проекта и персональный код доступа — регистрироваться самостоятельно не нужно.",
+      "Кабинет получают клиенты COLDDEV после оформления заказа. Мы выдаём ID проекта и персональный код доступа — всё готово для входа.",
   },
   {
     question: "Сколько занимает запуск сайта?",
@@ -85,7 +85,7 @@ const faqs = [
   {
     question: "Можно заказать только рекламу?",
     answer:
-      "Да. Можно заказать сайт, Яндекс Директ или связку под ключ. Если текущий сайт не готов к рекламе, скажем об этом до запуска бюджета.",
+      "Да. Можно заказать сайт, Яндекс Директ или связку под ключ. Перед стартом проверяем готовность площадки и согласуем план продвижения.",
   },
 ];
 
@@ -101,16 +101,15 @@ export default function Home() {
                 <span /> Сайты и Яндекс Директ для бизнеса
               </span>
               <h1>
-                САЙТ ДОЛЖЕН
+                ВЫ ВИДИТЕ
                 <br />
-                <em>ПРИВОДИТЬ</em>
+                <em>ВСЁ.</em>
                 <br />
-                КЛИЕНТОВ. ТОЧКА.
+                МЫ ДЕЛАЕМ ОСТАЛЬНОЕ.
               </h1>
               <p>
-                Вы платите не за кнопки и анимацию. Вы получаете понятную
-                систему: человек увидел рекламу, понял предложение и оставил
-                заявку.
+                Каждый этап, срок, счёт и результат — на одном экране. Мы
+                проектируем сайты, запускаем рекламу и ведём работу до заявки.
               </p>
               <div className="neo-hero-actions">
                 <a
@@ -130,7 +129,7 @@ export default function Home() {
               </div>
               <div className="neo-human-note">
                 <span>Я</span>
-                <p><strong>Проект ведёт Ярослав лично.</strong> Без менеджеров, пересказов и передачи задачи по цепочке.</p>
+                <p><strong>Проект ведёт Ярослав лично.</strong> Один человек отвечает за задачу от первого сообщения до запуска.</p>
               </div>
             </div>
 
@@ -155,7 +154,7 @@ export default function Home() {
                 <div className="scene-focus">
                   <span>Сейчас делаем</span>
                   <h3>Мобильную версию и финальную проверку</h3>
-                  <p>От клиента ничего не требуется</p>
+                  <p>Работа идёт по плану</p>
                 </div>
                 <div className="scene-row">
                   <div><small>Запуск</small><strong>14 августа</strong></div>
@@ -170,17 +169,17 @@ export default function Home() {
             <div><Gauge /><span>ВИДНО</span><strong>что готово</strong></div>
             <div><Clock3 /><span>ПОНЯТНО</span><strong>когда запуск</strong></div>
             <div><ShieldCheck /><span>ПРОЗРАЧНО</span><strong>куда ушёл бюджет</strong></div>
-            <Link href="/demo">Посмотреть кабинет <ArrowUpRight /></Link>
+            <Link href="/login">Войти в кабинет <ArrowUpRight /></Link>
           </div>
         </section>
 
         <section className="hard-line" aria-label="Главное преимущество COLDDEV">
           <div className="hard-line-track">
-            <span>НИКАКИХ «НУ ЧТО ТАМ?»</span>
+            <span>ВЫ ВИДИТЕ ВСЁ</span>
             <i>•</i>
-            <span>ВЕСЬ ПРОЕКТ У ВАС ПЕРЕД ГЛАЗАМИ</span>
+            <span>МЫ ДЕЛАЕМ ОСТАЛЬНОЕ</span>
             <i>•</i>
-            <span>НИКАКИХ «НУ ЧТО ТАМ?»</span>
+            <span>ВЫ ВИДИТЕ ВСЁ</span>
           </div>
         </section>
 
@@ -189,12 +188,12 @@ export default function Home() {
             <div className="neo-heading">
               <span className="neo-kicker">За что вы платите</span>
               <h2>
-                НЕ ЗА «КРАСИВО».<br />
-                <em>ЗА ПОНЯТНЫЙ ПУТЬ ДО ЗАЯВКИ.</em>
+                ВЫ ВИДИТЕ ЦЕННОСТЬ.<br />
+                <em>ПОНЯТНЫЙ ПУТЬ ДО ЗАЯВКИ.</em>
               </h2>
               <p>
-                Убираем всё, что мешает человеку принять решение. Оставляем
-                смысл, доверие и действие.
+                Каждый экран объясняет предложение, укрепляет доверие и ведёт
+                человека к действию.
               </p>
             </div>
             <div className="neo-service-grid">
@@ -220,7 +219,7 @@ export default function Home() {
           <div className="shell platform-inner">
             <div className="platform-copy">
               <span>Работаем на нормальной инфраструктуре</span>
-              <strong>Без платного сервера на старте. Без привязки к конструктору.</strong>
+              <strong>Надёжная основа для сайта, кабинета, аналитики и рекламы.</strong>
             </div>
             <div className="platform-logos">
               {platforms.map((platform) => {
@@ -237,7 +236,7 @@ export default function Home() {
             <div className="cabinet-title-row">
               <div>
                 <span className="neo-kicker neo-kicker-light">Личный кабинет COLDDEV</span>
-                <h2>НИКАКИХ<br />«НУ ЧТО ТАМ?»</h2>
+                <h2>ВЫ ВИДИТЕ ВСЁ.<br />МЫ ДЕЛАЕМ ОСТАЛЬНОЕ.</h2>
               </div>
               <div className="cabinet-access-note">
                 <FileCheck2 />
@@ -257,7 +256,7 @@ export default function Home() {
                   <div className="cabinet-now">
                     <span>ЧТО ПРОИСХОДИТ СЕЙЧАС</span>
                     <h3>Собираем мобильную версию сайта</h3>
-                    <p><Check /> От вас ничего не требуется</p>
+                    <p><Check /> Работа идёт по плану</p>
                   </div>
                   <div className="cabinet-big-progress">
                     <strong>68%</strong>
@@ -281,12 +280,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="cabinet-demo-row">
-              <p>Хотите увидеть кабинет глазами клиента?</p>
-              <Link className="button button-white button-large" href="/demo">
-                Открыть демо <ArrowUpRight />
-              </Link>
-            </div>
           </div>
         </section>
 
@@ -294,8 +287,8 @@ export default function Home() {
           <div className="shell">
             <div className="neo-heading neo-heading-compact">
               <span className="neo-kicker">Как проходит работа</span>
-              <h2>ВЫ НЕ ДОЛЖНЫ<br />РАЗБИРАТЬСЯ В РАЗРАБОТКЕ.</h2>
-              <p>Вам нужно понимать только три вещи: что делаем, когда закончим и какой результат получили.</p>
+              <h2>ВЫ ВИДИТЕ<br />КАЖДЫЙ ШАГ.</h2>
+              <p>Вам всегда понятны три вещи: что делаем, когда закончим и какой результат получили.</p>
             </div>
             <div className="neo-process-list">
               {process.map(([number, title, text]) => (
@@ -314,8 +307,8 @@ export default function Home() {
           <div className="shell">
             <div className="neo-heading cases-heading">
               <span className="neo-kicker">Кейсы и примеры</span>
-              <h2>НЕ ОБЕЩАНИЯ.<br /><em>ПОКАЗЫВАЕМ РАБОТУ.</em></h2>
-              <p>Здесь будут ваши реальные проекты из админки. Ни одного придуманного логотипа или чужой цифры.</p>
+              <h2>ПОКАЗЫВАЕМ РАБОТУ.<br /><em>ПОНЯТНЫЕ РЕЗУЛЬТАТЫ.</em></h2>
+              <p>Здесь будут ваши реальные проекты из админки: сайт, реклама, задачи и измеримый результат.</p>
             </div>
             <div className="neo-cases-grid">
               <article className="neo-case neo-case-main">
@@ -335,7 +328,7 @@ export default function Home() {
                   <strong>РЕАЛЬНЫЕ<br />ЦИФРЫ</strong>
                   <span>Показы · клики · заявки · стоимость</span>
                 </div>
-                <div className="case-meta"><div><span>Кейс №02</span><h3>Результат рекламы без красивых сказок</h3></div><ArrowUpRight /></div>
+                <div className="case-meta"><div><span>Кейс №02</span><h3>Результат рекламы в понятных цифрах</h3></div><ArrowUpRight /></div>
               </article>
             </div>
           </div>
@@ -345,7 +338,7 @@ export default function Home() {
           <div className="shell neo-faq-grid">
             <div className="neo-heading">
               <span className="neo-kicker">Вопросы до заказа</span>
-              <h2>КОРОТКО.<br />БЕЗ МЕЛКОГО ШРИФТА.</h2>
+              <h2>КОРОТКО.<br />ПОНЯТНЫМ ЯЗЫКОМ.</h2>
             </div>
             <div className="faq-list neo-faq-list">
               {faqs.map((item, index) => (
@@ -362,8 +355,8 @@ export default function Home() {
           <div className="shell">
             <div className="neo-final-card">
               <div className="liquid-ring" />
-              <span className="neo-kicker neo-kicker-light">Давайте без долгих созвонов</span>
-              <h2>ПОКА ВЫ ДУМАЕТЕ,<br />КЛИЕНТ УХОДИТ К ТОМУ,<br />У КОГО УЖЕ ПОНЯТНО.</h2>
+              <span className="neo-kicker neo-kicker-light">Обсудим следующий шаг</span>
+              <h2>ВАШ БИЗНЕС РАСТЁТ.<br />САЙТ И РЕКЛАМА<br />РАБОТАЮТ НА РЕЗУЛЬТАТ.</h2>
               <p>Напишите, чем занимается ваш бизнес. В ответ получите понятный следующий шаг и ориентир по стоимости.</p>
               <a className="button button-white button-large" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><Send /> Написать @c0lddev</a>
             </div>

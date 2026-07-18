@@ -45,14 +45,12 @@ export default function AdminPage() {
   const [credential, setCredential] = useState("");
   const [snapshot, setSnapshot] = useState<AdminSnapshot | null>(null);
   const [section, setSection] = useState<AdminSection>("overview");
-  const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modal, setModal] = useState<{ entity: AdminSection; item?: Record<string, unknown> } | null>(null);
   const [toast, setToast] = useState("");
 
   const authenticate = async (value: string) => {
-    setAuthLoading(true);
     setAuthError("");
     try {
       const data = await colddevApi.getAdminSnapshot(value);
@@ -61,8 +59,6 @@ export default function AdminPage() {
       setSnapshot(data);
     } catch (error) {
       setAuthError(error instanceof Error ? error.message : "Не удалось проверить аккаунт");
-    } finally {
-      setAuthLoading(false);
     }
   };
 
@@ -74,7 +70,7 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (snapshot || !siteConfig.googleClientId || colddevApi.isDemoMode) return;
+    if (snapshot || !siteConfig.googleClientId) return;
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
@@ -112,7 +108,7 @@ export default function AdminPage() {
   }, [toast]);
 
   if (!snapshot) {
-    return <AdminAuth loading={authLoading} error={authError} authenticate={authenticate} />;
+    return <AdminAuth error={authError} />;
   }
 
   const activeLabel = sections.find((item) => item.id === section)?.label;
@@ -128,7 +124,7 @@ export default function AdminPage() {
           <div className="sidebar-bottom"><button className="sidebar-logout" style={{color:"#9a9ea7"}} onClick={logout}><LogOut size={13} /> Выйти из админки</button></div>
         </aside>
         <section className="product-main">
-          <header className="product-topbar"><div><h1>{activeLabel}</h1><p>Управление COLDDEV · {siteConfig.adminEmail}</p></div><div className="topbar-actions"><button className="mobile-nav-toggle" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button><span className="admin-mode">ДЕМО ДАННЫЕ</span></div></header>
+          <header className="product-topbar"><div><h1>{activeLabel}</h1><p>Управление COLDDEV · {siteConfig.adminEmail}</p></div><div className="topbar-actions"><button className="mobile-nav-toggle" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button><span className="admin-mode">GOOGLE SHEETS / LIVE</span></div></header>
           <div className="product-content">
             {section === "overview" && <AdminOverview snapshot={snapshot} setSection={setSection} />}
             {section === "clients" && <ClientsSection snapshot={snapshot} onCreate={() => setModal({entity:"clients"})} onEdit={(item) => setModal({entity:"clients", item})} />}
@@ -149,8 +145,8 @@ export default function AdminPage() {
   );
 }
 
-function AdminAuth({ loading, error, authenticate }: { loading: boolean; error: string; authenticate: (credential: string) => void }) {
-  return <main className="product-page"><div className="google-auth-card card"><Logo /><h1>Вход в админку</h1><p>Доступ только для разрешённых Google-аккаунтов. Сейчас настроен белый список для {siteConfig.adminEmail}.</p>{error && <div className="auth-error">{error}</div>}{colddevApi.isDemoMode ? <button className="button button-primary" style={{width:"100%"}} disabled={loading} onClick={() => authenticate("demo-google-credential")}>{loading ? "Проверяем…" : "Открыть демо-админку"}</button> : <div id="google-admin-button" className="google-button-wrap" />}</div></main>;
+function AdminAuth({ error }: { error: string }) {
+  return <main className="product-page"><div className="google-auth-card card"><Logo /><h1>Вход в админку</h1><p>Доступ через разрешённый Google-аккаунт {siteConfig.adminEmail}. Здесь вы управляете клиентами, проектами и оплатами.</p>{error && <div className="auth-error">{error}</div>}{siteConfig.apiUrl ? <div id="google-admin-button" className="google-button-wrap" /> : <div className="auth-setup-note">Подключите Google Apps Script, чтобы открыть рабочую админку.</div>}</div></main>;
 }
 
 function AdminOverview({ snapshot, setSection }: { snapshot: AdminSnapshot; setSection: (section: AdminSection) => void }) {

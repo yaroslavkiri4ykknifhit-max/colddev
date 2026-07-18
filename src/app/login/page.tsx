@@ -70,18 +70,12 @@ export default function LoginPage() {
               {loading ? <LoaderCircle className="spin" size={19} /> : <>Войти в кабинет <ArrowRight size={19} /></>}
             </button>
           </form>
-          {colddevApi.isDemoMode && (
-            <div className="demo-access">
-              <strong>Демонстрационный доступ</strong><br />
-              ID: CD-0007 · Код: COLD-DEMO
-            </div>
-          )}
         </div>
       </section>
       <aside className="auth-visual">
         <div className="auth-quote">
-          <span>COLDDEV / ваш проект без неизвестности</span>
-          <blockquote>НИКАКИХ<br />«НУ ЧТО ТАМ?»</blockquote>
+          <span>COLDDEV / ваш проект в ясной картине</span>
+          <blockquote>ВЫ ВИДИТЕ<br />ВСЁ.</blockquote>
           <p>Сразу видно, что готово, что делаем сейчас, когда запуск и какие счета нужно оплатить.</p>
         </div>
       </aside>

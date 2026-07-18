@@ -1,5 +1,4 @@
 import { siteConfig } from "@/config/site";
-import { mockAdminSnapshot, mockDashboardData } from "@/data/mock-data";
 import type { AdminSnapshot, ClientSession, DashboardData } from "@/types";
 
 const MAX_RECEIPT_BYTES = 10 * 1024 * 1024;
@@ -9,10 +8,6 @@ const RECEIPT_TYPES = [
   "image/webp",
   "application/pdf",
 ];
-
-function wait(ms = 450) {
-  return new Promise((resolve) => window.setTimeout(resolve, ms));
-}
 
 async function request<T>(action: string, payload: Record<string, unknown>) {
   if (!siteConfig.apiUrl) {
@@ -58,31 +53,16 @@ export function validateReceipt(file: File) {
 }
 
 export const colddevApi = {
-  isDemoMode: !siteConfig.apiUrl,
-
   async login(projectId: string, accessCode: string): Promise<ClientSession> {
     if (!siteConfig.apiUrl) {
-      await wait();
-      const validProject = mockDashboardData.projects.some(
-        (project) => project.id.toLowerCase() === projectId.trim().toLowerCase(),
-      );
-      const validCode = accessCode.trim().toUpperCase() === "COLD-DEMO";
-      if (!validProject || !validCode) {
-        throw new Error("Проверьте ID проекта и код доступа");
-      }
-      return {
-        token: "demo-client-session",
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        data: mockDashboardData,
-      };
+      throw new Error("Личный кабинет подключается. Напишите Ярославу в Telegram, чтобы получить доступ к проекту.");
     }
     return request<ClientSession>("client.login", { projectId, accessCode });
   },
 
   async getDashboard(token: string): Promise<DashboardData> {
     if (!siteConfig.apiUrl) {
-      await wait(250);
-      return mockDashboardData;
+      throw new Error("Личный кабинет подключается. Напишите Ярославу в Telegram, чтобы получить доступ к проекту.");
     }
     return request<DashboardData>("client.dashboard", { token });
   },
@@ -90,8 +70,7 @@ export const colddevApi = {
   async markInvoicePaid(token: string, invoiceId: string, file: File) {
     validateReceipt(file);
     if (!siteConfig.apiUrl) {
-      await wait(700);
-      return { status: "Ожидает подтверждения" as const, fileName: file.name };
+      throw new Error("Загрузка чека станет доступна после подключения личного кабинета.");
     }
     const dataUrl = await fileToDataUrl(file);
     return request<{ status: "Ожидает подтверждения"; fileName: string }>(
@@ -111,8 +90,7 @@ export const colddevApi = {
 
   async getAdminSnapshot(googleCredential: string): Promise<AdminSnapshot> {
     if (!siteConfig.apiUrl) {
-      await wait();
-      return mockAdminSnapshot;
+      throw new Error("Админка подключается. Укажите URL Google Apps Script в настройках сайта.");
     }
     return request<AdminSnapshot>("admin.snapshot", { googleCredential });
   },
@@ -124,8 +102,7 @@ export const colddevApi = {
     value: Record<string, unknown>,
   ) {
     if (!siteConfig.apiUrl) {
-      await wait(350);
-      return { id: String(value.id ?? `DEMO-${Date.now()}`), ...value };
+      throw new Error("Сохранение станет доступно после подключения Google Apps Script.");
     }
     return request<Record<string, unknown>>("admin.mutate", {
       googleCredential,
@@ -135,4 +112,3 @@ export const colddevApi = {
     });
   },
 };
-
