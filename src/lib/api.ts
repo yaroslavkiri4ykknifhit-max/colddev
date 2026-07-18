@@ -34,11 +34,12 @@ async function request<T>(action: string, payload: Record<string, unknown>, opti
     window.clearTimeout(timeout);
   }
 
-  const result = (await response.json()) as {
-    ok: boolean;
-    data?: T;
-    error?: string;
-  };
+  let result: { ok: boolean; data?: T; error?: string };
+  try {
+    result = (await response.json()) as { ok: boolean; data?: T; error?: string };
+  } catch {
+    throw new Error("Сервис COLDDEV вернул непонятный ответ. Обновите страницу и попробуйте ещё раз.");
+  }
 
   if (!result.ok || !result.data) {
     throw new Error(result.error || "Не удалось выполнить запрос");
@@ -56,8 +57,18 @@ function fileToDataUrl(file: File) {
   });
 }
 
+function receiptMimeType(file: File) {
+  if (RECEIPT_TYPES.includes(file.type)) return file.type;
+  const extension = file.name.toLowerCase().split(".").pop();
+  if (extension === "jpg" || extension === "jpeg") return "image/jpeg";
+  if (extension === "png") return "image/png";
+  if (extension === "webp") return "image/webp";
+  if (extension === "pdf") return "application/pdf";
+  return file.type;
+}
+
 export function validateReceipt(file: File) {
-  if (!RECEIPT_TYPES.includes(file.type)) {
+  if (!RECEIPT_TYPES.includes(receiptMimeType(file))) {
     throw new Error("Разрешены JPG, PNG, WEBP и PDF");
   }
   if (file.size > MAX_RECEIPT_BYTES) {
@@ -93,7 +104,7 @@ export const colddevApi = {
         invoiceId,
         file: {
           name: file.name,
-          type: file.type,
+          type: receiptMimeType(file),
           size: file.size,
           dataUrl,
         },

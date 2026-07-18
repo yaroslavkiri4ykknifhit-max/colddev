@@ -13,7 +13,6 @@ import {
   FolderKanban,
   LayoutDashboard,
   LogOut,
-  Menu,
   Pencil,
   Plus,
   Search,
@@ -99,7 +98,6 @@ export default function AdminPage() {
   const [section, setSection] = useState<AdminSection>("overview");
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modal, setModal] = useState<{ entity: AdminEntity; item?: Record<string, unknown> } | null>(null);
   const [modalError, setModalError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -241,8 +239,8 @@ export default function AdminPage() {
   return (
     <main className="product-page">
       <div className="product-shell admin-shell">
-        <aside className={`product-sidebar admin-sidebar ${sidebarOpen ? "is-open" : ""}`}>
-          <div className="sidebar-top"><Logo /><button className="mobile-nav-toggle" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)}><X size={17} /></button></div>
+        <aside className="product-sidebar admin-sidebar">
+          <div className="sidebar-top"><Logo /></div>
           <nav className="admin-navigation" aria-label="Разделы админки">
             {navigationGroups.map((group) => (
               <div className="admin-nav-group" key={group.label}>
@@ -250,7 +248,7 @@ export default function AdminPage() {
                 <div className="product-nav">
                   {group.items.map((item) => {
                     const Icon = item.icon;
-                    return <button className={section === item.id ? "is-active" : ""} onClick={() => { setSection(item.id); setSidebarOpen(false); }} key={item.id}><Icon />{item.label}</button>;
+                    return <button className={section === item.id ? "is-active" : ""} onClick={() => setSection(item.id)} key={item.id}><Icon />{item.label}</button>;
                   })}
                 </div>
               </div>
@@ -263,7 +261,6 @@ export default function AdminPage() {
           <header className="product-topbar">
             <div><h1>{activeLabel}</h1><p>Управление COLDDEV · {siteConfig.adminEmail}</p></div>
             <div className="topbar-actions">
-              <button className="mobile-nav-toggle" aria-label="Открыть меню" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button>
               <span className={`sync-status ${refreshing ? "is-syncing" : ""}`}>{refreshing && <span className="button-spinner" />}{refreshing ? "Обновляем данные" : "Данные актуальны"}</span>
             </div>
           </header>
@@ -281,6 +278,13 @@ export default function AdminPage() {
           </div>
         </section>
       </div>
+
+      <nav className="admin-mobile-bottom-nav" aria-label="Разделы админки">
+        {allSections.map((item) => {
+          const Icon = item.icon;
+          return <button className={section === item.id ? "is-active" : ""} aria-current={section === item.id ? "page" : undefined} onClick={() => setSection(item.id)} key={item.id}><Icon /><span>{item.label}</span></button>;
+        })}
+      </nav>
 
       {modal && <EntityModal entity={modal.entity} item={modal.item} snapshot={snapshot} saving={saving} error={modalError} onClose={() => !saving && setModal(null)} onSave={(values) => saveEntity(modal.entity, values, modal.item)} />}
       {newProjectAccess && <ProjectAccessModal credentials={newProjectAccess} onClose={() => setNewProjectAccess(null)} />}

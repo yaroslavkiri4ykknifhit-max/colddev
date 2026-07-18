@@ -89,8 +89,8 @@ export default function LoginPage() {
               </div>
             </div>
             {error && <div className="auth-error" role="alert">{error}</div>}
-            <button className="button button-primary button-large" disabled={loading}>
-              {loading ? <LoaderCircle className="spin" size={19} /> : <>Войти в кабинет <ArrowRight size={19} /></>}
+            <button className="button button-primary button-large" disabled={loading} aria-busy={loading}>
+              {loading ? <><LoaderCircle className="spin" size={21} /> Проверяем вход…</> : <>Войти в кабинет <ArrowRight size={19} /></>}
             </button>
           </form>
           <div className="auth-order-section">

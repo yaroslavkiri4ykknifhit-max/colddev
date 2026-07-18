@@ -14,7 +14,6 @@ import {
   Globe2,
   Home,
   LogOut,
-  Menu,
   Rocket,
   Send,
   Sparkles,
@@ -56,7 +55,6 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [projectId, setProjectId] = useState("");
   const [view, setView] = useState<View>("overview");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [invoiceToPay, setInvoiceToPay] = useState("");
   const [receiptFlow, setReceiptFlow] = useState<ReceiptFlow>("idle");
@@ -127,7 +125,6 @@ export default function DashboardPage() {
 
   const chooseView = (next: View) => {
     setView(next);
-    setSidebarOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -168,15 +165,9 @@ export default function DashboardPage() {
   return (
     <main className="product-page">
       <div className="product-shell">
-        <button
-          className={`sidebar-scrim ${sidebarOpen ? "is-visible" : ""}`}
-          aria-label="Закрыть меню"
-          onClick={() => setSidebarOpen(false)}
-        />
-        <aside className={`product-sidebar ${sidebarOpen ? "is-open" : ""}`}>
+        <aside className="product-sidebar">
           <div className="sidebar-top">
             <Logo />
-            <button className="mobile-nav-toggle" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)}><X size={17} /></button>
           </div>
           <div className="sidebar-project">
             <label htmlFor="project-select">Ваш проект</label>
@@ -219,11 +210,13 @@ export default function DashboardPage() {
               <p>{project.id} · обновлено {formatDate(project.lastUpdatedAt)}</p>
             </div>
             <div className="topbar-actions">
+              <select className="mobile-project-select" aria-label="Выбрать проект" value={project.id} onChange={(event) => setProjectId(event.target.value)}>
+                {data.projects.map((item) => <option value={item.id} key={item.id}>{item.id}</option>)}
+              </select>
               <div className="user-chip">
                 <span className="user-avatar">{data.client.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}</span>
                 <div><strong>{data.client.name}</strong><span>{data.client.company}</span></div>
               </div>
-              <button className="mobile-nav-toggle" aria-label="Открыть меню кабинета" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button>
             </div>
           </header>
 
