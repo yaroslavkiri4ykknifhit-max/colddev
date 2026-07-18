@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import {
+  ArrowRight,
   ArrowUpRight,
   Check,
   CheckCircle2,
@@ -12,10 +13,8 @@ import {
   FolderKanban,
   Globe2,
   Home,
-  Layers3,
   LogOut,
   Menu,
-  Megaphone,
   Rocket,
   Send,
   Sparkles,
@@ -29,16 +28,14 @@ import { colddevApi } from "@/lib/api";
 import { formatDate, formatMoney, formatNumber, formatShortDate } from "@/lib/format";
 import type { ClientSession, DashboardData, Invoice, Project } from "@/types";
 
-type View = "overview" | "stages" | "updates" | "site" | "ads" | "payments" | "offers";
+type View = "overview" | "work" | "results" | "payments" | "offers";
 
-const navItems: Array<{ id: View; label: string; icon: typeof Home }> = [
-  { id: "overview", label: "Обзор", icon: Home },
-  { id: "stages", label: "Этапы", icon: Layers3 },
-  { id: "updates", label: "Что уже сделано", icon: Clock3 },
-  { id: "site", label: "Сайт и ссылки", icon: Globe2 },
-  { id: "ads", label: "Реклама и заявки", icon: Megaphone },
-  { id: "payments", label: "Счета и оплата", icon: CircleDollarSign },
-  { id: "offers", label: "Что можно добавить", icon: Sparkles },
+const navItems: Array<{ id: View; label: string; mobileLabel: string; icon: typeof Home }> = [
+  { id: "overview", label: "Главная", mobileLabel: "Главная", icon: Home },
+  { id: "work", label: "Ход работы", mobileLabel: "Работа", icon: Clock3 },
+  { id: "results", label: "Результаты", mobileLabel: "Результаты", icon: Globe2 },
+  { id: "payments", label: "Оплата", mobileLabel: "Оплата", icon: CircleDollarSign },
+  { id: "offers", label: "Дополнительные услуги", mobileLabel: "Услуги", icon: Sparkles },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -49,6 +46,7 @@ function StatusBadge({ status }: { status: string }) {
       : status === "Ожидает оплаты" || status === "Ожидает подтверждения"
         ? "status-yellow"
         : "status-blue";
+
   return <span className={`status-badge ${color}`}>{status}</span>;
 }
 
@@ -59,7 +57,7 @@ export default function DashboardPage() {
   const [view, setView] = useState<View>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
-  const [invoiceToPay, setInvoiceToPay] = useState<string>("");
+  const [invoiceToPay, setInvoiceToPay] = useState("");
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState("");
 
@@ -69,6 +67,7 @@ export default function DashboardPage() {
       window.location.replace("/login");
       return;
     }
+
     try {
       const stored = JSON.parse(raw) as ClientSession;
       setSession(stored);
@@ -91,8 +90,12 @@ export default function DashboardPage() {
   }, [toast]);
 
   const project = data?.projects.find((item) => item.id === projectId) ?? data?.projects[0];
-  const projectStages = data?.stages.filter((item) => item.projectId === project?.id).sort((a, b) => a.order - b.order) ?? [];
-  const projectUpdates = data?.updates.filter((item) => item.projectId === project?.id) ?? [];
+  const projectStages = data?.stages
+    .filter((item) => item.projectId === project?.id)
+    .sort((a, b) => a.order - b.order) ?? [];
+  const projectUpdates = data?.updates
+    .filter((item) => item.projectId === project?.id)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) ?? [];
   const projectReports = data?.reports.filter((item) => item.projectId === project?.id) ?? [];
   const projectInvoices = data?.invoices.filter((item) => item.projectId === project?.id) ?? [];
   const pendingInvoice = projectInvoices.find((item) => item.status === "Ожидает оплаты");
@@ -110,6 +113,7 @@ export default function DashboardPage() {
   const chooseView = (next: View) => {
     setView(next);
     setSidebarOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const copyText = async (value: string) => {
@@ -141,42 +145,83 @@ export default function DashboardPage() {
     return <main className="loading-screen"><div className="loader" /></main>;
   }
 
+  const activeView = navItems.find((item) => item.id === view)?.label ?? "Главная";
+
   return (
     <main className="product-page">
       <div className="product-shell">
+        <button
+          className={`sidebar-scrim ${sidebarOpen ? "is-visible" : ""}`}
+          aria-label="Закрыть меню"
+          onClick={() => setSidebarOpen(false)}
+        />
         <aside className={`product-sidebar ${sidebarOpen ? "is-open" : ""}`}>
-          <div className="sidebar-top"><Logo /><button className="mobile-nav-toggle" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)}><X size={17} /></button></div>
-          <div className="sidebar-project">
-            <label htmlFor="project-select">Выберите проект</label>
-            <select id="project-select" value={project.id} onChange={(event) => setProjectId(event.target.value)}>
-              {data.projects.map((item) => <option value={item.id} key={item.id}>{item.id} · {item.name}</option>)}
-            </select>
+          <div className="sidebar-top">
+            <Logo />
+            <button className="mobile-nav-toggle" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)}><X size={17} /></button>
           </div>
-          <nav className="product-nav">
+          <div className="sidebar-project">
+            <label htmlFor="project-select">Ваш проект</label>
+            <select id="project-select" value={project.id} onChange={(event) => setProjectId(event.target.value)}>
+              {data.projects.map((item) => <option value={item.id} key={item.id}>{item.name} · {item.id}</option>)}
+            </select>
+            <small>{data.projects.length > 1 ? `Доступно проектов: ${data.projects.length}` : "Все данные относятся к этому проекту"}</small>
+          </div>
+          <span className="sidebar-section-label">Разделы кабинета</span>
+          <nav className="product-nav" aria-label="Разделы кабинета">
             {navItems.map((item) => {
               const Icon = item.icon;
-              return <button className={view === item.id ? "is-active" : ""} onClick={() => chooseView(item.id)} key={item.id}><Icon />{item.label}</button>;
+              return (
+                <button
+                  className={view === item.id ? "is-active" : ""}
+                  aria-current={view === item.id ? "page" : undefined}
+                  onClick={() => chooseView(item.id)}
+                  key={item.id}
+                >
+                  <Icon />
+                  {item.label}
+                </button>
+              );
             })}
           </nav>
           <div className="sidebar-bottom">
-            <a className="sidebar-support" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><span>Остался вопрос?</span><strong><Send size={14} /> Написать Ярославу</strong></a>
-            <button className="sidebar-logout" onClick={logout}><LogOut size={13} /> Выйти</button>
+            <a className="sidebar-support" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer">
+              <span>Нужна помощь?</span>
+              <strong><Send size={14} /> Написать Ярославу</strong>
+            </a>
+            <button className="sidebar-logout" onClick={logout}><LogOut size={13} /> Выйти из кабинета</button>
           </div>
         </aside>
+
         <section className="product-main">
           <header className="product-topbar">
-            <div><h1>Проект: {project.name}</h1><p>Номер {project.id} · обновлено {formatDate(project.lastUpdatedAt)}</p></div>
+            <div className="topbar-title">
+              <span>{activeView}</span>
+              <h1>{project.name}</h1>
+              <p>{project.id} · обновлено {formatDate(project.lastUpdatedAt)}</p>
+            </div>
             <div className="topbar-actions">
-              <button className="mobile-nav-toggle" aria-label="Открыть меню" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button>
-              <div className="user-chip"><span className="user-avatar">{data.client.name.split(" ").map((part) => part[0]).join("").slice(0,2)}</span><div><strong>{data.client.name}</strong><span>{data.client.company}</span></div></div>
+              <div className="user-chip">
+                <span className="user-avatar">{data.client.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}</span>
+                <div><strong>{data.client.name}</strong><span>{data.client.company}</span></div>
+              </div>
+              <button className="mobile-nav-toggle" aria-label="Открыть меню кабинета" onClick={() => setSidebarOpen(true)}><Menu size={18} /></button>
             </div>
           </header>
+
           <div className="product-content">
-            {view === "overview" && <Overview project={project} stages={projectStages} updates={projectUpdates} invoices={projectInvoices} setView={setView} />}
-            {view === "stages" && <StagesView project={project} stages={projectStages} />}
-            {view === "updates" && <UpdatesView updates={projectUpdates} />}
-            {view === "site" && <SiteView project={project} stages={projectStages} />}
-            {view === "ads" && <AdsView reports={projectReports} />}
+            {view === "overview" && (
+              <Overview
+                clientName={data.client.name}
+                project={project}
+                stages={projectStages}
+                updates={projectUpdates}
+                invoices={projectInvoices}
+                setView={chooseView}
+              />
+            )}
+            {view === "work" && <WorkView project={project} stages={projectStages} updates={projectUpdates} />}
+            {view === "results" && <ResultsView project={project} stages={projectStages} reports={projectReports} />}
             {view === "payments" && (
               <PaymentsView
                 invoices={projectInvoices}
@@ -193,101 +238,303 @@ export default function DashboardPage() {
           </div>
         </section>
       </div>
+
+      <nav className="mobile-bottom-nav" aria-label="Основная навигация">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              className={view === item.id ? "is-active" : ""}
+              aria-current={view === item.id ? "page" : undefined}
+              onClick={() => chooseView(item.id)}
+              key={item.id}
+            >
+              <Icon />
+              <span>{item.mobileLabel}</span>
+              {item.id === "payments" && pendingInvoice && <i aria-label="Есть неоплаченный счёт" />}
+            </button>
+          );
+        })}
+      </nav>
       {toast && <div className="toast"><CheckCircle2 size={17} /> {toast}</div>}
     </main>
   );
 }
 
-function Overview({ project, stages, updates, invoices, setView }: { project: Project; stages: DashboardData["stages"]; updates: DashboardData["updates"]; invoices: Invoice[]; setView: (view: View) => void }) {
+function Overview({ clientName, project, stages, updates, invoices, setView }: {
+  clientName: string;
+  project: Project;
+  stages: DashboardData["stages"];
+  updates: DashboardData["updates"];
+  invoices: Invoice[];
+  setView: (view: View) => void;
+}) {
+  const firstName = clientName.split(" ")[0] || clientName;
   const completed = stages.filter((stage) => stage.status === "done").length;
-  const nextStage = stages.find((stage) => stage.status === "active") ?? stages.find((stage) => stage.status === "waiting");
+  const currentStage = stages.find((stage) => stage.status === "active") ?? stages.find((stage) => stage.status === "waiting");
   const unpaid = invoices.find((invoice) => invoice.status === "Ожидает оплаты");
+
   return <>
-    <div className="client-current-card card">
-      <div className="client-current-copy">
-        <div className="client-current-top"><span>Что происходит сейчас</span><StatusBadge status={project.status} /></div>
-        <h2>{project.currentAction}</h2>
+    <div className="dashboard-welcome">
+      <div>
+        <span>Личный кабинет COLDDEV</span>
+        <h2>Здравствуйте, {firstName}</h2>
+        <p>На этом экране собрано всё важное по проекту. Начните с блока «Сейчас».</p>
+      </div>
+      <StatusBadge status={project.status} />
+    </div>
+
+    <section className="dashboard-now-grid" aria-label="Главное по проекту">
+      <article className="dashboard-now-card card">
+        <span className="dashboard-card-label">Сейчас</span>
+        <h3>{project.currentAction}</h3>
         <p>{project.managerComment}</p>
-        <div className="client-action-state"><Check size={17} /><div><strong>Сейчас всё идёт по плану</strong><span>Следующий шаг появится здесь, когда понадобится ваше решение или файл.</span></div></div>
+        <div className="dashboard-now-meta">
+          <div><span>Текущий этап</span><strong>{currentStage?.title ?? "Проект завершён"}</strong></div>
+          <div><span>Обновлено</span><strong>{formatDate(project.lastUpdatedAt)}</strong></div>
+        </div>
+      </article>
+
+      <article className={`client-next-step card ${unpaid ? "needs-action" : "is-clear"}`}>
+        <span className="dashboard-card-label">Ваш следующий шаг</span>
+        {unpaid ? <>
+          <span className="client-next-icon"><CircleDollarSign /></span>
+          <h3>Оплатить счёт</h3>
+          <p>{formatMoney(unpaid.amount)} до {formatDate(unpaid.dueAt)}. Реквизиты и загрузка чека уже готовы.</p>
+          <button className="button button-primary" onClick={() => setView("payments")}>Перейти к оплате <ArrowRight size={16} /></button>
+        </> : <>
+          <span className="client-next-icon"><Check /></span>
+          <h3>От вас ничего не требуется</h3>
+          <p>Мы продолжаем работу. Если понадобится решение или материал, это появится здесь.</p>
+        </>}
+      </article>
+    </section>
+
+    <section className="project-path-card card">
+      <div className="project-path-head">
+        <div><span className="dashboard-card-label">Путь до результата</span><h3>{project.progress}% проекта готово</h3></div>
+        <div className="project-deadline"><span>Плановая дата</span><strong>{formatShortDate(project.deadline)}</strong></div>
       </div>
-      <div className="client-progress-panel">
-        <span>Проект готов</span>
-        <strong>{project.progress}%</strong>
-        <div className="large-progress"><span style={{ width: `${project.progress}%` }} /></div>
-        <small>Плановый запуск: {formatDate(project.deadline)}</small>
+      <div className="project-progress-track" aria-label={`Проект готов на ${project.progress}%`}><span style={{ width: `${project.progress}%` }} /></div>
+      <div className="project-path-foot">
+        <span>{completed} из {stages.length} этапов завершено</span>
+        <button onClick={() => setView("work")}>Посмотреть весь ход работы <ArrowRight size={14} /></button>
       </div>
-    </div>
-    <div className="stats-grid">
-      <div className="stat-card card"><span>Готово этапов</span><strong>{completed} из {stages.length}</strong><small>Все этапы можно открыть в меню</small></div>
-      <div className="stat-card card"><span>Текущий этап</span><strong>{nextStage?.title ?? "Проект готов"}</strong><small>{nextStage?.description ?? "Все работы завершены"}</small></div>
-      <div className="stat-card card"><span>Плановая дата</span><strong>{formatShortDate(project.deadline)}</strong><small>Дата запуска проекта</small></div>
-      <div className="stat-card card"><span>Ближайшая оплата</span><strong>{unpaid ? formatMoney(unpaid.amount) : "Счета закрыты"}</strong><small>{unpaid ? `Оплатить до ${formatShortDate(unpaid.dueAt)}` : "Все платежи подтверждены"}</small></div>
-    </div>
-    <div className="dashboard-columns">
-      <div className="card"><div className="card-heading"><h3>Последние обновления по проекту</h3><button onClick={() => setView("updates")}>Открыть всю историю</button></div><div className="timeline">{updates.slice(0,3).map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title}</h4><p>{update.description}</p></div><time>{formatShortDate(update.date)}</time></div>)}</div></div>
-      <div className="action-card card"><span>Главное на сегодня</span><h3>{unpaid ? `Счёт на ${formatMoney(unpaid.amount)}` : "Работа идёт по плану"}</h3><p>{unpaid ? `Срок оплаты — ${formatDate(unpaid.dueAt)}. Реквизиты и загрузка чека находятся в разделе «Счета и оплата».` : "Следующий важный шаг появится здесь автоматически."}</p>{unpaid && <button className="button button-primary button-small" onClick={() => setView("payments")}>Перейти к оплате <ArrowUpRight size={14} /></button>}</div>
-    </div>
+    </section>
+
+    <section className="dashboard-home-grid">
+      <article className="dashboard-feed card">
+        <div className="card-heading">
+          <div><span>Последние события</span><h3>Что изменилось в проекте</h3></div>
+          <button onClick={() => setView("work")}>Вся история</button>
+        </div>
+        <UpdateTimeline updates={updates.slice(0, 3)} compact />
+      </article>
+
+      <article className="quick-actions card">
+        <div className="card-heading"><div><span>Быстрый доступ</span><h3>Куда перейти</h3></div></div>
+        <button onClick={() => setView("results")}><Globe2 /><div><strong>Сайт и результаты</strong><span>Ссылки и показатели</span></div><ArrowRight /></button>
+        <button onClick={() => setView("payments")}><CircleDollarSign /><div><strong>Счета и чеки</strong><span>Оплата через ЕРИП</span></div><ArrowRight /></button>
+        <a href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><Send /><div><strong>Задать вопрос</strong><span>Откроется Telegram</span></div><ArrowUpRight /></a>
+      </article>
+    </section>
   </>;
 }
 
-function StagesView({ project, stages }: { project: Project; stages: DashboardData["stages"] }) {
-  return <><div className="view-heading"><div><h2>Этапы проекта</h2><p>{project.progress}% готово · {stages.filter((item) => item.status === "done").length} этапа завершено</p></div><StatusBadge status={project.status} /></div><div className="stage-list">{stages.map((stage, index) => <article className={`stage-card card is-${stage.status}`} key={stage.id}><span className="stage-index">{stage.status === "done" ? <Check size={16} /> : String(index + 1).padStart(2,"0")}</span><div><h3>{stage.title}</h3><p>{stage.description}</p></div><span>{stage.status === "done" ? "Завершён" : stage.status === "active" ? "В работе" : stage.status === "paused" ? "Пауза" : "Ожидает"}</span></article>)}</div></>;
-}
-
-function UpdatesView({ updates }: { updates: DashboardData["updates"] }) {
-  return <><div className="view-heading"><div><h2>Ход работы</h2><p>История изменений и заметки по проекту</p></div></div><div className="card"><div className="timeline">{updates.length ? updates.map((update) => <div className="timeline-item" key={update.id}><span className="timeline-dot" /><div><h4>{update.title} · {update.category}</h4><p>{update.description}</p>{update.linkUrl && <a href={update.linkUrl} target="_blank" rel="noreferrer" className="button button-ghost button-small">Открыть результат <ArrowUpRight size={13} /></a>}</div><time>{formatDate(update.date)}</time></div>) : <EmptyState title="Обновления появятся здесь" text="Первая запись появится после начала работ." />}</div></div></>;
-}
-
-function SiteView({ project, stages }: { project: Project; stages: DashboardData["stages"] }) {
-  return <><div className="view-heading"><div><h2>Сайт</h2><p>Ссылки и технический статус проекта</p></div>{project.previewUrl && <a className="button button-primary" href={project.previewUrl} target="_blank" rel="noreferrer">Открыть превью <ArrowUpRight size={16} /></a>}</div><div className="stats-grid"><div className="stat-card card"><span>Состояние</span><strong>В разработке</strong><small>Технический статус под контролем</small></div><div className="stat-card card"><span>Версия</span><strong>0.{project.progress}</strong><small>Последняя сборка</small></div><div className="stat-card card"><span>Готово этапов</span><strong>{stages.filter((item) => item.status === "done").length}</strong><small>из {stages.length}</small></div><div className="stat-card card"><span>Домен</span><strong>{project.siteUrl ? "Подключён" : "Ожидает"}</strong><small>{project.siteUrl ?? "будет подключён перед запуском"}</small></div></div><div className="report-summary card"><span className="eyebrow">Комментарий менеджера</span><p>{project.managerComment}</p></div></>;
-}
-
-function AdsView({ reports }: { reports: DashboardData["reports"] }) {
-  const report = reports[0];
-  if (!report) return <><div className="view-heading"><div><h2>Реклама</h2><p>Статистика Яндекс Директа</p></div></div><div className="card"><EmptyState title="Рекламные отчёты появятся здесь" text="Показатели появятся после запуска кампаний." /></div></>;
-  const costPerLead = report.leads ? report.spend / report.leads : 0;
-  return <><div className="view-heading"><div><h2>Реклама</h2><p>{report.period}</p></div><StatusBadge status="В работе" /></div><div className="reports-grid"><div className="report-card card"><span>Показы</span><strong>{formatNumber(report.impressions)}</strong><small>охват объявлений</small></div><div className="report-card card"><span>Клики</span><strong>{formatNumber(report.clicks)}</strong><small>{((report.clicks/report.impressions)*100).toFixed(1)}% CTR</small></div><div className="report-card card"><span>Расход</span><strong>{formatMoney(report.spend)}</strong><small>осталось {formatMoney(report.budgetLeft)}</small></div><div className="report-card card"><span>Заявки</span><strong>{report.leads}</strong><small>{formatMoney(costPerLead)} за заявку</small></div></div><div className="report-summary card"><span className="eyebrow">Комментарий по периоду</span><p>{report.comment}</p></div></>;
-}
-
-function PaymentsView({ invoices, invoiceToPay, setInvoiceToPay, receiptFile, setReceiptFile, uploading, uploadReceipt, copyText }: { invoices: Invoice[]; invoiceToPay: string; setInvoiceToPay: (id: string) => void; receiptFile: File | null; setReceiptFile: (file: File | null) => void; uploading: boolean; uploadReceipt: () => void; copyText: (value: string) => void }) {
-  const selected = invoices.find((item) => item.id === invoiceToPay);
-  const hasPendingInvoice = invoices.some((item) => item.status === "Ожидает оплаты");
+function WorkView({ project, stages, updates }: {
+  project: Project;
+  stages: DashboardData["stages"];
+  updates: DashboardData["updates"];
+}) {
+  const activeStage = stages.find((stage) => stage.status === "active");
+  const completed = stages.filter((stage) => stage.status === "done").length;
 
   return <>
-    <div className="view-heading"><div><h2>Счета и оплата</h2><p>Здесь видно, сколько, когда и как нужно оплатить</p></div></div>
-    <div className="invoice-list">
-      {invoices.map((invoice) => <article className="invoice-card card" key={invoice.id}>
-        <div><h3>{invoice.title}</h3><p>{invoice.id} · выставлен {formatShortDate(invoice.createdAt)}</p></div>
-        <div className="invoice-amount"><span>Сумма</span><strong>{formatMoney(invoice.amount)}</strong></div>
-        <div className="invoice-due"><span>Оплатить до</span><strong>{formatDate(invoice.dueAt)}</strong></div>
-        <StatusBadge status={invoice.status} />
-      </article>)}
+    <div className="view-heading client-view-heading">
+      <div><span className="dashboard-card-label">Ход работы</span><h2>От первого шага до запуска</h2><p>Сверху — этапы проекта. Ниже — подробная история обновлений.</p></div>
+      <StatusBadge status={project.status} />
     </div>
-    {hasPendingInvoice && <div className="payment-panel" style={{marginTop:12}}>
+
+    {activeStage && <div className="work-current-card card">
+      <span>Сейчас в работе</span>
+      <div><h3>{activeStage.title}</h3><p>{activeStage.description}</p></div>
+      <strong>{project.progress}%</strong>
+    </div>}
+
+    <section className="work-section">
+      <div className="section-simple-heading"><h3>Этапы проекта</h3><span>{completed} из {stages.length} завершено</span></div>
+      <div className="stage-list client-stage-list">
+        {stages.map((stage, index) => (
+          <article className={`stage-card card is-${stage.status}`} key={stage.id}>
+            <span className="stage-index">{stage.status === "done" ? <Check size={16} /> : index + 1}</span>
+            <div><h3>{stage.title}</h3><p>{stage.description}</p></div>
+            <span>{stage.status === "done" ? "Готово" : stage.status === "active" ? "Сейчас" : stage.status === "paused" ? "Пауза" : "Дальше"}</span>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section className="work-section">
+      <div className="section-simple-heading"><h3>История проекта</h3><span>Новые записи сверху</span></div>
+      <div className="card"><UpdateTimeline updates={updates} /></div>
+    </section>
+  </>;
+}
+
+function UpdateTimeline({ updates, compact = false }: { updates: DashboardData["updates"]; compact?: boolean }) {
+  if (!updates.length) return <EmptyState title="История пока пустая" text="Первая запись появится после начала работ." />;
+
+  return <div className={`timeline client-timeline ${compact ? "is-compact" : ""}`}>
+    {updates.map((update) => <article className="timeline-item" key={update.id}>
+      <span className="timeline-dot" />
+      <div>
+        <span className="timeline-category">{update.category}</span>
+        <h4>{update.title}</h4>
+        <p>{update.description}</p>
+        {update.linkUrl && <a href={update.linkUrl} target="_blank" rel="noreferrer">Открыть результат <ArrowUpRight size={13} /></a>}
+      </div>
+      <time>{formatDate(update.date)}</time>
+    </article>)}
+  </div>;
+}
+
+function ResultsView({ project, stages, reports }: {
+  project: Project;
+  stages: DashboardData["stages"];
+  reports: DashboardData["reports"];
+}) {
+  const report = reports[0];
+  const costPerLead = report?.leads ? report.spend / report.leads : 0;
+
+  return <>
+    <div className="view-heading client-view-heading">
+      <div><span className="dashboard-card-label">Результаты</span><h2>Сайт, ссылки и реклама</h2><p>Всё, что уже можно открыть или измерить, собрано на одном экране.</p></div>
+    </div>
+
+    <section className="result-site-card card">
+      <div>
+        <span className="dashboard-card-label">Ваш сайт</span>
+        <h3>{project.name}</h3>
+        <p>{project.siteUrl ? "Рабочий адрес подключён. Можно открыть сайт в новой вкладке." : "Рабочий адрес появится здесь перед запуском."}</p>
+      </div>
+      <div className="result-site-status">
+        <div><span>Готовность</span><strong>{project.progress}%</strong></div>
+        <div><span>Завершено этапов</span><strong>{stages.filter((item) => item.status === "done").length} из {stages.length}</strong></div>
+      </div>
+      <div className="result-site-actions">
+        {project.previewUrl && <a className="button button-primary" href={project.previewUrl} target="_blank" rel="noreferrer">Открыть текущую версию <ArrowUpRight size={15} /></a>}
+        {project.siteUrl && <a className="button button-ghost" href={project.siteUrl} target="_blank" rel="noreferrer">Открыть рабочий сайт <ArrowUpRight size={15} /></a>}
+      </div>
+    </section>
+
+    <section className="work-section">
+      <div className="section-simple-heading"><h3>Реклама и заявки</h3><span>{report?.period ?? "После запуска рекламы"}</span></div>
+      {report ? <>
+        <div className="reports-grid client-reports-grid">
+          <div className="report-card card"><span>Показы</span><strong>{formatNumber(report.impressions)}</strong><small>сколько раз увидели рекламу</small></div>
+          <div className="report-card card"><span>Переходы на сайт</span><strong>{formatNumber(report.clicks)}</strong><small>{report.impressions ? `${((report.clicks / report.impressions) * 100).toFixed(1)}% от показов` : "0% от показов"}</small></div>
+          <div className="report-card card"><span>Потрачено</span><strong>{formatMoney(report.spend)}</strong><small>осталось {formatMoney(report.budgetLeft)}</small></div>
+          <div className="report-card card is-accent"><span>Получено заявок</span><strong>{report.leads}</strong><small>{formatMoney(costPerLead)} за одну заявку</small></div>
+        </div>
+        <div className="report-summary card"><span className="dashboard-card-label">Комментарий по результатам</span><p>{report.comment}</p></div>
+      </> : <div className="card"><EmptyState title="Реклама ещё не запущена" text="После запуска здесь появятся показы, переходы, расходы и заявки." /></div>}
+    </section>
+  </>;
+}
+
+function PaymentsView({ invoices, invoiceToPay, setInvoiceToPay, receiptFile, setReceiptFile, uploading, uploadReceipt, copyText }: {
+  invoices: Invoice[];
+  invoiceToPay: string;
+  setInvoiceToPay: (id: string) => void;
+  receiptFile: File | null;
+  setReceiptFile: (file: File | null) => void;
+  uploading: boolean;
+  uploadReceipt: () => void;
+  copyText: (value: string) => void;
+}) {
+  const selected = invoices.find((item) => item.id === invoiceToPay);
+  const pendingInvoices = invoices.filter((item) => item.status === "Ожидает оплаты");
+
+  return <>
+    <div className="view-heading client-view-heading">
+      <div><span className="dashboard-card-label">Оплата</span><h2>{pendingInvoices.length ? "Есть счёт к оплате" : "Все счета в порядке"}</h2><p>Выберите счёт, оплатите через ЕРИП и приложите чек прямо здесь.</p></div>
+      {selected && <div className="payment-heading-total"><span>К оплате</span><strong>{formatMoney(selected.amount)}</strong></div>}
+    </div>
+
+    <section className="payment-steps" aria-label="Как оплатить">
+      <div className={selected ? "is-active" : ""}><span>1</span><strong>Выбрать счёт</strong></div>
+      <div className={selected ? "is-active" : ""}><span>2</span><strong>Оплатить в ЕРИП</strong></div>
+      <div><span>3</span><strong>Прикрепить чек</strong></div>
+    </section>
+
+    <div className="invoice-list">
+      {invoices.length ? invoices.map((invoice) => <article className={`invoice-card card ${invoice.id === invoiceToPay ? "is-selected" : ""}`} key={invoice.id}>
+        <div><span className="invoice-label">Услуга</span><h3>{invoice.title}</h3><p>{invoice.id} · выставлен {formatShortDate(invoice.createdAt)}</p></div>
+        <div className="invoice-amount"><span>Сумма</span><strong>{formatMoney(invoice.amount)}</strong></div>
+        <div className="invoice-due"><span>Срок оплаты</span><strong>{formatDate(invoice.dueAt)}</strong></div>
+        <StatusBadge status={invoice.status} />
+        {invoice.status === "Ожидает оплаты" && <button className="invoice-select-button" onClick={() => setInvoiceToPay(invoice.id)}>{invoice.id === invoiceToPay ? "Выбран" : "Выбрать"}</button>}
+      </article>) : <div className="card"><EmptyState title="Счетов пока нет" text="Когда появится новый счёт, он будет виден на этом экране." /></div>}
+    </div>
+
+    {pendingInvoices.length > 0 && <div className="payment-panel payment-panel-simple">
       <div className="erip-card card">
-        <span className="eyebrow eyebrow-invert">Как оплатить через ЕРИП</span>
-        <span className="erip-amount-label">Сумма выбранного счёта</span>
-        <h3>{selected ? formatMoney(selected.amount) : "Выберите счёт"}</h3>
+        <span className="eyebrow eyebrow-invert">Шаг 2 · Оплатите через ЕРИП</span>
+        <span className="erip-amount-label">Точная сумма выбранного счёта</span>
+        <div className="erip-pay-row">
+          <h3>{selected ? formatMoney(selected.amount) : "Выберите счёт"}</h3>
+          {selected && <button className="copy-button" onClick={() => copyText(selected.amount.toFixed(2).replace(".", ","))} title="Скопировать сумму"><Copy size={16} /></button>}
+        </div>
         <ol className="erip-path">
           {siteConfig.erip.path.map((part, index) => <li key={part}><span>{index + 1}</span><strong>{part}</strong></li>)}
         </ol>
-        <div className="erip-contract"><div><span>Номер договора</span><strong>{siteConfig.erip.contractNumber}</strong></div><button className="copy-button" onClick={() => copyText(siteConfig.erip.contractNumber)} title="Скопировать номер договора"><Copy size={16} /></button></div>
+        <div className="erip-contract">
+          <div><span>Номер договора</span><strong>{siteConfig.erip.contractNumber}</strong></div>
+          <button className="copy-button" onClick={() => copyText(siteConfig.erip.contractNumber)} title="Скопировать номер договора"><Copy size={16} /></button>
+        </div>
       </div>
+
       <div className="upload-card card">
-        <h3>После оплаты приложите чек</h3>
-        <p>Выберите оплаченный счёт и загрузите изображение или PDF. Мы проверим платёж и поменяем статус на «Оплачено».</p>
-        <div className="field"><label htmlFor="invoice-select">Какой счёт оплатили</label><select id="invoice-select" value={invoiceToPay} onChange={(event) => setInvoiceToPay(event.target.value)}>{invoices.filter((item) => item.status === "Ожидает оплаты").map((item) => <option value={item.id} key={item.id}>{item.title} · {formatMoney(item.amount)}</option>)}</select></div>
-        <label className="upload-zone" style={{marginTop:12}}><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => setReceiptFile(event.target.files?.[0] ?? null)} /><UploadCloud size={25} /><strong>{receiptFile ? "Выбрать другой файл" : "Выбрать чек на устройстве"}</strong><span>JPG, PNG, WEBP или PDF · до 10 МБ</span></label>
-        {receiptFile && <div className="upload-file">{receiptFile.name} · {(receiptFile.size/1024/1024).toFixed(2)} МБ</div>}
-        <button className="button button-primary" style={{width:"100%",marginTop:12}} disabled={!receiptFile || uploading} onClick={uploadReceipt}>{uploading ? "Загружаем чек…" : "Подтвердить: я оплатил"}</button>
+        <span className="dashboard-card-label">Шаг 3 · Подтвердите оплату</span>
+        <h3>Приложите чек</h3>
+        <p>После отправки мы проверим платёж. Статус счёта поменяется на «Ожидает подтверждения».</p>
+        {pendingInvoices.length > 1 && <div className="field"><label htmlFor="invoice-select">Какой счёт оплатили</label><select id="invoice-select" value={invoiceToPay} onChange={(event) => setInvoiceToPay(event.target.value)}>{pendingInvoices.map((item) => <option value={item.id} key={item.id}>{item.title} · {formatMoney(item.amount)}</option>)}</select></div>}
+        <label className="upload-zone">
+          <input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => setReceiptFile(event.target.files?.[0] ?? null)} />
+          <UploadCloud size={25} />
+          <strong>{receiptFile ? "Выбрать другой файл" : "Выбрать чек на устройстве"}</strong>
+          <span>JPG, PNG, WEBP или PDF · до 10 МБ</span>
+        </label>
+        {receiptFile && <div className="upload-file">{receiptFile.name} · {(receiptFile.size / 1024 / 1024).toFixed(2)} МБ</div>}
+        <button className="button button-primary upload-submit" disabled={!receiptFile || uploading} onClick={uploadReceipt}>{uploading ? "Загружаем чек…" : "Я оплатил — отправить чек"}</button>
       </div>
     </div>}
   </>;
 }
 
 function OffersView({ project, services }: { project: Project; services: DashboardData["services"] }) {
-  const priceLabel = (service: DashboardData["services"][number]) => service.priceMode === "request" ? "по запросу" : `${service.priceMode === "from" ? "от " : ""}${formatMoney(service.price ?? 0)}`;
-  return <><div className="view-heading"><div><h2>Улучшить проект</h2><p>Дополнительные возможности для {project.name}</p></div></div><div className="offers-grid">{services.filter((item) => item.active).map((service, index) => <article className="offer-card card" key={service.id}><span className="offer-icon">{index === 0 ? <Send /> : index === 1 ? <FolderKanban /> : <Rocket />}</span><h3>{service.title}</h3><p>{service.description}</p><div className="offer-bottom"><span className="offer-price">{priceLabel(service)}</span><a className="button button-primary button-small" href={`${siteConfig.contacts.telegramUrl}?text=${encodeURIComponent(`Здравствуйте. Хочу обсудить услугу «${service.title}» для проекта ${project.id}.`)}`} target="_blank" rel="noreferrer">{service.buttonLabel}</a></div></article>)}</div></>;
+  const priceLabel = (service: DashboardData["services"][number]) => service.priceMode === "request"
+    ? "по запросу"
+    : `${service.priceMode === "from" ? "от " : ""}${formatMoney(service.price ?? 0)}`;
+
+  const activeServices = services.filter((item) => item.active);
+
+  return <>
+    <div className="view-heading client-view-heading">
+      <div><span className="dashboard-card-label">Дополнительные услуги</span><h2>Что можно добавить к проекту</h2><p>Выберите нужную возможность — в Telegram откроется готовое сообщение.</p></div>
+    </div>
+    <div className="offers-grid">
+      {activeServices.length ? activeServices.map((service, index) => <article className="offer-card card" key={service.id}>
+        <span className="offer-icon">{index === 0 ? <Send /> : index === 1 ? <FolderKanban /> : <Rocket />}</span>
+        <h3>{service.title}</h3>
+        <p>{service.description}</p>
+        <div className="offer-bottom">
+          <span className="offer-price">{priceLabel(service)}</span>
+          <a className="button button-primary button-small" href={`${siteConfig.contacts.telegramUrl}?text=${encodeURIComponent(`Здравствуйте. Хочу обсудить услугу «${service.title}» для проекта ${project.id}.`)}`} target="_blank" rel="noreferrer">{service.buttonLabel}</a>
+        </div>
+      </article>) : <div className="card"><EmptyState title="Услуги скоро появятся" text="Если нужна доработка уже сейчас, напишите Ярославу в Telegram." /></div>}
+    </div>
+  </>;
 }
 
 function EmptyState({ title, text }: { title: string; text: string }) {
