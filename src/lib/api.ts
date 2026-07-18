@@ -9,13 +9,13 @@ const RECEIPT_TYPES = [
   "application/pdf",
 ];
 
-async function request<T>(action: string, payload: Record<string, unknown>) {
+async function request<T>(action: string, payload: Record<string, unknown>, options: { timeoutMs?: number } = {}) {
   if (!siteConfig.apiUrl) {
     throw new Error("API Google Apps Script ещё не подключён");
   }
 
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 30000);
+  const timeout = window.setTimeout(() => controller.abort(), options.timeoutMs ?? 30000);
   let response: Response;
   try {
     response = await fetch(siteConfig.apiUrl, {
@@ -27,7 +27,7 @@ async function request<T>(action: string, payload: Record<string, unknown>) {
     });
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      throw new Error("Google отвечает слишком долго. Попробуйте ещё раз через несколько секунд.");
+      throw new Error("Google обрабатывает файл дольше обычного. Чек мог уже сохраниться — обновите кабинет через 10 секунд. Если счёт всё ещё ждёт оплаты, попробуйте ещё раз.");
     }
     throw error;
   } finally {
@@ -98,6 +98,7 @@ export const colddevApi = {
           dataUrl,
         },
       },
+      { timeoutMs: 120000 },
     );
   },
 

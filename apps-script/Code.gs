@@ -93,6 +93,12 @@ function markInvoicePaid(input) {
   if (!invoice) throw new Error('Счёт не найден');
   const project = findOne(SHEETS.PROJECTS, 'id', invoice.project_id);
   if (!project || project.client_id !== session.client_id) throw new Error('Нет доступа к этому счёту');
+
+  // A browser can lose the response after Drive has already saved the file.
+  // Return the existing result so a retry is safe and never creates duplicates.
+  if (String(invoice.status) === 'Ожидает подтверждения' && invoice.receipt_file_id) {
+    return { status: 'Ожидает подтверждения', fileName: invoice.receipt_name || 'Чек сохранён' };
+  }
   if (String(invoice.status) !== 'Ожидает оплаты') throw new Error('Этот счёт уже обработан');
 
   const file = input.file || {};
@@ -100,13 +106,25 @@ function markInvoicePaid(input) {
   if (Number(file.size) > MAX_RECEIPT_BYTES) throw new Error('Файл должен быть меньше 10 МБ');
   if (!file.dataUrl || file.dataUrl.indexOf('base64,') === -1) throw new Error('Файл повреждён');
 
-  const bytes = Utilities.base64Decode(file.dataUrl.split('base64,')[1]);
-  const folder = getProjectFolder(project.id);
-  const blob = Utilities.newBlob(bytes, file.type, safeFileName(file.name));
-  const driveFile = folder.createFile(blob);
-  update(SHEETS.INVOICES, invoiceId, { status: 'Ожидает подтверждения', receipt_file_id: driveFile.getId(), receipt_name: driveFile.getName() });
-  append(SHEETS.ACTIVITY, { id: Utilities.getUuid(), title: 'Клиент сообщил об оплате', detail: invoiceId + ' · ' + project.id, date: new Date().toISOString() });
-  return { status: 'Ожидает подтверждения', fileName: driveFile.getName() };
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(30000)) throw new Error('Хранилище занято другой загрузкой. Подождите 10 секунд и попробуйте ещё раз.');
+  try {
+    // Re-read after taking the lock: another request may have finished while
+    // this one was waiting for access to Drive.
+    const latest = findOne(SHEETS.INVOICES, 'id', invoiceId);
+    if (latest && String(latest.status) === 'Ожидает подтверждения' && latest.receipt_file_id) {
+      return { status: 'Ожидает подтверждения', fileName: latest.receipt_name || 'Чек сохранён' };
+    }
+    const bytes = Utilities.base64Decode(file.dataUrl.split('base64,')[1]);
+    const folder = getProjectFolder(project.id);
+    const blob = Utilities.newBlob(bytes, file.type, safeFileName(file.name));
+    const driveFile = folder.createFile(blob);
+    update(SHEETS.INVOICES, invoiceId, { status: 'Ожидает подтверждения', receipt_file_id: driveFile.getId(), receipt_name: driveFile.getName() });
+    append(SHEETS.ACTIVITY, { id: Utilities.getUuid(), title: 'Клиент сообщил об оплате', detail: invoiceId + ' · ' + project.id, date: new Date().toISOString() });
+    return { status: 'Ожидает подтверждения', fileName: driveFile.getName() };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function adminSnapshot(input) {

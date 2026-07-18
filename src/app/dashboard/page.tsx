@@ -491,7 +491,7 @@ function PaymentsView({ invoices, invoiceToPay, setInvoiceToPay, receiptFile, se
 function ReceiptUploadOverlay({ stage, seconds, total, error, onClose, onRetry }: { stage: ReceiptFlow; seconds: number; total: number; error: string; onClose: () => void; onRetry: () => void }) {
   const isUploading = stage === "uploading";
   const isSuccess = stage === "success";
-  const progress = isSuccess ? 100 : Math.max(8, Math.min(94, Math.round(((total - seconds) / total) * 100)));
+  const progress = isSuccess || stage === "error" ? 100 : Math.max(8, Math.min(94, Math.round(((total - seconds) / total) * 100)));
   return <div className="receipt-flow-overlay" role="status" aria-live="polite">
     <div className={`receipt-flow-card ${isSuccess ? "is-success" : stage === "error" ? "is-error" : ""}`}>
       {isUploading && <div className="receipt-flow-orbit"><span className="loader" /></div>}
