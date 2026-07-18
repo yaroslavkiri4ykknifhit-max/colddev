@@ -29,13 +29,14 @@ import { formatDate, formatMoney, formatNumber, formatShortDate } from "@/lib/fo
 import type { ClientSession, DashboardData, Invoice, Project } from "@/types";
 
 type View = "overview" | "work" | "results" | "payments" | "offers";
+type ReceiptFlow = "idle" | "uploading" | "success" | "error";
 
 const navItems: Array<{ id: View; label: string; mobileLabel: string; icon: typeof Home }> = [
   { id: "overview", label: "Главная", mobileLabel: "Главная", icon: Home },
   { id: "work", label: "Ход работы", mobileLabel: "Работа", icon: Clock3 },
   { id: "results", label: "Результаты", mobileLabel: "Результаты", icon: Globe2 },
   { id: "payments", label: "Оплата", mobileLabel: "Оплата", icon: CircleDollarSign },
-  { id: "offers", label: "Дополнительные услуги", mobileLabel: "Услуги", icon: Sparkles },
+  { id: "offers", label: "Улучшить проект", mobileLabel: "Ещё", icon: Sparkles },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -58,7 +59,10 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [invoiceToPay, setInvoiceToPay] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const [receiptFlow, setReceiptFlow] = useState<ReceiptFlow>("idle");
+  const [receiptError, setReceiptError] = useState("");
+  const [uploadSeconds, setUploadSeconds] = useState(10);
+  const [uploadTotal, setUploadTotal] = useState(10);
   const [toast, setToast] = useState("");
 
   useEffect(() => {
@@ -88,6 +92,17 @@ export default function DashboardPage() {
     const timer = window.setTimeout(() => setToast(""), 3000);
     return () => window.clearTimeout(timer);
   }, [toast]);
+
+  useEffect(() => {
+    if (receiptFlow === "uploading") {
+      const timer = window.setInterval(() => setUploadSeconds((current) => Math.max(1, current - 1)), 1000);
+      return () => window.clearInterval(timer);
+    }
+    if (receiptFlow === "success") {
+      const timer = window.setTimeout(() => setReceiptFlow("idle"), 2600);
+      return () => window.clearTimeout(timer);
+    }
+  }, [receiptFlow]);
 
   const project = data?.projects.find((item) => item.id === projectId) ?? data?.projects[0];
   const projectStages = data?.stages
@@ -123,7 +138,11 @@ export default function DashboardPage() {
 
   const uploadReceipt = async () => {
     if (!session || !receiptFile || !invoiceToPay) return;
-    setUploading(true);
+    const estimate = Math.max(7, Math.min(18, Math.ceil(receiptFile.size / 1024 / 1024) * 2 + 7));
+    setUploadTotal(estimate);
+    setUploadSeconds(estimate);
+    setReceiptError("");
+    setReceiptFlow("uploading");
     try {
       const result = await colddevApi.markInvoicePaid(session.token, invoiceToPay, receiptFile);
       setData((current) => current && ({
@@ -133,16 +152,15 @@ export default function DashboardPage() {
           : invoice),
       }));
       setReceiptFile(null);
-      setToast("Чек отправлен. Платёж ожидает подтверждения");
+      setReceiptFlow("success");
     } catch (error) {
-      setToast(error instanceof Error ? error.message : "Не удалось отправить чек");
-    } finally {
-      setUploading(false);
+      setReceiptError(error instanceof Error ? error.message : "Не удалось отправить чек");
+      setReceiptFlow("error");
     }
   };
 
   if (!data || !project) {
-    return <main className="loading-screen"><div className="loader" /></main>;
+    return <main className="cabinet-loading"><Logo /><div className="cabinet-loading-orbit"><span className="loader" /></div><h1>Открываем кабинет</h1><p>Загружаем ваш проект</p></main>;
   }
 
   const activeView = navItems.find((item) => item.id === view)?.label ?? "Главная";
@@ -209,7 +227,7 @@ export default function DashboardPage() {
             </div>
           </header>
 
-          <div className="product-content">
+          <div className="product-content dashboard-view-enter" key={`${project.id}-${view}`}>
             {view === "overview" && (
               <Overview
                 clientName={data.client.name}
@@ -229,7 +247,7 @@ export default function DashboardPage() {
                 setInvoiceToPay={setInvoiceToPay}
                 receiptFile={receiptFile}
                 setReceiptFile={setReceiptFile}
-                uploading={uploading}
+                uploading={receiptFlow === "uploading"}
                 uploadReceipt={uploadReceipt}
                 copyText={copyText}
               />
@@ -256,6 +274,7 @@ export default function DashboardPage() {
           );
         })}
       </nav>
+      {receiptFlow !== "idle" && <ReceiptUploadOverlay stage={receiptFlow} seconds={uploadSeconds} total={uploadTotal} error={receiptError} onClose={() => setReceiptFlow("idle")} onRetry={() => void uploadReceipt()} />}
       {toast && <div className="toast"><CheckCircle2 size={17} /> {toast}</div>}
     </main>
   );
@@ -273,13 +292,14 @@ function Overview({ clientName, project, stages, updates, invoices, setView }: {
   const completed = stages.filter((stage) => stage.status === "done").length;
   const currentStage = stages.find((stage) => stage.status === "active") ?? stages.find((stage) => stage.status === "waiting");
   const unpaid = invoices.find((invoice) => invoice.status === "Ожидает оплаты");
+  const awaitingPayment = invoices.find((invoice) => invoice.status === "Ожидает подтверждения");
+  const latestUpdate = updates[0];
 
   return <>
     <div className="dashboard-welcome">
       <div>
-        <span>Личный кабинет COLDDEV</span>
-        <h2>Здравствуйте, {firstName}</h2>
-        <p>На этом экране собрано всё важное по проекту. Начните с блока «Сейчас».</p>
+        <span>Ваш проект</span>
+        <h2>Привет, {firstName}</h2>
       </div>
       <StatusBadge status={project.status} />
     </div>
@@ -287,8 +307,8 @@ function Overview({ clientName, project, stages, updates, invoices, setView }: {
     <section className="dashboard-now-grid" aria-label="Главное по проекту">
       <article className="dashboard-now-card card">
         <span className="dashboard-card-label">Сейчас</span>
-        <h3>{project.currentAction}</h3>
-        <p>{project.managerComment}</p>
+        <h3>{project.currentAction || "Работа над проектом идёт"}</h3>
+        <p>{project.managerComment || "Все изменения и следующие шаги появятся здесь."}</p>
         <div className="dashboard-now-meta">
           <div><span>Текущий этап</span><strong>{currentStage?.title ?? "Проект завершён"}</strong></div>
           <div><span>Обновлено</span><strong>{formatDate(project.lastUpdatedAt)}</strong></div>
@@ -296,23 +316,28 @@ function Overview({ clientName, project, stages, updates, invoices, setView }: {
       </article>
 
       <article className={`client-next-step card ${unpaid ? "needs-action" : "is-clear"}`}>
-        <span className="dashboard-card-label">Ваш следующий шаг</span>
+        <span className="dashboard-card-label">От вас сейчас</span>
         {unpaid ? <>
           <span className="client-next-icon"><CircleDollarSign /></span>
           <h3>Оплатить счёт</h3>
-          <p>{formatMoney(unpaid.amount)} до {formatDate(unpaid.dueAt)}. Реквизиты и загрузка чека уже готовы.</p>
+          <p>{formatMoney(unpaid.amount)} · до {formatDate(unpaid.dueAt)}</p>
           <button className="button button-primary" onClick={() => setView("payments")}>Перейти к оплате <ArrowRight size={16} /></button>
+        </> : awaitingPayment ? <>
+          <span className="client-next-icon is-pending"><Clock3 /></span>
+          <h3>Чек на проверке</h3>
+          <p>Мы проверяем платёж. Результат появится здесь.</p>
+          <button className="button button-ghost" onClick={() => setView("payments")}>Открыть счёт <ArrowRight size={16} /></button>
         </> : <>
           <span className="client-next-icon"><Check /></span>
-          <h3>От вас ничего не требуется</h3>
-          <p>Мы продолжаем работу. Если понадобится решение или материал, это появится здесь.</p>
+          <h3>Всё под контролем</h3>
+          <p>Сейчас от вас ничего не требуется.</p>
         </>}
       </article>
     </section>
 
-    <section className="project-path-card card">
+    <section className="project-path-card card" aria-label="Прогресс проекта">
       <div className="project-path-head">
-        <div><span className="dashboard-card-label">Путь до результата</span><h3>{project.progress}% проекта готово</h3></div>
+        <div><span className="dashboard-card-label">До запуска</span><h3>{project.progress}% готово</h3></div>
         <div className="project-deadline"><span>Плановая дата</span><strong>{formatShortDate(project.deadline)}</strong></div>
       </div>
       <div className="project-progress-track" aria-label={`Проект готов на ${project.progress}%`}><span style={{ width: `${project.progress}%` }} /></div>
@@ -322,21 +347,9 @@ function Overview({ clientName, project, stages, updates, invoices, setView }: {
       </div>
     </section>
 
-    <section className="dashboard-home-grid">
-      <article className="dashboard-feed card">
-        <div className="card-heading">
-          <div><span>Последние события</span><h3>Что изменилось в проекте</h3></div>
-          <button onClick={() => setView("work")}>Вся история</button>
-        </div>
-        <UpdateTimeline updates={updates.slice(0, 3)} compact />
-      </article>
-
-      <article className="quick-actions card">
-        <div className="card-heading"><div><span>Быстрый доступ</span><h3>Куда перейти</h3></div></div>
-        <button onClick={() => setView("results")}><Globe2 /><div><strong>Сайт и результаты</strong><span>Ссылки и показатели</span></div><ArrowRight /></button>
-        <button onClick={() => setView("payments")}><CircleDollarSign /><div><strong>Счета и чеки</strong><span>Оплата через ЕРИП</span></div><ArrowRight /></button>
-        <a href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer"><Send /><div><strong>Задать вопрос</strong><span>Откроется Telegram</span></div><ArrowUpRight /></a>
-      </article>
+    <section className="dashboard-latest card">
+      <div><span className="dashboard-card-label">Последнее обновление</span><h3>{latestUpdate?.title ?? "Работа продолжается"}</h3><p>{latestUpdate?.description ?? "Новые события появятся здесь после следующего шага."}</p></div>
+      <div className="dashboard-latest-actions"><button className="button button-ghost" onClick={() => setView("work")}>Вся работа <ArrowRight size={15} /></button><a className="button button-primary" href={siteConfig.contacts.telegramUrl} target="_blank" rel="noreferrer">Задать вопрос <Send size={15} /></a></div>
     </section>
   </>;
 }
@@ -452,64 +465,47 @@ function PaymentsView({ invoices, invoiceToPay, setInvoiceToPay, receiptFile, se
   uploadReceipt: () => void;
   copyText: (value: string) => void;
 }) {
-  const selected = invoices.find((item) => item.id === invoiceToPay);
   const pendingInvoices = invoices.filter((item) => item.status === "Ожидает оплаты");
+  const selected = pendingInvoices.find((item) => item.id === invoiceToPay) ?? pendingInvoices[0];
+  const history = invoices.filter((item) => item.id !== selected?.id);
 
   return <>
     <div className="view-heading client-view-heading">
-      <div><span className="dashboard-card-label">Оплата</span><h2>{pendingInvoices.length ? "Есть счёт к оплате" : "Все счета в порядке"}</h2><p>Выберите счёт, оплатите через ЕРИП и приложите чек прямо здесь.</p></div>
+      <div><span className="dashboard-card-label">Оплата</span><h2>{selected ? "Оплатите счёт" : "Оплата в порядке"}</h2><p>{selected ? "Два шага: ЕРИП и чек." : "Все ваши счета закрыты или находятся на проверке."}</p></div>
       {selected && <div className="payment-heading-total"><span>К оплате</span><strong>{formatMoney(selected.amount)}</strong></div>}
     </div>
 
-    <section className="payment-steps" aria-label="Как оплатить">
-      <div className={selected ? "is-active" : ""}><span>1</span><strong>Выбрать счёт</strong></div>
-      <div className={selected ? "is-active" : ""}><span>2</span><strong>Оплатить в ЕРИП</strong></div>
-      <div><span>3</span><strong>Прикрепить чек</strong></div>
-    </section>
-
-    <div className="invoice-list">
-      {invoices.length ? invoices.map((invoice) => <article className={`invoice-card card ${invoice.id === invoiceToPay ? "is-selected" : ""}`} key={invoice.id}>
-        <div><span className="invoice-label">Услуга</span><h3>{invoice.title}</h3><p>{invoice.id} · выставлен {formatShortDate(invoice.createdAt)}</p></div>
-        <div className="invoice-amount"><span>Сумма</span><strong>{formatMoney(invoice.amount)}</strong></div>
-        <div className="invoice-due"><span>Срок оплаты</span><strong>{formatDate(invoice.dueAt)}</strong></div>
-        <div><StatusBadge status={invoice.status} />{invoice.receiptName && <small className="invoice-receipt-name">Чек отправлен: {invoice.receiptName}</small>}</div>
-        {invoice.status === "Ожидает оплаты" && <button className="invoice-select-button" onClick={() => setInvoiceToPay(invoice.id)}>{invoice.id === invoiceToPay ? "Выбран" : "Выбрать"}</button>}
-      </article>) : <div className="card"><EmptyState title="Счетов пока нет" text="Когда появится новый счёт, он будет виден на этом экране." /></div>}
-    </div>
-
-    {pendingInvoices.length > 0 && <div className="payment-panel payment-panel-simple">
-      <div className="erip-card card">
-        <span className="eyebrow eyebrow-invert">Шаг 2 · Оплатите через ЕРИП</span>
-        <span className="erip-amount-label">Точная сумма выбранного счёта</span>
-        <div className="erip-pay-row">
-          <h3>{selected ? formatMoney(selected.amount) : "Выберите счёт"}</h3>
-          {selected && <button className="copy-button" onClick={() => copyText(selected.amount.toFixed(2).replace(".", ","))} title="Скопировать сумму"><Copy size={16} /></button>}
-        </div>
-        <ol className="erip-path">
-          {siteConfig.erip.path.map((part, index) => <li key={part}><span>{index + 1}</span><strong>{part}</strong></li>)}
-        </ol>
-        <div className="erip-contract">
-          <div><span>Номер договора</span><strong>{siteConfig.erip.contractNumber}</strong></div>
-          <button className="copy-button" onClick={() => copyText(siteConfig.erip.contractNumber)} title="Скопировать номер договора"><Copy size={16} /></button>
-        </div>
+    {selected ? <>
+      {pendingInvoices.length > 1 && <div className="payment-selector"><span>Выберите счёт</span><select aria-label="Счёт для оплаты" value={selected.id} onChange={(event) => setInvoiceToPay(event.target.value)}>{pendingInvoices.map((item) => <option value={item.id} key={item.id}>{item.title} · {formatMoney(item.amount)}</option>)}</select></div>}
+      <article className="payment-focus card"><div><span className="invoice-label">Счёт к оплате</span><h3>{selected.title}</h3><p>{selected.id} · оплатить до {formatDate(selected.dueAt)}</p></div><strong>{formatMoney(selected.amount)}</strong></article>
+      <div className="payment-action-grid">
+        <div className="erip-card card"><span className="payment-step-label">1 · Оплатить</span><h3>{formatMoney(selected.amount)} <button className="copy-button" onClick={() => copyText(selected.amount.toFixed(2).replace(".", ","))} title="Скопировать сумму"><Copy size={16} /></button></h3><ol className="erip-path">{siteConfig.erip.path.map((part, index) => <li key={part}><span>{index + 1}</span><strong>{part}</strong></li>)}</ol><div className="erip-contract"><div><span>Номер договора</span><strong>{siteConfig.erip.contractNumber}</strong></div><button className="copy-button" onClick={() => copyText(siteConfig.erip.contractNumber)} title="Скопировать номер договора"><Copy size={16} /></button></div></div>
+        <div className="upload-card card"><span className="payment-step-label">2 · Отправить чек</span><h3>Прикрепите чек</h3><p>Подойдёт фото или PDF до 10 МБ.</p><label className="upload-zone"><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => setReceiptFile(event.target.files?.[0] ?? null)} /><UploadCloud size={25} /><strong>{receiptFile ? "Выбрать другой файл" : "Выбрать файл"}</strong><span>JPG, PNG, WEBP или PDF</span></label>{receiptFile && <div className="upload-file">{receiptFile.name} · {(receiptFile.size / 1024 / 1024).toFixed(2)} МБ</div>}<button className="button button-primary upload-submit" disabled={!receiptFile || uploading} onClick={uploadReceipt}>{uploading ? "Отправляем…" : "Я оплатил — отправить"}</button></div>
       </div>
+    </> : <div className="payment-done-card card"><span className="payment-done-icon"><CheckCircle2 /></span><h3>Сейчас всё в порядке</h3><p>Новых счетов к оплате нет. Здесь останется история ваших платежей.</p></div>}
 
-      <div className="upload-card card">
-        <span className="dashboard-card-label">Шаг 3 · Подтвердите оплату</span>
-        <h3>Приложите чек</h3>
-        <p>После отправки мы проверим платёж. Статус счёта поменяется на «Ожидает подтверждения».</p>
-        {pendingInvoices.length > 1 && <div className="field"><label htmlFor="invoice-select">Какой счёт оплатили</label><select id="invoice-select" value={invoiceToPay} onChange={(event) => setInvoiceToPay(event.target.value)}>{pendingInvoices.map((item) => <option value={item.id} key={item.id}>{item.title} · {formatMoney(item.amount)}</option>)}</select></div>}
-        <label className="upload-zone">
-          <input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => setReceiptFile(event.target.files?.[0] ?? null)} />
-          <UploadCloud size={25} />
-          <strong>{receiptFile ? "Выбрать другой файл" : "Выбрать чек на устройстве"}</strong>
-          <span>JPG, PNG, WEBP или PDF · до 10 МБ</span>
-        </label>
-        {receiptFile && <div className="upload-file">{receiptFile.name} · {(receiptFile.size / 1024 / 1024).toFixed(2)} МБ</div>}
-        <button className="button button-primary upload-submit" disabled={!receiptFile || uploading} onClick={uploadReceipt}>{uploading ? "Загружаем чек…" : "Я оплатил — отправить чек"}</button>
-      </div>
-    </div>}
+    {history.length > 0 && <section className="payment-history"><div className="section-simple-heading"><h3>История счетов</h3><span>{history.length}</span></div><div className="payment-history-list">{history.map((invoice) => <article className="payment-history-row card" key={invoice.id}><div><strong>{invoice.title}</strong><span>{invoice.id} · {formatShortDate(invoice.createdAt)}</span>{invoice.receiptName && <small className="invoice-receipt-name">Чек отправлен: {invoice.receiptName}</small>}</div><strong>{formatMoney(invoice.amount)}</strong><StatusBadge status={invoice.status} /></article>)}</div></section>}
   </>;
+}
+
+function ReceiptUploadOverlay({ stage, seconds, total, error, onClose, onRetry }: { stage: ReceiptFlow; seconds: number; total: number; error: string; onClose: () => void; onRetry: () => void }) {
+  const isUploading = stage === "uploading";
+  const isSuccess = stage === "success";
+  const progress = isSuccess ? 100 : Math.max(8, Math.min(94, Math.round(((total - seconds) / total) * 100)));
+  return <div className="receipt-flow-overlay" role="status" aria-live="polite">
+    <div className={`receipt-flow-card ${isSuccess ? "is-success" : stage === "error" ? "is-error" : ""}`}>
+      {isUploading && <div className="receipt-flow-orbit"><span className="loader" /></div>}
+      {isSuccess && <span className="receipt-flow-check"><Check size={42} /></span>}
+      {stage === "error" && <span className="receipt-flow-error"><X size={42} /></span>}
+      <span className="receipt-flow-kicker">{isUploading ? "Платёж" : isSuccess ? "Готово" : "Не получилось"}</span>
+      <h2>{isUploading ? "Отправляем чек" : isSuccess ? "Чек отправлен" : "Чек не отправился"}</h2>
+      <p>{isUploading ? (seconds > 1 ? `Обычно осталось около ${seconds} секунд. Не закрывайте кабинет.` : "Почти готово. Проверяем файл…") : isSuccess ? "Счёт отмечен как «Ожидает подтверждения». Мы проверим платёж и обновим статус." : error}</p>
+      <div className="receipt-flow-progress"><span style={{ width: `${progress}%` }} /></div>
+      {isUploading && <span className="receipt-flow-caption">Шаг 1 из 2 · сохраняем файл в защищённое хранилище</span>}
+      {isSuccess && <button className="button button-primary" onClick={onClose}>Вернуться к счетам</button>}
+      {stage === "error" && <div className="receipt-flow-actions"><button className="button button-primary" onClick={onRetry}>Попробовать ещё раз</button><button className="button button-ghost" onClick={onClose}>Закрыть</button></div>}
+    </div>
+  </div>;
 }
 
 function OffersView({ project, services }: { project: Project; services: DashboardData["services"] }) {

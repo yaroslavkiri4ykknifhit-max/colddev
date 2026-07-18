@@ -2,6 +2,7 @@
 
 import {
   Activity,
+  ArrowRight,
   ArrowUpRight,
   BarChart3,
   BriefcaseBusiness,
@@ -264,8 +265,8 @@ export default function AdminPage() {
             </div>
           </header>
 
-          <div className="product-content">
-            {section === "overview" && <AdminOverview snapshot={snapshot} onCreateClient={() => openModal("clients")} onCreateProject={() => openModal("projects")} onCreateInvoice={() => openModal("invoices")} />}
+          <div className="product-content admin-view-enter" key={section}>
+            {section === "overview" && <AdminOverview snapshot={snapshot} onCreateClient={() => openModal("clients")} onCreateProject={() => openModal("projects")} onCreateStage={() => openModal("stages")} onCreateUpdate={() => openModal("updates")} onCreateInvoice={() => openModal("invoices")} />}
             {section === "clients" && <ClientsSection snapshot={snapshot} onCreate={() => openModal("clients")} onEdit={(item) => openModal("clients", item)} />}
             {section === "projects" && <ProjectsSection snapshot={snapshot} onCreate={() => openModal("projects")} onEdit={(item) => openModal("projects", item)} />}
             {section === "stages" && <EditableListSection title="Этапы проектов" description="Покажите клиенту, из каких понятных шагов состоит работа." addLabel="Добавить этап" icon={<ClipboardList />} items={snapshot.stages} getTitle={(item) => item.title} getMeta={(item) => `${projectName(snapshot, item.projectId)} · ${stageStatusLabel(item.status)}`} getDetail={(item) => item.description} onCreate={() => openModal("stages")} onEdit={(item) => openModal("stages", item as unknown as Record<string, unknown>)} />}
@@ -289,25 +290,21 @@ function AdminAuth({ error, loading }: { error: string; loading: boolean }) {
   return <main className="product-page"><div className="google-auth-card card"><Logo />{loading ? <div className="admin-auth-loading" role="status"><span className="loader" /><h1>Открываем админку</h1><p>Проверяем Google-аккаунт и загружаем данные. Обычно это занимает несколько секунд.</p></div> : <><h1>Вход в админку</h1><p>Войдите через {siteConfig.adminEmail}. После проверки откроются клиенты, проекты и оплаты.</p>{error && <div className="auth-error">{error}</div>}{siteConfig.apiUrl ? <div id="google-admin-button" className="google-button-wrap" /> : <div className="auth-setup-note">Подключите Google Apps Script, чтобы открыть рабочую админку.</div>}</>}</div></main>;
 }
 
-function AdminOverview({ snapshot, onCreateClient, onCreateProject, onCreateInvoice }: { snapshot: AdminSnapshot; onCreateClient: () => void; onCreateProject: () => void; onCreateInvoice: () => void }) {
+function AdminOverview({ snapshot, onCreateClient, onCreateProject, onCreateStage, onCreateUpdate, onCreateInvoice }: { snapshot: AdminSnapshot; onCreateClient: () => void; onCreateProject: () => void; onCreateStage: () => void; onCreateUpdate: () => void; onCreateInvoice: () => void }) {
   const unpaid = snapshot.invoices.filter((item) => item.status === "Ожидает оплаты" || item.status === "Ожидает подтверждения").length;
+  const steps = [
+    { label: "Клиент", done: snapshot.clients.length > 0, action: onCreateClient, actionLabel: "Добавить" },
+    { label: "Проект", done: snapshot.projects.length > 0, action: onCreateProject, actionLabel: "Создать" },
+    { label: "Этапы", done: snapshot.stages.length > 0, action: onCreateStage, actionLabel: "Добавить" },
+    { label: "Обновления", done: snapshot.updates.length > 0, action: onCreateUpdate, actionLabel: "Опубликовать" },
+  ];
+  const next = steps.find((step) => !step.done) ?? { label: "Следующий шаг", done: true, action: onCreateUpdate, actionLabel: "Добавить обновление" };
   return <>
-    <div className="view-heading"><div><span className="eyebrow">Сегодня в работе</span><h2>Всё важное на одном экране</h2><p>Начните нужное действие сразу — без поиска по меню.</p></div></div>
-    <div className="admin-quick-actions">
-      <button onClick={onCreateClient}><span><Users /></span><div><strong>Новый клиент</strong><small>Контакты и компания</small></div><Plus /></button>
-      <button onClick={onCreateProject}><span><FolderKanban /></span><div><strong>Новый проект</strong><small>Сразу получите ID и код</small></div><Plus /></button>
-      <button onClick={onCreateInvoice}><span><CircleDollarSign /></span><div><strong>Выставить счёт</strong><small>Сумма, срок и проект</small></div><Plus /></button>
-    </div>
-    <div className="admin-kpis">
-      <div className="admin-kpi card"><span>Клиенты</span><strong>{snapshot.clients.length}</strong><small>в базе COLDDEV</small></div>
-      <div className="admin-kpi card"><span>Проекты в работе</span><strong>{snapshot.projects.filter((item) => item.status !== "Завершён").length}</strong><small>активных проектов</small></div>
-      <div className="admin-kpi card"><span>Требуют оплаты</span><strong>{unpaid}</strong><small>счетов для проверки</small></div>
-      <div className="admin-kpi card"><span>Отчёты по рекламе</span><strong>{snapshot.reports.length}</strong><small>записей в системе</small></div>
-    </div>
-    <div className="card admin-activity-card">
-      <div className="card-heading"><h3>Последние действия</h3><span>Автоматическая история</span></div>
-      {snapshot.activity.length ? <div className="activity-list">{snapshot.activity.slice(0, 8).map((item) => <div className="activity-row" key={item.id}><span className="activity-icon"><Activity size={15} /></span><div><strong>{item.title}</strong><span>{item.detail}</span></div><time>{formatShortDate(item.date)}</time></div>)}</div> : <EmptyInline text="Здесь появятся сохранённые действия." />}
-    </div>
+    <div className="view-heading"><div><span className="eyebrow">Маршрут администратора</span><h2>Ведите проект по шагам</h2><p>Сначала клиент, потом проект. Остальное появляется по ходу работы.</p></div></div>
+    <section className="admin-next-action card"><div><span className="admin-step-kicker">Ваш следующий шаг</span><h3>{next.done ? "Проект уже ведётся" : `${next.label}: ${next.actionLabel.toLowerCase()}`}</h3><p>{next.done ? "Добавляйте новости, отчёты и счета по мере работы." : `Сейчас нужно: ${next.label.toLowerCase()}.`}</p></div><button className="button button-primary" onClick={next.action}>{next.done ? "Добавить обновление" : next.actionLabel} <ArrowRight size={16} /></button></section>
+    <section className="admin-path" aria-label="Путь создания проекта">{steps.map((step, index) => <div className={`admin-path-step ${step.done ? "is-done" : index === steps.findIndex((item) => !item.done) ? "is-current" : ""}`} key={step.label}><span>{step.done ? <Check size={15} /> : index + 1}</span><strong>{step.label}</strong><small>{step.done ? "Готово" : index === steps.findIndex((item) => !item.done) ? "Сейчас" : "Дальше"}</small>{!step.done && index === steps.findIndex((item) => !item.done) && <button onClick={step.action}>{step.actionLabel}</button>}</div>)}</section>
+    <div className="admin-kpis admin-kpis-compact"><div className="admin-kpi card"><span>Клиенты</span><strong>{snapshot.clients.length}</strong></div><div className="admin-kpi card"><span>Проекты</span><strong>{snapshot.projects.length}</strong></div><div className="admin-kpi card"><span>Проверить оплату</span><strong>{unpaid}</strong></div><button className="admin-kpi admin-kpi-action card" onClick={onCreateInvoice}><span>Новый счёт</span><strong><Plus size={19} /></strong></button></div>
+    <div className="card admin-activity-card"><div className="card-heading"><h3>Последняя активность</h3><span>Система</span></div>{snapshot.activity.length ? <div className="activity-list">{snapshot.activity.slice(0, 5).map((item) => <div className="activity-row" key={item.id}><span className="activity-icon"><Activity size={15} /></span><div><strong>{item.title}</strong><span>{item.detail}</span></div><time>{formatShortDate(item.date)}</time></div>)}</div> : <EmptyInline text="Здесь появятся сохранённые действия." />}</div>
   </>;
 }
 
@@ -362,6 +359,7 @@ function EntityModal({ entity, item, snapshot, saving, error, onClose, onSave }:
       </fieldset>
       <div className="modal-footer"><button type="button" className="button button-ghost" disabled={saving} onClick={onClose}>Отмена</button><button type="submit" className="button button-primary" disabled={saving || blocked}>{saving ? <><span className="button-spinner" /> Сохраняем…</> : item ? "Сохранить изменения" : `Добавить ${entityLabels[entity]}`}</button></div>
     </form>
+    {saving && <div className="modal-saving-state" role="status"><span className="loader" /><strong>Сохраняем запись</strong><span>Подождите несколько секунд</span></div>}
   </section></div>;
 }
 
@@ -388,7 +386,7 @@ function AdvertisingFields({ values, update, snapshot }: FormFieldsProps & { sna
 }
 
 function InvoiceFields({ values, update, snapshot }: FormFieldsProps & { snapshot: AdminSnapshot }) {
-  return <><ProjectSelect snapshot={snapshot} value={values.projectId} onChange={(value) => update("projectId", value)} /><SelectField label="Статус" value={values.status} onChange={(value) => update("status", value)} options={["Ожидает оплаты", "Ожидает подтверждения", "Оплачено", "Просрочено", "Отменено"].map((value) => ({ value, label: value }))} /><Field label="За что оплата" value={values.title} onChange={(value) => update("title", value)} placeholder="Например, разработка сайта — второй этап" required full /><Field label="Сумма, BYN" value={values.amount} onChange={(value) => update("amount", value)} type="number" min="0" step="0.01" required /><Field label="Оплатить до" value={values.dueAt} onChange={(value) => update("dueAt", value)} type="date" required /><TextArea label="Комментарий к счёту" value={values.comment} onChange={(value) => update("comment", value)} placeholder="Необязательное пояснение для клиента" full /></>;
+  return <><ProjectSelect snapshot={snapshot} value={values.projectId} onChange={(value) => update("projectId", value)} /><SelectField label="Статус" value={values.status} onChange={(value) => update("status", value)} options={["Ожидает оплаты", "Ожидает подтверждения", "Оплачено", "Просрочено", "Отменено"].map((value) => ({ value, label: value }))} />{values.receiptName ? <div className="form-receipt-card field-full"><span>Чек клиента</span><strong>{values.receiptName}</strong>{values.receiptUrl ? <a href={values.receiptUrl} target="_blank" rel="noreferrer">Открыть чек <ArrowUpRight size={13} /></a> : <small>Файл сохранён в папке проекта Google Drive.</small>}</div> : values.status === "Ожидает подтверждения" ? <div className="form-warning field-full">Статус уже «Ожидает подтверждения», но файл чека не пришёл в данные. Попросите клиента отправить его ещё раз из раздела «Оплата».</div> : null}<Field label="За что оплата" value={values.title} onChange={(value) => update("title", value)} placeholder="Например, разработка сайта — второй этап" required full /><Field label="Сумма, BYN" value={values.amount} onChange={(value) => update("amount", value)} type="number" min="0" step="0.01" required /><Field label="Оплатить до" value={values.dueAt} onChange={(value) => update("dueAt", value)} type="date" required /><TextArea label="Комментарий к счёту" value={values.comment} onChange={(value) => update("comment", value)} placeholder="Необязательное пояснение для клиента" full /></>;
 }
 
 function ServiceFields({ values, update }: FormFieldsProps) {
@@ -473,6 +471,8 @@ function initialFormValues(entity: AdminEntity, item: Record<string, unknown> | 
     comment: String(item?.comment ?? ""),
     screenshotUrl: String(item?.screenshotUrl ?? ""),
     amount: String(item?.amount ?? ""),
+    receiptName: String(item?.receiptName ?? ""),
+    receiptUrl: String(item?.receiptUrl ?? ""),
     createdAt: inputDateValue(item?.createdAt, today),
     dueAt: inputDateValue(item?.dueAt, due),
     price: String(item?.price ?? ""),
