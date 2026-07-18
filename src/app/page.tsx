@@ -236,7 +236,7 @@ export default function Home() {
             <div className="cabinet-title-row">
               <div>
                 <span className="neo-kicker neo-kicker-light">Личный кабинет COLDDEV</span>
-                <h2>ВЫ ВИДИТЕ ВСЁ.<br />МЫ ДЕЛАЕМ ОСТАЛЬНОЕ.</h2>
+                <h2>НИКАКИХ<br />«НУ ЧТО ТАМ?»</h2>
               </div>
               <div className="cabinet-access-note">
                 <FileCheck2 />
