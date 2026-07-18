@@ -2256,6 +2256,9 @@ body { overflow-x: hidden; }
 .admin-record-row > div > strong { margin-bottom: 5px; font-size: 12px; }
 .admin-record-row > div > span { color: var(--neo-violet-dark); font-size: 9px; font-weight: 750; }
 .admin-record-row > div > p { margin: 6px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+.record-link { margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; color: var(--neo-violet-dark); font-size: 9px; font-weight: 800; text-decoration: none; }
+.record-link:hover { text-decoration: underline; }
+.invoice-receipt-name { display: block; margin-top: 7px; color: #277654; font-size: 9px; }
 
 .heading-actions { display: flex; gap: 8px; }
 .content-state { width: fit-content; margin-top: 16px; padding: 5px 8px; border-radius: 99px; color: #777b83; background: #eef0f3; font-size: 8px; font-weight: 800; }

@@ -472,7 +472,7 @@ function PaymentsView({ invoices, invoiceToPay, setInvoiceToPay, receiptFile, se
         <div><span className="invoice-label">Услуга</span><h3>{invoice.title}</h3><p>{invoice.id} · выставлен {formatShortDate(invoice.createdAt)}</p></div>
         <div className="invoice-amount"><span>Сумма</span><strong>{formatMoney(invoice.amount)}</strong></div>
         <div className="invoice-due"><span>Срок оплаты</span><strong>{formatDate(invoice.dueAt)}</strong></div>
-        <StatusBadge status={invoice.status} />
+        <div><StatusBadge status={invoice.status} />{invoice.receiptName && <small className="invoice-receipt-name">Чек отправлен: {invoice.receiptName}</small>}</div>
         {invoice.status === "Ожидает оплаты" && <button className="invoice-select-button" onClick={() => setInvoiceToPay(invoice.id)}>{invoice.id === invoiceToPay ? "Выбран" : "Выбрать"}</button>}
       </article>) : <div className="card"><EmptyState title="Счетов пока нет" text="Когда появится новый счёт, он будет виден на этом экране." /></div>}
     </div>

@@ -123,7 +123,7 @@ function adminSnapshot(input) {
     stages: rows(SHEETS.STAGES).map(mapStage),
     updates: rows(SHEETS.UPDATES).map(mapUpdate),
     reports: rows(SHEETS.REPORTS).map(mapReport),
-    invoices: rows(SHEETS.INVOICES).map(mapInvoice),
+    invoices: rows(SHEETS.INVOICES).map((row) => mapInvoice(row, true)),
     services: rows(SHEETS.SERVICES).map(mapService),
   });
 }
@@ -161,7 +161,7 @@ function buildDashboard(clientId) {
     stages: rows(SHEETS.STAGES).filter(belongs).map(mapStage),
     updates: rows(SHEETS.UPDATES).filter(belongs).map(mapUpdate),
     reports: rows(SHEETS.REPORTS).filter(belongs).map(mapReport),
-    invoices: rows(SHEETS.INVOICES).filter(belongs).map(mapInvoice),
+    invoices: rows(SHEETS.INVOICES).filter(belongs).map((row) => mapInvoice(row, false)),
     services: rows(SHEETS.SERVICES).filter(row => String(row.active) !== 'false').map(mapService),
   };
 }
@@ -240,6 +240,6 @@ function mapProject(row) { return { id: row.id, clientId: row.client_id, name: r
 function mapStage(row) { return { id: row.id, projectId: row.project_id, title: row.title, description: row.description, order: Number(row.order || 0), status: row.status, startedAt: row.started_at, completedAt: row.completed_at }; }
 function mapUpdate(row) { return { id: row.id, projectId: row.project_id, title: row.title, description: row.description, date: row.date, category: row.category, imageUrl: row.image_url, linkUrl: row.link_url }; }
 function mapReport(row) { return { id: row.id, projectId: row.project_id, period: row.period, impressions: Number(row.impressions || 0), clicks: Number(row.clicks || 0), spend: Number(row.spend || 0), leads: Number(row.leads || 0), budgetLeft: Number(row.budget_left || 0), comment: row.comment, screenshotUrl: row.screenshot_url }; }
-function mapInvoice(row) { return { id: row.id, projectId: row.project_id, title: row.title, amount: Number(row.amount || 0), createdAt: row.created_at, dueAt: row.due_at, status: row.status, comment: row.comment, receiptName: row.receipt_name }; }
+function mapInvoice(row, includeReceiptUrl) { const invoice = { id: row.id, projectId: row.project_id, title: row.title, amount: Number(row.amount || 0), createdAt: row.created_at, dueAt: row.due_at, status: row.status, comment: row.comment, receiptName: row.receipt_name }; if (includeReceiptUrl && row.receipt_file_id) invoice.receiptUrl = 'https://drive.google.com/open?id=' + encodeURIComponent(row.receipt_file_id); return invoice; }
 function mapService(row) { return { id: row.id, title: row.title, description: row.description, price: row.price === '' ? null : Number(row.price), priceMode: row.price_mode, buttonLabel: row.button_label, imageUrl: row.image_url, active: String(row.active) !== 'false', order: Number(row.order || 0) }; }
 function mapPortfolio(row) { return { id: row.id, kind: row.kind, title: row.title, category: row.category, description: row.description, result: row.result, imageUrl: row.image_url, url: row.url, published: String(row.published) !== 'false', order: Number(row.order || 0) }; }
