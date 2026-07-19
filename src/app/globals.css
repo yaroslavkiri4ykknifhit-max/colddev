@@ -1132,11 +1132,11 @@ img { display: block; max-width: 100%; }
 .case-meta h3 { margin: 7px 0 0; font-size: 18px; letter-spacing: -.035em; }
 .case-meta p { max-width: 520px; margin: 8px 0 0; color: #70727e; font-size: 12px; line-height: 1.45; }
 
-.case-gallery { min-height: 430px; position: relative; overflow: hidden; color: white; background: linear-gradient(135deg, #2a1b72, #6257ee 56%, #a6a1ff); }
-.case-gallery.is-compact { min-height: 330px; }
-.case-gallery > img { width: 100%; height: 100%; min-height: inherit; display: block; object-fit: cover; transition: transform .45s ease; }
+.case-gallery { height: clamp(340px, 32vw, 460px); min-height: 0; position: relative; overflow: hidden; color: white; background: linear-gradient(135deg, #2a1b72, #6257ee 56%, #a6a1ff); }
+.case-gallery.is-compact { height: clamp(300px, 29vw, 410px); }
+.case-gallery > img { width: 100%; height: 100%; min-height: 0; display: block; object-fit: cover; transition: transform .45s ease; }
 .neo-case:hover .case-gallery > img { transform: scale(1.035); }
-.case-gallery-placeholder { min-height: inherit; padding: 32px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.18), transparent 26%), linear-gradient(135deg, #24174f, #6257ee); }
+.case-gallery-placeholder { height: 100%; padding: 32px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.18), transparent 26%), linear-gradient(135deg, #24174f, #6257ee); }
 .case-gallery-placeholder svg { width: 42px; height: 42px; margin-bottom: 18px; color: rgba(255,255,255,.85); }
 .case-gallery-placeholder span { max-width: 220px; color: rgba(255,255,255,.7); font-size: 12px; font-weight: 700; line-height: 1.45; }
 .case-gallery-arrow { width: 38px; height: 38px; position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.48); border-radius: 50%; color: white; background: rgba(19,17,51,.46); backdrop-filter: blur(12px); transform: translateY(-50%); transition: .2s ease; }
@@ -1165,7 +1165,7 @@ img { display: block; max-width: 100%; }
 .case-article-heading { margin-bottom: 30px; }
 .case-article-heading h1 { max-width: 890px; margin: 18px 0 0; color: var(--neo-night); font-size: clamp(42px, 7vw, 88px); font-weight: 850; letter-spacing: -.075em; line-height: .9; }
 .case-article-result { max-width: 670px; margin: 24px 0 0; color: var(--neo-violet-dark); font-size: clamp(17px, 2vw, 23px); font-weight: 750; line-height: 1.35; }
-.case-article > .case-gallery { min-height: min(66vw, 650px); border-radius: 31px; box-shadow: 0 26px 70px rgba(28,25,75,.12); }
+.case-article > .case-gallery { height: min(66vw, 650px); min-height: 0; border-radius: 31px; box-shadow: 0 26px 70px rgba(28,25,75,.12); }
 .case-article-body { margin-top: 34px; display: grid; grid-template-columns: 1fr 330px; gap: 50px; align-items: start; }
 .case-article-copy { max-width: 680px; }
 .case-article-copy p { margin: 18px 0 0; color: #4f515d; font-size: 18px; line-height: 1.7; white-space: pre-line; }
@@ -1392,11 +1392,11 @@ img { display: block; max-width: 100%; }
   .case-visual-site { padding: 25px; }
   .case-browser { width: 100%; }
   .case-visual-ads > strong { font-size: 35px; }
-  .case-gallery { min-height: 330px; }
-  .case-gallery.is-compact { min-height: 285px; }
+  .case-gallery { height: 330px; min-height: 0; }
+  .case-gallery.is-compact { height: 285px; min-height: 0; }
   .case-article-page { padding-top: 30px; padding-bottom: 78px; }
   .case-article-heading h1 { font-size: 48px; }
-  .case-article > .case-gallery { min-height: 390px; border-radius: 24px; }
+  .case-article > .case-gallery { height: 390px; min-height: 0; border-radius: 24px; }
   .case-article-copy p { font-size: 16px; }
   .neo-faq-list summary { min-height: 86px; font-size: 16px; }
   .neo-final-card { min-height: 590px; padding: 31px 23px; border-radius: 28px; }
