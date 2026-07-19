@@ -181,7 +181,7 @@ export default function Home() {
           <div className="hard-line-track">
             <span>ВЫ ВИДИТЕ ВСЁ</span>
             <i>•</i>
-            <span>МЫ ДЕЛАЕМ ОСТАЛЬНОЕ</span>
+            <span>НИКАКИХ НУ ЧТО ТАМ?</span>
             <i>•</i>
             <span>ВЫ ВИДИТЕ ВСЁ</span>
           </div>
