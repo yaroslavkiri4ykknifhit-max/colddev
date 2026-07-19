@@ -12,10 +12,22 @@ import { colddevApi } from "@/lib/api";
 import type { PortfolioItem } from "@/types";
 
 export default function CasesPage() {
-  const [caseId] = useState(() => typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("id") ?? "");
+  const [caseId, setCaseId] = useState("");
   const [caseItem, setCaseItem] = useState<PortfolioItem | null>(null);
-  const [loading, setLoading] = useState(Boolean(caseId));
-  const [error, setError] = useState(caseId ? "" : "Кейс не выбран");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("id") ?? "";
+    const timer = window.setTimeout(() => {
+      setCaseId(id);
+      if (!id) {
+        setError("Кейс не выбран");
+        setLoading(false);
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!caseId) return;
