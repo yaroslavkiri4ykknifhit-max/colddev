@@ -9,14 +9,10 @@ import { caseImages } from "@/lib/cases";
 import { colddevApi } from "@/lib/api";
 import type { PortfolioItem } from "@/types";
 
-const fallbackCases: PortfolioItem[] = [
-  { id: "fallback-site", kind: "case", title: "Сайт, который можно показать клиенту", category: "Сайт", description: "Структура, дизайн и разработка в одном понятном маршруте.", result: "Понятный путь от первого экрана до заявки", published: true, order: 1 },
-  { id: "fallback-ads", kind: "case", title: "Результат рекламы в цифрах", category: "Яндекс Директ", description: "Показы, клики, заявки и стоимость обращения собраны в одной картине.", result: "Каждая цифра привязана к следующему действию", published: true, order: 2 },
-];
-
 export function CaseSection() {
-  const [items, setItems] = useState<PortfolioItem[]>(fallbackCases);
+  const [items, setItems] = useState<PortfolioItem[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -24,9 +20,13 @@ export function CaseSection() {
       .then((portfolio) => {
         if (!mounted) return;
         const cases = portfolio.filter((item) => item.kind === "case" && item.published).sort((a, b) => a.order - b.order);
-        setItems(cases.length ? cases : fallbackCases);
+        setItems(cases);
       })
-      .catch(() => undefined)
+      .catch(() => {
+        if (!mounted) return;
+        setLoadError("Кейсы пока не подключились к публичной странице. Проверьте обновление Apps Script.");
+        setItems([]);
+      })
       .finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
   }, []);
@@ -39,8 +39,9 @@ export function CaseSection() {
           <h2>ПОКАЗЫВАЕМ РАБОТУ.<br /><em>ПОНЯТНЫЕ РЕЗУЛЬТАТЫ.</em></h2>
           <p>Фотографии, ход работы и результат — всё собрано в кейсе, который можно открыть полностью.</p>
           {loading && <span className="cases-loading"><LoaderCircle /> Загружаем реальные кейсы</span>}
+          {loadError && <span className="cases-loading is-error">{loadError}</span>}
         </div>
-        <div className="neo-cases-grid">
+        {items?.length ? <div className="neo-cases-grid">
           {items.slice(0, 4).map((item, index) => (
             <article className={`neo-case ${index === 0 ? "neo-case-main" : ""}`} key={item.id}>
               <CaseGallery images={caseImages(item)} title={item.title} compact />
@@ -54,7 +55,7 @@ export function CaseSection() {
               </div>
             </article>
           ))}
-        </div>
+        </div> : !loading && <div className="cases-empty"><strong>Кейсы скоро появятся здесь</strong><span>Добавьте опубликованный кейс в админке — он появится на этой странице автоматически.</span></div>}
         <div className="cases-order-strip">
           <div><span>Ваш проект может стать следующим</span><strong>Обсудим задачу и соберём понятный план запуска</strong></div>
           <a className="button button-primary button-large" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Обсудить свой проект <ArrowUpRight /></a>
