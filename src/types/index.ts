@@ -108,6 +108,7 @@ export interface PortfolioItem {
   description: string;
   result: string;
   imageUrl?: string;
+  imageUrls?: string[];
   url?: string;
   published: boolean;
   order: number;
@@ -139,4 +140,3 @@ export interface ClientSession {
   expiresAt: string;
   data: DashboardData;
 }
-

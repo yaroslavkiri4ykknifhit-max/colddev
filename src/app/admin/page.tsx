@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/config/site";
 import { colddevApi } from "@/lib/api";
+import { parseImageUrls } from "@/lib/cases";
 import { formatDate, formatMoney, formatShortDate } from "@/lib/format";
 import type {
   AdminSnapshot,
@@ -334,7 +335,7 @@ function ServicesSection({ snapshot, onCreate, onEdit }: { snapshot: AdminSnapsh
 }
 
 function ContentSection({ snapshot, onCreate, onEdit }: { snapshot: AdminSnapshot; onCreate: (kind: "portfolio" | "cases") => void; onEdit: (entity: "portfolio" | "cases", item: Record<string, unknown>) => void }) {
-  return <><div className="view-heading"><div><h2>Работы и кейсы</h2><p>Один раздел для всего контента, который показывается на главной странице.</p></div><div className="heading-actions"><button className="button button-ghost" onClick={() => onCreate("portfolio")}><Plus size={16} /> Добавить работу</button><button className="button button-primary" onClick={() => onCreate("cases")}><Plus size={16} /> Добавить кейс</button></div></div>{snapshot.portfolio.length ? <div className="portfolio-grid">{snapshot.portfolio.map((item) => <article className="portfolio-card admin-content-card" key={item.id}><div className={`project-art ${item.kind === "case" ? "project-art-two" : "project-art-one"}`}><span className="content-kind">{item.kind === "case" ? "Кейс" : "Работа"}</span><span className="art-label">{item.title}</span></div><div className="portfolio-meta"><div><span>{item.category} · {item.published ? "опубликовано" : "скрыто"}</span><h3>{item.result || item.description}</h3></div><button className="edit-button" onClick={() => onEdit(item.kind === "case" ? "cases" : "portfolio", item as unknown as Record<string, unknown>)}><Pencil size={14} /> Изменить</button></div></article>)}</div> : <EmptyAdminState title="Работ и кейсов пока нет" text="Добавьте материалы — они появятся на главной странице сайта." action="Добавить работу" onAction={() => onCreate("portfolio")} />}</>;
+  return <><div className="view-heading"><div><h2>Работы и кейсы</h2><p>Один раздел для всего контента, который показывается на главной странице.</p></div><div className="heading-actions"><button className="button button-ghost" onClick={() => onCreate("portfolio")}><Plus size={16} /> Добавить работу</button><button className="button button-primary" onClick={() => onCreate("cases")}><Plus size={16} /> Добавить кейс</button></div></div>{snapshot.portfolio.length ? <div className="portfolio-grid">{snapshot.portfolio.map((item) => <article className="portfolio-card admin-content-card" key={item.id}><div className={`project-art ${item.kind === "case" ? "project-art-two" : "project-art-one"}`}><span className="content-kind">{item.kind === "case" ? "Кейс" : "Работа"}</span><span className="art-label">{item.title}</span></div><div className="portfolio-meta"><div><span>{item.category} · {item.published ? "опубликовано" : "скрыто"}{item.kind === "case" && item.imageUrls?.length ? ` · ${item.imageUrls.length} фото` : ""}</span><h3>{item.result || item.description}</h3></div><button className="edit-button" onClick={() => onEdit(item.kind === "case" ? "cases" : "portfolio", item as unknown as Record<string, unknown>)}><Pencil size={14} /> Изменить</button></div></article>)}</div> : <EmptyAdminState title="Работ и кейсов пока нет" text="Добавьте материалы — они появятся на главной странице сайта." action="Добавить работу" onAction={() => onCreate("portfolio")} />}</>;
 }
 
 function SectionHeading({ title, description, action, onAction }: { title: string; description: string; action: string; onAction: () => void }) {
@@ -401,7 +402,7 @@ function ServiceFields({ values, update }: FormFieldsProps) {
 }
 
 function PortfolioFields({ values, update }: FormFieldsProps) {
-  return <><Field label="Название" value={values.title} onChange={(value) => update("title", value)} placeholder="Название проекта" required /><Field label="Категория" value={values.category} onChange={(value) => update("category", value)} placeholder="Сайт / реклама / бот" required /><TextArea label="Короткое описание" value={values.description} onChange={(value) => update("description", value)} placeholder="Что было сделано" required full /><Field label="Главный результат" value={values.result} onChange={(value) => update("result", value)} placeholder="Например, 42 заявки за месяц" required full /><Field label="Ссылка на проект" value={values.url} onChange={(value) => update("url", value)} type="url" placeholder="https://..." /><Field label="Ссылка на изображение" value={values.imageUrl} onChange={(value) => update("imageUrl", value)} type="url" placeholder="https://..." /><SelectField label="Публикация" value={values.published} onChange={(value) => update("published", value)} options={[{ value: "true", label: "Показывать на сайте" }, { value: "false", label: "Сохранить скрытым" }]} /><Field label="Порядок" value={values.order} onChange={(value) => update("order", value)} type="number" min="1" /></>;
+  return <><Field label="Название" value={values.title} onChange={(value) => update("title", value)} placeholder="Название проекта" required /><Field label="Категория" value={values.category} onChange={(value) => update("category", value)} placeholder="Сайт / реклама / бот" required /><TextArea label="Короткое описание" value={values.description} onChange={(value) => update("description", value)} placeholder="Что было сделано" required full /><Field label="Главный результат" value={values.result} onChange={(value) => update("result", value)} placeholder="Например, 42 заявки за месяц" required full /><Field label="Ссылка на проект" value={values.url} onChange={(value) => update("url", value)} type="url" placeholder="https://..." /><TextArea label="Фотографии кейса" value={values.imageUrls} onChange={(value) => update("imageUrls", value)} placeholder="Вставьте ссылки на фото: одна ссылка в каждой строке" full /><small className="field-hint field-full">Первая ссылка будет главным фото. Старое поле «Ссылка на изображение» поддерживается автоматически.</small><SelectField label="Публикация" value={values.published} onChange={(value) => update("published", value)} options={[{ value: "true", label: "Показывать на сайте" }, { value: "false", label: "Сохранить скрытым" }]} /><Field label="Порядок" value={values.order} onChange={(value) => update("order", value)} type="number" min="1" /></>;
 }
 
 function ProjectSelect({ snapshot, value, onChange }: { snapshot: AdminSnapshot; value: string; onChange: (value: string) => void }) {
@@ -468,6 +469,7 @@ function initialFormValues(entity: AdminEntity, item: Record<string, unknown> | 
     date: inputDateValue(item?.date, today),
     category: String(item?.category ?? "Общее"),
     imageUrl: String(item?.imageUrl ?? ""),
+    imageUrls: Array.isArray(item?.imageUrls) ? item.imageUrls.map(String).join("\n") : String(item?.imageUrls ?? item?.imageUrl ?? ""),
     linkUrl: String(item?.linkUrl ?? ""),
     period: String(item?.period ?? ""),
     impressions: String(item?.impressions ?? "0"),
@@ -502,7 +504,7 @@ function formExplanation(entity: AdminEntity) {
     invoices: "Реквизиты ЕРИП уже настроены. Здесь меняются только услуга, сумма, срок и статус.",
     services: "Карточка появится в разделе дополнительных услуг клиентского кабинета.",
     portfolio: "Работа появится в портфолио на главной странице.",
-    cases: "Кейс показывает задачу и измеримый результат на главной странице.",
+    cases: "Кейс показывает задачу и измеримый результат. Вставьте несколько ссылок на фото — по одной в каждой строке.",
   };
   return copy[entity];
 }
@@ -556,7 +558,8 @@ function applyLocalMutation(snapshot: AdminSnapshot, entity: AdminEntity, value:
     const service: ServiceOffer = { id, title: String(value.title ?? "Новая услуга"), description: String(value.description ?? ""), price: value.price === "" ? null : Number(value.price), priceMode: (value.priceMode as ServiceOffer["priceMode"]) ?? "fixed", buttonLabel: String(value.buttonLabel ?? "Обсудить"), imageUrl: String(value.imageUrl ?? ""), active: String(value.active) !== "false", order: Number(value.order ?? snapshot.services.length + 1) };
     return { ...snapshot, services: upsert(snapshot.services, service) };
   }
-  const portfolioItem: PortfolioItem = { id, kind: entity === "cases" ? "case" : "portfolio", title: String(value.title ?? "Новая работа"), category: String(value.category ?? "Проект"), description: String(value.description ?? ""), result: String(value.result ?? ""), imageUrl: String(value.imageUrl ?? ""), url: String(value.url ?? ""), published: String(value.published) !== "false", order: Number(value.order ?? snapshot.portfolio.length + 1) };
+  const imageUrls = parseImageUrls(String(value.imageUrls ?? value.imageUrl ?? ""));
+  const portfolioItem: PortfolioItem = { id, kind: entity === "cases" ? "case" : "portfolio", title: String(value.title ?? "Новая работа"), category: String(value.category ?? "Проект"), description: String(value.description ?? ""), result: String(value.result ?? ""), imageUrl: imageUrls[0] ?? "", imageUrls, url: String(value.url ?? ""), published: String(value.published) !== "false", order: Number(value.order ?? snapshot.portfolio.length + 1) };
   return { ...snapshot, portfolio: upsert(snapshot.portfolio, portfolioItem) };
 }
 

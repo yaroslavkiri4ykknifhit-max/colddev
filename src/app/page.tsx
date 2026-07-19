@@ -25,6 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { CaseSection } from "@/components/CaseSection";
 import { siteConfig } from "@/config/site";
 
 const services = [
@@ -310,40 +311,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="neo-section cases-section" id="portfolio">
-          <div className="shell">
-            <div className="neo-heading cases-heading">
-              <span className="neo-kicker">Кейсы и примеры</span>
-              <h2>ПОКАЗЫВАЕМ РАБОТУ.<br /><em>ПОНЯТНЫЕ РЕЗУЛЬТАТЫ.</em></h2>
-              <p>Здесь будут ваши реальные проекты из админки: сайт, реклама, задачи и измеримый результат.</p>
-            </div>
-            <div className="neo-cases-grid">
-              <article className="neo-case neo-case-main">
-                <div className="case-visual case-visual-site">
-                  <span>САЙТ</span>
-                  <div className="case-browser">
-                    <div><i /><i /><i /></div>
-                    <strong>ВАШ<br />ПРОЕКТ</strong>
-                    <span>Место для первого реального кейса</span>
-                  </div>
-                </div>
-                <div className="case-meta"><div><span>Кейс №01</span><h3>Сайт, который можно показать клиенту</h3></div><ArrowUpRight /></div>
-              </article>
-              <article className="neo-case">
-                <div className="case-visual case-visual-ads">
-                  <div className="case-chart"><i /><i /><i /><i /><i /></div>
-                  <strong>РЕАЛЬНЫЕ<br />ЦИФРЫ</strong>
-                  <span>Показы · клики · заявки · стоимость</span>
-                </div>
-                <div className="case-meta"><div><span>Кейс №02</span><h3>Результат рекламы в понятных цифрах</h3></div><ArrowUpRight /></div>
-              </article>
-            </div>
-            <div className="cases-order-strip">
-              <div><span>Ваш проект может стать следующим</span><strong>Обсудим задачу и соберём понятный план запуска</strong></div>
-              <a className="button button-primary button-large" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Обсудить свой проект <ArrowUpRight /></a>
-            </div>
-          </div>
-        </section>
+        <CaseSection />
 
         <section className="neo-section neo-faq-section">
           <div className="shell neo-faq-grid">

@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import type { AdminSnapshot, ClientSession, DashboardData } from "@/types";
+import type { AdminSnapshot, ClientSession, DashboardData, PortfolioItem } from "@/types";
 
 const MAX_RECEIPT_BYTES = 10 * 1024 * 1024;
 const RECEIPT_TYPES = [
@@ -89,6 +89,10 @@ export const colddevApi = {
       throw new Error("Личный кабинет подключается. Напишите Ярославу в Telegram, чтобы получить доступ к проекту.");
     }
     return request<DashboardData>("client.dashboard", { token });
+  },
+
+  async getPortfolio(): Promise<PortfolioItem[]> {
+    return request<PortfolioItem[]>("public.portfolio", {});
   },
 
   async markInvoicePaid(token: string, invoiceId: string, file: File) {
