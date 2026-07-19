@@ -19,7 +19,7 @@ export function CaseSection() {
     colddevApi.getPortfolio()
       .then((portfolio) => {
         if (!mounted) return;
-        const cases = portfolio.filter((item) => item.kind === "case" && item.published).sort((a, b) => a.order - b.order);
+        const cases = portfolio.filter((item) => (item.kind === "case" || item.kind === "portfolio") && item.published).sort((a, b) => a.order - b.order);
         setItems(cases);
       })
       .catch(() => {

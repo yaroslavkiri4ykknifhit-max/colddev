@@ -21,7 +21,7 @@ export default function CasesPage() {
     if (!caseId) return;
     colddevApi.getPortfolio()
       .then((items) => {
-        const found = items.find((item) => item.id === caseId && item.kind === "case" && item.published);
+        const found = items.find((item) => item.id === caseId && (item.kind === "case" || item.kind === "portfolio") && item.published);
         if (found) setCaseItem(found);
         else setError("Этот кейс пока недоступен");
       })
