@@ -1033,6 +1033,48 @@ img { display: block; max-width: 100%; }
 .neo-service-card > strong svg { width: 18px; height: 18px; padding: 4px; flex: 0 0 auto; border-radius: 50%; color: white; background: var(--neo-violet); }
 .neo-service-card:nth-child(3) > strong { border-color: rgba(255,255,255,.1); color: white; }
 
+.pricing-brief {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(350px, .65fr);
+  gap: 14px;
+}
+
+.pricing-list {
+  overflow: hidden;
+  border: 1px solid rgba(15,16,32,.1);
+  border-radius: 31px;
+  background: white;
+}
+
+.pricing-list-heading { min-height: 82px; padding: 20px 27px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid rgba(15,16,32,.1); }
+.pricing-list-heading span { color: #858793; font-size: 10px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.pricing-list-heading strong { color: var(--neo-violet); font-size: 12px; }
+.pricing-row { min-height: 78px; padding: 17px 27px; display: grid; grid-template-columns: 42px minmax(0,1fr) auto; align-items: center; gap: 18px; border-bottom: 1px solid rgba(15,16,32,.08); }
+.pricing-row:last-child { border-bottom: 0; }
+.pricing-row > span { color: #9a9ca6; font-size: 10px; font-weight: 800; }
+.pricing-row > strong { color: var(--neo-night); font-size: 18px; letter-spacing: -.035em; }
+.pricing-row > b { color: var(--neo-night); font-size: 18px; font-weight: 850; letter-spacing: -.035em; text-align: right; }
+
+.pricing-free-card {
+  min-height: 394px;
+  padding: 31px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 31px;
+  color: white;
+  background: var(--neo-violet);
+}
+
+.pricing-free-card::before { content: ""; width: 280px; height: 280px; position: absolute; top: -120px; right: -100px; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; box-shadow: 0 0 0 45px rgba(255,255,255,.04), 0 0 0 90px rgba(255,255,255,.025); }
+.pricing-free-card > span { position: relative; z-index: 1; color: rgba(255,255,255,.68); font-size: 10px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.pricing-free-card > strong { margin-top: 22px; position: relative; z-index: 1; font-size: clamp(45px, 5vw, 72px); font-weight: 900; letter-spacing: -.075em; line-height: .85; }
+.pricing-free-card > p { max-width: 430px; margin: auto 0 24px; position: relative; z-index: 1; color: rgba(255,255,255,.78); font-size: 14px; font-weight: 650; line-height: 1.55; }
+.pricing-free-card .button { position: relative; z-index: 1; }
+
 .platform-section { padding: 34px 0; border-top: 1px solid rgba(15,16,32,.08); border-bottom: 1px solid rgba(15,16,32,.08); background: white; }
 .platform-inner { display: grid; grid-template-columns: .55fr 1.45fr; align-items: center; gap: 50px; }
 .platform-copy span { display: block; margin-bottom: 7px; color: #858793; font-size: 9px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
@@ -1316,6 +1358,8 @@ img { display: block; max-width: 100%; }
   .neo-service-grid { grid-template-columns: 1fr; }
   .neo-service-card { min-height: 340px; }
   .neo-service-card h3 { margin-top: 70px; }
+  .pricing-brief { grid-template-columns: 1fr; }
+  .pricing-free-card { min-height: 360px; }
   .cabinet-title-row { grid-template-columns: 1fr; gap: 35px; }
   .cabinet-title-row h2 { font-size: clamp(58px, 13vw, 98px); }
   .cabinet-screen-main { grid-template-columns: 1fr; }
@@ -1371,6 +1415,16 @@ img { display: block; max-width: 100%; }
   .neo-heading > p { font-size: 15px; }
   .neo-service-card { min-height: 330px; padding: 24px; border-radius: 24px; }
   .neo-service-card h3 { margin-top: 55px; font-size: 25px; }
+  .pricing-list, .pricing-free-card { border-radius: 24px; }
+  .pricing-list-heading { min-height: 70px; padding: 17px 20px; }
+  .pricing-list-heading strong { display: none; }
+  .pricing-row { min-height: 82px; padding: 16px 20px; grid-template-columns: 30px minmax(0,1fr); gap: 4px 10px; }
+  .pricing-row > strong { font-size: 16px; }
+  .pricing-row > b { grid-column: 2; font-size: 16px; text-align: left; }
+  .pricing-free-card { min-height: 390px; padding: 25px; }
+  .pricing-free-card > strong { font-size: 50px; }
+  .pricing-free-card > p { margin-top: auto; font-size: 14px; }
+  .pricing-free-card .button { width: 100%; justify-content: center; }
   .platform-logos { grid-template-columns: 1fr 1fr; }
   .platform-logos > div { min-height: 58px; }
   .cabinet-title-row h2 { font-size: 56px; }

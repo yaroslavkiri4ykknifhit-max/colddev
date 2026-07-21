@@ -52,6 +52,13 @@ const services = [
   },
 ];
 
+const prices = [
+  ["Сайт для бизнеса", "от 899 BYN"],
+  ["Настройка рекламы", "от 399 BYN"],
+  ["Telegram-боты и автоматизация", "от 1499 BYN"],
+  ["Сопровождение", "от 299 BYN в месяц"],
+];
+
 const process = [
   ["01", "Разбираемся в бизнесе", "Смотрим продукт, клиентов, конкурентов и считаем, что действительно нужно сделать."],
   ["02", "Собираем систему", "Структура, тексты, дизайн, разработка, аналитика и реклама работают на одну цель."],
@@ -216,6 +223,24 @@ export default function Home() {
                   </article>
                 );
               })}
+            </div>
+            <div className="pricing-brief">
+              <div className="pricing-list" aria-label="Ориентировочная стоимость услуг">
+                <div className="pricing-list-heading"><span>Ориентир по стоимости</span><strong>Понятно до старта</strong></div>
+                {prices.map(([title, price], index) => (
+                  <div className="pricing-row" key={title}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <strong>{title}</strong>
+                    <b>{price}</b>
+                  </div>
+                ))}
+              </div>
+              <aside className="pricing-free-card">
+                <span>Расчёт проекта</span>
+                <strong>БЕСПЛАТНО</strong>
+                <p>Точная стоимость зависит от задачи и объёма работы. После короткого обсуждения бесплатно предложу решение, сроки и фиксированную цену.</p>
+                <a className="button button-white" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Получить расчёт <ArrowUpRight /></a>
+              </aside>
             </div>
           </div>
         </section>
