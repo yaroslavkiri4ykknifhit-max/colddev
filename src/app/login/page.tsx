@@ -37,7 +37,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="auth-page">
+    <main className="auth-page" id="main-content">
       <section className="auth-side">
         <Logo />
         <Link className="auth-back" href="/">

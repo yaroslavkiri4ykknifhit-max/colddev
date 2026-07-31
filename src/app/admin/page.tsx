@@ -10,12 +10,14 @@ import {
   CircleDollarSign,
   ClipboardList,
   Copy,
+  DatabaseZap,
   FolderKanban,
   LayoutDashboard,
   LogOut,
   Pencil,
   Plus,
   Search,
+  ShieldCheck,
   Sparkles,
   Users,
   X,
@@ -25,6 +27,7 @@ import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/config/site";
 import { colddevApi } from "@/lib/api";
 import { parseImageUrls } from "@/lib/cases";
+import { demoAdminSnapshot } from "@/lib/demo";
 import { formatDate, formatMoney, formatShortDate } from "@/lib/format";
 import type {
   AdminSnapshot,
@@ -123,6 +126,15 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
+    const previewMode = process.env.NODE_ENV === "development" && new URLSearchParams(window.location.search).get("preview") === "1";
+    if (previewMode) {
+      const previewTimer = window.setTimeout(() => {
+        setCredential("ui-preview");
+        setSnapshot(demoAdminSnapshot);
+        setAuthLoading(false);
+      }, 0);
+      return () => window.clearTimeout(previewTimer);
+    }
     const stored = sessionStorage.getItem("colddev.adminCredential");
     const timer = window.setTimeout(() => {
       if (stored) {
@@ -232,13 +244,29 @@ export default function AdminPage() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
+  useEffect(() => {
+    const syncSectionFromUrl = () => {
+      const candidate = window.location.hash.slice(1) as AdminSection;
+      if (allSections.some((item) => item.id === candidate)) setSection(candidate);
+    };
+    syncSectionFromUrl();
+    window.addEventListener("popstate", syncSectionFromUrl);
+    return () => window.removeEventListener("popstate", syncSectionFromUrl);
+  }, []);
+
+  const chooseSection = (next: AdminSection) => {
+    setSection(next);
+    if (window.location.hash !== `#${next}`) window.history.pushState(null, "", `#${next}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   if (!snapshot) {
     return <AdminAuth error={authError} loading={authLoading} />;
   }
 
   const activeLabel = allSections.find((item) => item.id === section)?.label;
   return (
-    <main className="product-page">
+    <main className="product-page" id="main-content">
       <div className="product-shell admin-shell">
         <aside className="product-sidebar admin-sidebar">
           <div className="sidebar-top"><Logo /></div>
@@ -249,7 +277,7 @@ export default function AdminPage() {
                 <div className="product-nav">
                   {group.items.map((item) => {
                     const Icon = item.icon;
-                    return <button className={section === item.id ? "is-active" : ""} onClick={() => setSection(item.id)} key={item.id}><Icon />{item.label}</button>;
+                    return <button className={section === item.id ? "is-active" : ""} aria-current={section === item.id ? "page" : undefined} onClick={() => chooseSection(item.id)} key={item.id}><Icon />{item.label}</button>;
                   })}
                 </div>
               </div>
@@ -283,7 +311,7 @@ export default function AdminPage() {
       <nav className="admin-mobile-bottom-nav" aria-label="Разделы админки">
         {allSections.map((item) => {
           const Icon = item.icon;
-          return <button className={section === item.id ? "is-active" : ""} aria-current={section === item.id ? "page" : undefined} onClick={() => setSection(item.id)} key={item.id}><Icon /><span>{item.label}</span></button>;
+          return <button className={section === item.id ? "is-active" : ""} aria-current={section === item.id ? "page" : undefined} onClick={() => chooseSection(item.id)} key={item.id}><Icon /><span>{item.label}</span></button>;
         })}
       </nav>
 
@@ -295,7 +323,33 @@ export default function AdminPage() {
 }
 
 function AdminAuth({ error, loading }: { error: string; loading: boolean }) {
-  return <main className="product-page"><div className="google-auth-card card"><Logo />{loading ? <div className="admin-auth-loading" role="status"><span className="loader" /><h1>Открываем админку</h1><p>Проверяем Google-аккаунт и загружаем данные. Обычно это занимает несколько секунд.</p></div> : <><h1>Вход в админку</h1><p>Войдите через {siteConfig.adminEmail}. После проверки откроются клиенты, проекты и оплаты.</p>{error && <div className="auth-error">{error}</div>}{siteConfig.apiUrl ? <div id="google-admin-button" className="google-button-wrap" /> : <div className="auth-setup-note">Подключите Google Apps Script, чтобы открыть рабочую админку.</div>}</>}</div></main>;
+  return <main className="admin-auth-page" id="main-content">
+    <div className="admin-auth-shell">
+      <div className="admin-auth-brandline"><Logo /><span>PRIVATE CONSOLE / 01</span></div>
+      <div className="admin-auth-layout">
+        <aside className="admin-auth-intro">
+          <span className="neo-kicker neo-kicker-light"><span /> Центр управления COLDDEV</span>
+          <h1>ВСЯ РАБОТА.<br /><em>В ОДНОЙ<br />СИСТЕМЕ.</em></h1>
+          <p>Клиенты, проекты, этапы, реклама и оплаты — без хаоса и потерянных сообщений.</p>
+          <div className="admin-auth-benefits">
+            <div><ShieldCheck /><span><strong>Закрытый доступ</strong><small>Только аккаунт владельца</small></span></div>
+            <div><DatabaseZap /><span><strong>Единые данные</strong><small>Google Sheets и Drive</small></span></div>
+          </div>
+        </aside>
+        <section className="admin-auth-card card">
+          <span className="admin-auth-index">COLDDEV / ADMIN</span>
+          {loading ? <div className="admin-auth-loading" role="status"><span className="loader" /><h2>Открываем админку</h2><p>Проверяем аккаунт и загружаем рабочие данные.</p></div> : <>
+            <span className="admin-auth-icon"><ShieldCheck /></span>
+            <h2>Добро пожаловать</h2>
+            <p>Войдите через <strong>{siteConfig.adminEmail}</strong>. После проверки откроется рабочая панель.</p>
+            {error && <div className="auth-error">{error}</div>}
+            {siteConfig.apiUrl ? <div id="google-admin-button" className="google-button-wrap" /> : <div className="auth-setup-note"><strong>Остался один шаг</strong><span>Подключите Google Apps Script, чтобы открыть рабочую админку.</span></div>}
+            <small className="admin-auth-footnote">Авторизация защищена Google Identity Services</small>
+          </>}
+        </section>
+      </div>
+    </div>
+  </main>;
 }
 
 function AdminOverview({ snapshot, onCreateClient, onCreateProject, onCreateStage, onCreateUpdate, onCreateInvoice }: { snapshot: AdminSnapshot; onCreateClient: () => void; onCreateProject: () => void; onCreateStage: () => void; onCreateUpdate: () => void; onCreateInvoice: () => void }) {
@@ -319,11 +373,11 @@ function AdminOverview({ snapshot, onCreateClient, onCreateProject, onCreateStag
 function ClientsSection({ snapshot, onCreate, onEdit }: { snapshot: AdminSnapshot; onCreate: () => void; onEdit: (item: Record<string, unknown>) => void }) {
   const [query, setQuery] = useState("");
   const rows = snapshot.clients.filter((item) => `${item.name} ${item.company} ${item.id}`.toLowerCase().includes(query.toLowerCase()));
-  return <><SectionHeading title="Клиенты" description="Сначала добавьте клиента, затем создайте для него один или несколько проектов." action="Добавить клиента" onAction={onCreate} /><div className="admin-toolbar"><label className="search-box"><Search size={15} /><input aria-label="Поиск клиентов" placeholder="Имя, компания или ID" value={query} onChange={(event) => setQuery(event.target.value)} /></label><span>{rows.length} из {snapshot.clients.length}</span></div>{rows.length ? <div className="card data-table-wrap"><table className="data-table"><thead><tr><th>Клиент</th><th>Контакты</th><th>Проекты</th><th>Статус</th><th><span className="sr-only">Действия</span></th></tr></thead><tbody>{rows.map((item) => <tr key={item.id}><td><strong>{item.company}</strong><small>{item.id} · {item.name}</small></td><td><strong>{item.telegram || "Telegram не указан"}</strong><small>{item.email || item.phone || "Контакты не указаны"}</small></td><td><strong>{snapshot.projects.filter((project) => project.clientId === item.id).length}</strong><small>проектов</small></td><td><span className={`status-badge ${item.status === "Активен" ? "status-green" : "status-gray"}`}>{item.status}</span></td><td><button className="edit-button" onClick={() => onEdit(item as unknown as Record<string, unknown>)}><Pencil size={14} /> Изменить</button></td></tr>)}</tbody></table></div> : <EmptyAdminState title={query ? "Ничего не найдено" : "Клиентов пока нет"} text={query ? "Попробуйте другой запрос." : "Добавьте первого клиента — после этого сможете создать его проект."} action={query ? undefined : "Добавить клиента"} onAction={onCreate} />}</>;
+  return <><SectionHeading title="Клиенты" description="Сначала добавьте клиента, затем создайте для него один или несколько проектов." action="Добавить клиента" onAction={onCreate} /><div className="admin-toolbar"><label className="search-box"><Search size={15} /><input aria-label="Поиск клиентов" placeholder="Имя, компания или ID" value={query} onChange={(event) => setQuery(event.target.value)} /></label><span>{rows.length} из {snapshot.clients.length}</span></div>{rows.length ? <div className="card data-table-wrap"><table className="data-table clients-table"><thead><tr><th>Клиент</th><th>Контакты</th><th>Проекты</th><th>Статус</th><th><span className="sr-only">Действия</span></th></tr></thead><tbody>{rows.map((item) => <tr key={item.id}><td><strong>{item.company}</strong><small>{item.id} · {item.name}</small></td><td><strong>{item.telegram || "Telegram не указан"}</strong><small>{item.email || item.phone || "Контакты не указаны"}</small></td><td><strong>{snapshot.projects.filter((project) => project.clientId === item.id).length}</strong><small>проектов</small></td><td><span className={`status-badge ${item.status === "Активен" ? "status-green" : "status-gray"}`}>{item.status}</span></td><td><button className="edit-button" onClick={() => onEdit(item as unknown as Record<string, unknown>)}><Pencil size={14} /> Изменить</button></td></tr>)}</tbody></table></div> : <EmptyAdminState title={query ? "Ничего не найдено" : "Клиентов пока нет"} text={query ? "Попробуйте другой запрос." : "Добавьте первого клиента — после этого сможете создать его проект."} action={query ? undefined : "Добавить клиента"} onAction={onCreate} />}</>;
 }
 
 function ProjectsSection({ snapshot, onCreate, onEdit }: { snapshot: AdminSnapshot; onCreate: () => void; onEdit: (item: Record<string, unknown>) => void }) {
-  return <><SectionHeading title="Проекты" description="Здесь находятся статус, прогресс, сроки и то, что видит клиент." action="Создать проект" onAction={onCreate} />{snapshot.projects.length ? <div className="card data-table-wrap"><table className="data-table"><thead><tr><th>Проект</th><th>Клиент</th><th>Готовность</th><th>Срок</th><th>Статус</th><th><span className="sr-only">Действия</span></th></tr></thead><tbody>{snapshot.projects.map((item) => <tr key={item.id}><td><strong>{item.name}</strong><small>{item.id} · {item.type}</small></td><td>{snapshot.clients.find((client) => client.id === item.clientId)?.company ?? "Клиент не найден"}</td><td><strong>{item.progress}%</strong><div className="mini-progress"><i style={{ width: `${item.progress}%` }} /></div></td><td>{formatShortDate(item.deadline)}</td><td><span className="status-badge status-blue">{item.status}</span></td><td><button className="edit-button" onClick={() => onEdit(item as unknown as Record<string, unknown>)}><Pencil size={14} /> Изменить</button></td></tr>)}</tbody></table></div> : <EmptyAdminState title="Проектов пока нет" text={snapshot.clients.length ? "Создайте проект, задайте срок и получите данные для входа клиента." : "Сначала добавьте клиента, затем создайте его первый проект."} action={snapshot.clients.length ? "Создать проект" : undefined} onAction={onCreate} />}</>;
+  return <><SectionHeading title="Проекты" description="Здесь находятся статус, прогресс, сроки и то, что видит клиент." action="Создать проект" onAction={onCreate} />{snapshot.projects.length ? <div className="card data-table-wrap"><table className="data-table projects-table"><thead><tr><th>Проект</th><th>Клиент</th><th>Готовность</th><th>Срок</th><th>Статус</th><th><span className="sr-only">Действия</span></th></tr></thead><tbody>{snapshot.projects.map((item) => <tr key={item.id}><td><strong>{item.name}</strong><small>{item.id} · {item.type}</small></td><td>{snapshot.clients.find((client) => client.id === item.clientId)?.company ?? "Клиент не найден"}</td><td><strong>{item.progress}%</strong><div className="mini-progress"><i style={{ width: `${item.progress}%` }} /></div></td><td>{formatShortDate(item.deadline)}</td><td><span className="status-badge status-blue">{item.status}</span></td><td><button className="edit-button" onClick={() => onEdit(item as unknown as Record<string, unknown>)}><Pencil size={14} /> Изменить</button></td></tr>)}</tbody></table></div> : <EmptyAdminState title="Проектов пока нет" text={snapshot.clients.length ? "Создайте проект, задайте срок и получите данные для входа клиента." : "Сначала добавьте клиента, затем создайте его первый проект."} action={snapshot.clients.length ? "Создать проект" : undefined} onAction={onCreate} />}</>;
 }
 
 function EditableListSection<T extends { id: string }>({ title, description, addLabel, icon, items, getTitle, getMeta, getDetail, getLink, onCreate, onEdit }: { title: string; description: string; addLabel: string; icon: React.ReactNode; items: T[]; getTitle: (item: T) => string; getMeta: (item: T) => string; getDetail: (item: T) => string; getLink?: (item: T) => string | undefined; onCreate: () => void; onEdit: (item: T) => void }) {

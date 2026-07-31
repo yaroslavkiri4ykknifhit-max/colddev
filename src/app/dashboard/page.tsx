@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/config/site";
 import { colddevApi } from "@/lib/api";
+import { demoDashboardData } from "@/lib/demo";
 import { formatDate, formatMoney, formatNumber, formatShortDate } from "@/lib/format";
 import type { ClientSession, DashboardData, Invoice, Project } from "@/types";
 
@@ -64,6 +65,13 @@ export default function DashboardPage() {
   const [toast, setToast] = useState("");
 
   useEffect(() => {
+    const previewMode = process.env.NODE_ENV === "development" && new URLSearchParams(window.location.search).get("preview") === "1";
+    if (previewMode) {
+      setSession({ token: "ui-preview", expiresAt: nowIso(), data: demoDashboardData });
+      setData(demoDashboardData);
+      setProjectId(demoDashboardData.projects[0]?.id ?? "");
+      return;
+    }
     const raw = sessionStorage.getItem("colddev.clientSession");
     if (!raw) {
       window.location.replace("/login");
@@ -83,6 +91,16 @@ export default function DashboardPage() {
       sessionStorage.removeItem("colddev.clientSession");
       window.location.replace("/login");
     }
+  }, []);
+
+  useEffect(() => {
+    const syncViewFromUrl = () => {
+      const candidate = window.location.hash.slice(1) as View;
+      if (navItems.some((item) => item.id === candidate)) setView(candidate);
+    };
+    syncViewFromUrl();
+    window.addEventListener("popstate", syncViewFromUrl);
+    return () => window.removeEventListener("popstate", syncViewFromUrl);
   }, []);
 
   useEffect(() => {
@@ -125,6 +143,7 @@ export default function DashboardPage() {
 
   const chooseView = (next: View) => {
     setView(next);
+    if (window.location.hash !== `#${next}`) window.history.pushState(null, "", `#${next}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -163,7 +182,7 @@ export default function DashboardPage() {
   const activeView = navItems.find((item) => item.id === view)?.label ?? "Главная";
 
   return (
-    <main className="product-page">
+    <main className="product-page" id="main-content">
       <div className="product-shell">
         <aside className="product-sidebar">
           <div className="sidebar-top">
@@ -528,4 +547,8 @@ function OffersView({ project, services }: { project: Project; services: Dashboa
 
 function EmptyState({ title, text }: { title: string; text: string }) {
   return <div className="empty-state"><FileText size={30} /><h3>{title}</h3><p>{text}</p></div>;
+}
+
+function nowIso() {
+  return new Date(Date.now() + 60 * 60 * 1000).toISOString();
 }

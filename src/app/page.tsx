@@ -102,7 +102,7 @@ export default function Home() {
   return (
     <>
       <SiteHeader />
-      <main className="new-landing">
+      <main className="new-landing" id="main-content">
         <section className="neo-hero">
           <div className="shell neo-hero-grid">
             <div className="neo-hero-copy">

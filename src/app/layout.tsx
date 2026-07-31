@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import "@fontsource-variable/onest";
+import "@fontsource-variable/unbounded";
+import { AmbientExperience } from "@/components/AmbientExperience";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+import "./polish.css";
 
 export const metadata: Metadata = {
   title: {
@@ -20,12 +24,18 @@ export const metadata: Metadata = {
     siteName: siteConfig.brandName,
     locale: "ru_RU",
     type: "website",
-    images: [{ url: "/colddev-logo-card.png", width: 1242, height: 1242, alt: "COLDDEV" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "COLDDEV — вы видите всё" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: ["/og.png"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#5e54eb",
+  themeColor: "#6457f5",
   width: "device-width",
   initialScale: 1,
 };
@@ -33,7 +43,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru" data-scroll-behavior="smooth">
-      <body>{children}</body>
+      <body>
+        {children}
+        <AmbientExperience />
+      </body>
     </html>
   );
 }

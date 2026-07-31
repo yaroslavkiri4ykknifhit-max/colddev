@@ -43,7 +43,7 @@ export default function CasesPage() {
 
   return <>
     <SiteHeader />
-    <main className="case-article-page">
+    <main className="case-article-page" id="main-content">
       <div className="shell">
         <Link href="/#portfolio" className="case-back-link"><ArrowLeft /> Все кейсы</Link>
         {loading ? <div className="case-article-state"><LoaderCircle className="is-spinning" /><strong>Открываем кейс</strong><span>Загружаем фотографии и описание</span></div> : error ? <div className="case-article-state is-error"><strong>{error}</strong><span>Вернитесь к списку кейсов или напишите нам.</span><Link className="button button-primary" href="/#portfolio">Вернуться к кейсам</Link></div> : caseItem ? <article className="case-article">

@@ -2,18 +2,30 @@
 
 import { Menu, Send, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
 import { Logo } from "./Logo";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.classList.toggle("menu-is-open", open);
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.classList.remove("menu-is-open");
+    };
+  }, [open]);
+
   return (
     <header className="site-header">
       <div className="shell header-inner">
         <Logo />
-        <nav className={open ? "header-nav is-open" : "header-nav"} aria-label="Основная навигация">
+        <nav id="site-navigation" className={open ? "header-nav is-open" : "header-nav"} aria-label="Основная навигация">
           <Link href="/#services" onClick={() => setOpen(false)}>
             Что получите
           </Link>
@@ -52,6 +64,8 @@ export function SiteHeader() {
             className="menu-toggle"
             type="button"
             aria-label={open ? "Закрыть меню" : "Открыть меню"}
+            aria-controls="site-navigation"
+            aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
           >
             {open ? <X /> : <Menu />}
