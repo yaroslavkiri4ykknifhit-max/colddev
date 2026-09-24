@@ -1,374 +1,114 @@
 import {
-  ArrowRight,
-  ArrowUpRight,
-  BarChart3,
-  Check,
-  Clock3,
-  Eye,
-  FileCheck2,
-  Gauge,
-  LayoutDashboard,
-  MousePointerClick,
-  Send,
-  ShieldCheck,
-  Target,
-  WalletCards,
+  ArrowDown, ArrowRight, ArrowUpRight, BarChart3, Bot, Check,
+  Clock3, Eye, Layers3, LayoutDashboard, MousePointer2, Send,
+  ShieldCheck, Target, WalletCards,
 } from "lucide-react";
-import {
-  SiGithubpages,
-  SiGoogleanalytics,
-  SiGooglesheets,
-  SiNextdotjs,
-  SiTelegram,
-} from "react-icons/si";
-import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CaseSection } from "@/components/CaseSection";
+import { DashboardPreview } from "@/components/DashboardPreview";
+import { ColdMotion } from "@/components/ColdMotion";
 import { siteConfig } from "@/config/site";
 
-const services = [
-  {
-    id: "01",
-    icon: MousePointerClick,
-    title: "Сайт, который объясняет и продаёт",
-    text: "За несколько секунд человек понимает, что вы предлагаете, почему вам можно доверять и куда нажать, чтобы купить.",
-    accent: "Понятный маршрут от первого экрана до заявки.",
-  },
-  {
-    id: "02",
-    icon: Target,
-    title: "Яндекс Директ с понятной экономикой",
-    text: "Собираем горячий спрос, разделяем кампании и показываем цифры человеческим языком.",
-    accent: "В каждом отчёте видны расход, заявки и цена обращения.",
-  },
-  {
-    id: "03",
-    icon: LayoutDashboard,
-    title: "Личный кабинет с полной картиной",
-    text: "Этапы, сроки, обновления, реклама, счета и файлы собраны в одном месте.",
-    accent: "Весь проект у вас перед глазами.",
-  },
-];
-
 const prices = [
-  ["Сайт для бизнеса", "от 899 BYN"],
-  ["Настройка рекламы", "от 399 BYN"],
-  ["Telegram-боты и автоматизация", "от 1499 BYN"],
-  ["Сопровождение", "от 299 BYN в месяц"],
+  ["Сайт для бизнеса", "899", "Структура / тексты / дизайн / разработка"],
+  ["Настройка рекламы", "399", "Яндекс Директ / аналитика"],
+  ["Telegram-боты и автоматизация", "1499", "Под вашу задачу и процессы"],
+  ["Сопровождение", "299", "Поддержка и развитие проекта / в месяц"],
 ];
-
 const process = [
-  ["01", "Разбираемся в бизнесе", "Смотрим продукт, клиентов, конкурентов и считаем, что действительно нужно сделать."],
-  ["02", "Собираем систему", "Структура, тексты, дизайн, разработка, аналитика и реклама работают на одну цель."],
-  ["03", "Показываем каждый шаг", "После заказа выдаём доступ в кабинет. Там видны статус, сроки и результат."],
+  ["01", "Разбираемся\nв бизнесе", "Смотрим продукт, клиентов, конкурентов и определяем, что действительно нужно сделать."],
+  ["02", "Собираем\nсистему", "Структура, тексты, дизайн, разработка, аналитика и реклама работают на одну цель."],
+  ["03", "Показываем\nкаждый шаг", "После заказа выдаём доступ в кабинет. Там видны статус, сроки и результат."],
 ];
-
 const cabinetItems = [
-  ["Что делаем сейчас", "Текущий этап и комментарий простым языком", Eye],
-  ["Когда будет готово", "Прогресс, завершённые шаги и плановая дата", Clock3],
-  ["Что дала реклама", "Показы, клики, заявки, расходы и цена обращения", BarChart3],
-  ["Что и когда оплачивать", "Счета, ЕРИП, чеки и понятные статусы платежей", WalletCards],
+  { title: "Что делаем сейчас", text: "Текущий этап и комментарий простым языком", icon: Eye },
+  { title: "Когда будет готово", text: "Прогресс, завершённые шаги и плановая дата", icon: Clock3 },
+  { title: "Что дала реклама", text: "Показы, клики, заявки, расходы и цена обращения", icon: BarChart3 },
+  { title: "Что и когда оплачивать", text: "Счета, ЕРИП, чеки и статусы платежей", icon: WalletCards },
 ];
-
-const platforms = [
-  { name: "Next.js", icon: SiNextdotjs },
-  { name: "GitHub Pages", icon: SiGithubpages },
-  { name: "Google Sheets", icon: SiGooglesheets },
-  { name: "Google Analytics", icon: SiGoogleanalytics },
-  { name: "Telegram", icon: SiTelegram },
-];
-
 const faqs = [
-  {
-    question: "Кому доступен личный кабинет?",
-    answer:
-      "Кабинет получают клиенты COLDDEV после оформления заказа. Мы выдаём ID проекта и персональный код доступа — всё готово для входа.",
-  },
-  {
-    question: "Сколько занимает запуск сайта?",
-    answer:
-      "Лендинг обычно занимает 7–14 рабочих дней, корпоративный сайт — от 3 недель. Срок фиксируем до начала работ, а прогресс показываем в кабинете.",
-  },
-  {
-    question: "Можно заказать только рекламу?",
-    answer:
-      "Да. Можно заказать сайт, Яндекс Директ или связку под ключ. Перед стартом проверяем готовность площадки и согласуем план продвижения.",
-  },
+  ["Кому доступен личный кабинет?", "Кабинет получают клиенты COLDDEV после оформления заказа. Мы выдаём ID проекта и персональный код доступа — всё готово для входа."],
+  ["Сколько занимает запуск сайта?", "Лендинг обычно занимает 7–14 рабочих дней, корпоративный сайт — от 3 недель. Срок фиксируем до начала работ, а прогресс показываем в кабинете."],
+  ["Можно заказать только рекламу?", "Да. Можно заказать сайт, Яндекс Директ или связку под ключ. Перед стартом проверяем готовность площадки и согласуем план продвижения."],
 ];
-
+function OrderLink({ children = "Получить расчёт" }: { children?: React.ReactNode }) {
+  return <a className="cd-button" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer"><span>{children}</span><span className="cd-button-icon"><ArrowUpRight size={20} /></span></a>;
+}
 export default function Home() {
   return (
-    <>
+    <div className="cold-site">
+      <a className="cd-skip" href="#main-content">Перейти к содержимому</a>
       <SiteHeader />
-      <main className="new-landing" id="main-content">
-        <section className="neo-hero">
-          <div className="shell neo-hero-grid">
-            <div className="neo-hero-copy">
-              <span className="neo-kicker">
-                <span /> Сайты и Яндекс Директ для бизнеса
-              </span>
-              <h1>
-                ВЫ ВИДИТЕ
-                <br />
-                <em>ВСЁ.</em>
-                <br />
-                МЫ ДЕЛАЕМ ОСТАЛЬНОЕ.
-              </h1>
-              <p>
-                Каждый этап, срок, счёт и результат — на одном экране. Мы
-                проектируем сайты, запускаем рекламу и ведём работу до заявки.
-              </p>
-              <div className="neo-hero-actions">
-                <div className="primary-cta-wrap">
-                  <a
-                    className="button button-primary button-large"
-                    href={siteConfig.contacts.orderUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Получить расчёт <ArrowUpRight size={18} />
-                  </a>
-                  <small>Ответ в Telegram · план и ориентир по стоимости</small>
-                </div>
-                <div className="client-entry-wrap">
-                  <Link className="button neo-login-button button-large" href="/login">
-                    Уже клиент? Войти <ArrowRight size={18} />
-                  </Link>
-                  <small>Кабинет доступен после оформления заказа</small>
-                </div>
+      <main id="main-content">
+        <section className="cd-hero" aria-labelledby="hero-title">
+          <div className="cd-shell">
+            <div className="cd-wordmark" aria-hidden="true">colddev</div>
+            <div className="cd-hero-meta"><span>DIGITAL-РЕШЕНИЯ ДЛЯ БИЗНЕСА</span><span>САЙТЫ / РЕКЛАМА / АВТОМАТИЗАЦИЯ</span></div>
+            <div className="cd-hero-grid">
+              <div className="cd-hero-copy">
+                <h1 id="hero-title">Вы видите<br /><span className="cd-gradient">всё.</span></h1>
+                <h2>Мы делаем остальное.</h2>
+                <p>Проектируем сайты, запускаем рекламу и ведём работу до заявки. Каждый этап, срок и результат — у вас перед глазами.</p>
+                <OrderLink />
+                <small className="cd-cta-note">В Telegram / план и ориентир по стоимости</small>
               </div>
-              <div className="neo-human-note">
-                <span><Image src="/colddev-mark.png" width={56} height={56} alt="" /></span>
-                <p><strong>Проект ведёт Ярослав лично.</strong> Один человек отвечает за задачу от первого сообщения до запуска.</p>
+              <div className="cd-hero-art">
+                <div className="cd-glass-ring" aria-hidden="true" />
+                <div className="cd-art-label"><span className="cd-dot" /> Ваш проект. В ясной картине.</div>
+                <div className="cd-hero-dashboard"><DashboardPreview compact /></div>
+                <div className="cd-float cd-float-progress" aria-hidden="true"><span>Всё по плану</span><strong>68<span>%</span></strong><div className="cd-mini-progress"><i /></div></div>
+                <div className="cd-float cd-float-update" aria-hidden="true"><span className="cd-check-circle"><Check size={20} /></span><div><small>Ещё один шаг</small><strong>Дизайн согласован</strong></div><ArrowUpRight size={18} /></div>
+                <span className="cd-art-caption">Пример кабинета / данные условные</span>
               </div>
             </div>
-
-            <div className="neo-hero-scene" aria-label="Пример кабинета COLDDEV">
-              <div className="liquid-orb orb-a" />
-              <div className="liquid-orb orb-b" />
-              <div className="glass-tile tile-progress">
-                <span>Готовность проекта</span>
-                <strong>68%</strong>
-                <div><i /></div>
-              </div>
-              <div className="glass-tile tile-update">
-                <span className="live-dot" />
-                <div><small>Обновлено сегодня</small><strong>Главная страница готова</strong></div>
-              </div>
-              <div className="scene-dashboard">
-                <div className="scene-dashboard-top">
-                  <span className="scene-mark"><Image src="/colddev-mark.png" width={56} height={56} alt="" /></span>
-                  <div><small>ПРОЕКТ CD-0007</small><strong>Сайт для Forma</strong></div>
-                  <span className="scene-status">В работе</span>
-                </div>
-                <div className="scene-focus">
-                  <span>Сейчас делаем</span>
-                  <h3>Мобильную версию и финальную проверку</h3>
-                  <p>Работа идёт по плану</p>
-                </div>
-                <div className="scene-row">
-                  <div><small>Запуск</small><strong>14 августа</strong></div>
-                  <div><small>Готово этапов</small><strong>3 из 6</strong></div>
-                  <div><small>К оплате</small><strong>600 BYN</strong></div>
-                </div>
-              </div>
+            <div className="cd-hero-bottom">
+              <div className="cd-person"><span className="cd-person-mark">Я</span><p><strong>Проект ведёт Ярослав лично.</strong><span>От первого сообщения до запуска.</span></p></div>
+              <a href="#services" className="cd-scroll-link">Посмотреть, что внутри <span><ArrowDown size={18} /></span></a>
             </div>
-          </div>
-
-          <div className="shell neo-control-bar">
-            <div><Gauge /><span>ВИДНО</span><strong>что готово</strong></div>
-            <div><Clock3 /><span>ПОНЯТНО</span><strong>когда запуск</strong></div>
-            <div><ShieldCheck /><span>ПРОЗРАЧНО</span><strong>куда ушёл бюджет</strong></div>
-            <Link href="/login">Войти в кабинет <ArrowUpRight /></Link>
-          </div>
-        </section>
-
-        <section className="hard-line" aria-label="Главное преимущество COLDDEV">
-          <div className="hard-line-track">
-            <span>ВЫ ВИДИТЕ ВСЁ</span>
-            <i>•</i>
-            <span>НИКАКИХ НУ ЧТО ТАМ?</span>
-            <i>•</i>
-            <span>ВЫ ВИДИТЕ ВСЁ</span>
-          </div>
-        </section>
-
-        <section className="neo-section neo-value-section" id="services">
-          <div className="shell">
-            <div className="neo-heading">
-              <span className="neo-kicker">За что вы платите</span>
-              <h2>
-                ВЫ ВИДИТЕ ЦЕННОСТЬ.<br />
-                <em>ПОНЯТНЫЙ ПУТЬ ДО ЗАЯВКИ.</em>
-              </h2>
-              <p>
-                Каждый экран объясняет предложение, укрепляет доверие и ведёт
-                человека к действию.
-              </p>
-            </div>
-            <div className="neo-service-grid">
-              {services.map((service) => {
-                const Icon = service.icon;
-                return (
-                  <article className="neo-service-card" key={service.id}>
-                    <div className="neo-service-top">
-                      <span>{service.id}</span>
-                      <Icon />
-                    </div>
-                    <h3>{service.title}</h3>
-                    <p>{service.text}</p>
-                    <strong><Check /> {service.accent}</strong>
-                  </article>
-                );
-              })}
-            </div>
-            <div className="pricing-brief">
-              <div className="pricing-list" aria-label="Ориентировочная стоимость услуг">
-                <div className="pricing-list-heading"><span>Ориентир по стоимости</span><strong>Понятно до старта</strong></div>
-                {prices.map(([title, price], index) => (
-                  <div className="pricing-row" key={title}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <strong>{title}</strong>
-                    <b>{price}</b>
-                  </div>
-                ))}
-              </div>
-              <aside className="pricing-free-card">
-                <span>Расчёт проекта</span>
-                <strong>БЕСПЛАТНО</strong>
-                <p>Точная стоимость зависит от задачи и объёма работы. После короткого обсуждения бесплатно предложу решение, сроки и фиксированную цену.</p>
-                <a className="button button-white" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Получить расчёт <ArrowUpRight /></a>
-              </aside>
+            <div className="cd-trust-grid">
+              <div><Eye size={21} /><span>Видно<strong>что готово</strong></span><span className="cd-trust-number">01</span></div>
+              <div><Clock3 size={21} /><span>Понятно<strong>когда запуск</strong></span><span className="cd-trust-number">02</span></div>
+              <div><ShieldCheck size={21} /><span>Прозрачно<strong>куда ушёл бюджет</strong></span><span className="cd-trust-number">03</span></div>
             </div>
           </div>
         </section>
-
-        <section className="platform-section">
-          <div className="shell platform-inner">
-            <div className="platform-copy">
-              <span>Основа проекта</span>
-              <strong>Сайт, кабинет, аналитика и реклама работают на проверенной инфраструктуре.</strong>
-            </div>
-            <div className="platform-logos">
-              {platforms.map((platform) => {
-                const Icon = platform.icon;
-                return <div key={platform.name}><Icon /><span>{platform.name}</span></div>;
-              })}
-              <div className="yandex-logo"><b>Я</b><span>Яндекс Директ</span></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="neo-section cabinet-showcase" id="cabinet">
-          <div className="shell">
-            <div className="cabinet-title-row">
-              <div>
-                <span className="neo-kicker neo-kicker-light">Личный кабинет COLDDEV</span>
-                <h2>НИКАКИХ<br />«НУ ЧТО ТАМ?»</h2>
-              </div>
-              <div className="cabinet-access-note">
-                <FileCheck2 />
-                <p><strong>Только для клиентов</strong>Кабинет выдаётся после оформления заказа. Вход — по ID проекта и персональному коду.</p>
-                <div className="cabinet-access-actions">
-                  <Link href="/login">Перейти ко входу <ArrowRight /></Link>
-                  <a href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Оформить заказ <ArrowUpRight /></a>
-                </div>
-              </div>
-            </div>
-
-            <div className="cabinet-showcase-grid">
-              <div className="cabinet-screen">
-                <div className="cabinet-screen-bar">
-                  <span className="scene-mark"><Image src="/colddev-mark.png" width={56} height={56} alt="" /></span>
-                  <div><small>ДОБРЫЙ ДЕНЬ, АЛЕКСЕЙ</small><strong>Ваш проект понятен с первого экрана</strong></div>
-                  <span className="scene-status">В работе</span>
-                </div>
-                <div className="cabinet-screen-main">
-                  <div className="cabinet-now">
-                    <span>ЧТО ПРОИСХОДИТ СЕЙЧАС</span>
-                    <h3>Собираем мобильную версию сайта</h3>
-                    <p><Check /> Работа идёт по плану</p>
-                  </div>
-                  <div className="cabinet-big-progress">
-                    <strong>68%</strong>
-                    <span>готово</span>
-                    <div><i /></div>
-                  </div>
-                </div>
-                <div className="cabinet-screen-stats">
-                  <div><span>Плановый запуск</span><strong>14 августа</strong></div>
-                  <div><span>Следующий шаг</span><strong>Подключение домена</strong></div>
-                  <div><span>Последнее обновление</span><strong>Сегодня, 16:40</strong></div>
-                </div>
-              </div>
-              <div className="cabinet-feature-list">
-                {cabinetItems.map(([title, text, Icon]) => (
-                  <article key={String(title)}>
-                    <span><Icon /></span>
-                    <div><h3>{String(title)}</h3><p>{String(text)}</p></div>
-                  </article>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        <section className="neo-section" id="process">
-          <div className="shell">
-            <div className="neo-heading neo-heading-compact">
-              <span className="neo-kicker">Как проходит работа</span>
-              <h2>ВЫ ВИДИТЕ<br />КАЖДЫЙ ШАГ.</h2>
-              <p>Вам всегда понятны три вещи: что делаем, когда закончим и какой результат получили.</p>
-            </div>
-            <div className="neo-process-list">
-              {process.map(([number, title, text]) => (
-                <article key={number}>
-                  <span>{number}</span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                  <ArrowUpRight />
-                </article>
-              ))}
+        <section className="cd-section cd-services" id="services" aria-labelledby="services-title">
+          <div className="cd-shell">
+            <div className="cd-section-head cd-reveal"><div><span className="cd-eyebrow">01 / Что вы получаете</span><h2 id="services-title">От первого экрана<br />до <span className="cd-gradient">заявки.</span></h2></div><p>Каждый экран объясняет предложение, укрепляет доверие и ведёт человека к действию.</p></div>
+            <div className="cd-services-grid">
+              <article className="cd-service-card cd-service-web cd-reveal">
+                <div className="cd-card-top"><span>01 / Разработка</span><span className="cd-round-icon"><MousePointer2 size={22} /></span></div>
+                <div className="cd-web-art" aria-hidden="true"><div className="cd-mini-browser"><div className="cd-browser-top"><span className="cd-browser-controls"><i /><i /><i /></span><span>вашбизнес.by</span><ArrowUpRight size={12} /></div><div className="cd-mini-site"><span className="cd-mini-label">ВАШ БИЗНЕС / ОНЛАЙН</span><strong>Понятно.<br />С первого<br /><em>экрана.</em></strong><div className="cd-mini-site-cta">Оставить заявку <ArrowUpRight size={12} /></div><div className="cd-mini-sculpture"><Layers3 /></div></div><div className="cd-mini-site-bottom"><span>01 / Предложение</span><span>02 / Доверие</span><span>03 / Заявка</span></div></div><div className="cd-mini-phone"><span /><strong>Ваш<br />бизнес.</strong><div /><i><ArrowUpRight size={15} /></i></div></div>
+                <div className="cd-service-copy"><h3>Сайт, который<br />объясняет и продаёт</h3><p>За несколько секунд человек понимает, что вы предлагаете, почему вам можно доверять и куда нажать, чтобы купить.</p><a href="#pricing">Сайт для бизнеса <ArrowUpRight size={18} /></a></div>
+              </article>
+              <article className="cd-service-card cd-service-ads cd-reveal">
+                <div className="cd-card-top"><span>02 / Продвижение</span><span className="cd-round-icon"><Target size={22} /></span></div>
+                <div className="cd-ads-art" aria-hidden="true"><span className="cd-search-pill"><span>Вашу услугу уже ищут</span><Target size={18} /></span><div className="cd-ad-path"><span>Поиск</span><ArrowRight size={15} /><span>Сайт</span><ArrowRight size={15} /><strong>Заявка</strong></div></div>
+                <div className="cd-service-copy"><h3>Яндекс Директ<br />с понятной экономикой</h3><p>Собираем горячий спрос. В отчёте видны расход, заявки и цена обращения.</p></div>
+              </article>
+              <article className="cd-service-card cd-service-bots cd-reveal">
+                <div className="cd-card-top"><span>03 / Автоматизация</span><span className="cd-round-icon"><Bot size={22} /></span></div>
+                <div className="cd-bot-art" aria-hidden="true"><span><Send size={29} /></span><i /><span><Bot size={29} /></span><i /><span><Check size={29} /></span></div>
+                <div className="cd-service-copy"><h3>Меньше ручной работы.<br />Больше времени на бизнес.</h3><p>Telegram-боты и автоматизация под вашу задачу и рабочие процессы.</p></div>
+              </article>
             </div>
           </div>
         </section>
-
+        <section className="cd-cabinet-section" id="cabinet" aria-labelledby="cabinet-title"><div className="cd-shell"><div className="cd-cabinet-panel">
+          <div className="cd-section-head cd-reveal"><div><span className="cd-eyebrow">02 / Личный кабинет colddev</span><h2 id="cabinet-title">Никаких<br /><span>«ну что там?»</span></h2></div><p>Этапы, сроки, обновления, реклама, счета и файлы. Весь проект — в одном месте.</p></div>
+          <div className="cd-cabinet-grid"><div className="cd-cabinet-demo cd-reveal"><DashboardPreview /><span className="cd-demo-caption">Попробуйте переключить вкладки / данные условные</span></div><div className="cd-cabinet-features">{cabinetItems.map(({ title, text, icon: Icon }) => <article className="cd-reveal" key={title}><span><Icon size={20} /></span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></div>
+          <div className="cd-cabinet-access"><span><LayoutDashboard size={19} /> Доступ после заказа / по ID проекта и персональному коду</span><Link href="/login">Войти в кабинет <ArrowUpRight size={18} /></Link></div>
+        </div></div></section>
+        <section className="cd-section" id="process" aria-labelledby="process-title"><div className="cd-shell"><div className="cd-section-head cd-reveal"><div><span className="cd-eyebrow">03 / Как работаем</span><h2 id="process-title">Вы видите<br /><span className="cd-gradient">каждый шаг.</span></h2></div><p>Что делаем, когда закончим и какой результат получили. Всё понятно в любой момент.</p></div><div className="cd-process-grid">{process.map(([number, title, text]) => <article className="cd-process-card cd-reveal" key={number}><div><span>{number}</span><ArrowUpRight size={24} /></div><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
+        <section className="cd-section cd-pricing" id="pricing" aria-labelledby="pricing-title"><div className="cd-shell cd-pricing-grid"><div className="cd-pricing-intro cd-reveal"><span className="cd-eyebrow">04 / Стоимость</span><h2 id="pricing-title">Понятно<br /><span className="cd-gradient">до старта.</span></h2><p>Точная стоимость зависит от задачи и объёма работы. После короткого обсуждения предложу решение, сроки и фиксированную цену.</p><OrderLink /><span className="cd-cta-note">Расчёт проекта — бесплатно</span></div><div className="cd-price-list">{prices.map(([title, amount, detail], index) => <a className="cd-price-row cd-reveal" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer" key={title}><span className="cd-price-index">0{index + 1}</span><div><h3>{title}</h3><p>{detail}</p><strong><small>от</small> {amount} <small>BYN{index === 3 ? " / мес." : ""}</small></strong></div><span className="cd-price-arrow"><ArrowUpRight size={20} /></span></a>)}</div></div></section>
         <CaseSection />
-
-        <section className="neo-section neo-faq-section">
-          <div className="shell neo-faq-grid">
-            <div className="neo-heading">
-              <span className="neo-kicker">Вопросы до заказа</span>
-              <h2>КОРОТКО.<br />ПОНЯТНЫМ ЯЗЫКОМ.</h2>
-            </div>
-            <div className="faq-list neo-faq-list">
-              {faqs.map((item, index) => (
-                <details key={item.question} open={index === 0}>
-                  <summary><span>{item.question}</span><span className="faq-plus">+</span></summary>
-                  <p>{item.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="neo-section neo-final">
-          <div className="shell">
-            <div className="neo-final-card">
-              <div className="liquid-ring" />
-              <div className="final-brand-mark" aria-hidden="true"><Image src="/colddev-mark.png" width={420} height={420} alt="" /></div>
-              <span className="neo-kicker neo-kicker-light">Обсудим следующий шаг</span>
-              <h2>ВАШ БИЗНЕС РАСТЁТ.<br />САЙТ И РЕКЛАМА<br />РАБОТАЮТ НА РЕЗУЛЬТАТ.</h2>
-              <p>Напишите, чем занимается ваш бизнес. В ответ получите понятный следующий шаг и ориентир по стоимости.</p>
-              <a className="button button-white button-large" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer"><Send /> Написать @c0lddev</a>
-            </div>
-          </div>
-        </section>
+        <section className="cd-section cd-faq" aria-labelledby="faq-title"><div className="cd-shell cd-faq-grid"><div className="cd-reveal"><span className="cd-eyebrow">06 / До начала работы</span><h2 id="faq-title">Хороший<br /><span className="cd-gradient">вопрос.</span></h2><p>Коротко. Понятным языком.</p></div><div className="cd-faq-list">{faqs.map(([question, answer], index) => <details className="cd-reveal" key={question} name="colddev-faq" open={index === 0}><summary><span className="cd-faq-number">0{index + 1}</span><span>{question}</span><span className="cd-faq-plus" aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></div></section>
+        <section className="cd-final" id="contact" aria-labelledby="contact-title"><div className="cd-shell"><div className="cd-final-panel cd-reveal"><div><span className="cd-eyebrow">Следующий шаг / Написать Ярославу</span><h2 id="contact-title">Начнём<br />с вашей <span className="cd-gradient">задачи.</span></h2></div><div className="cd-final-copy"><span className="cd-final-icon"><Send size={36} /></span><p>Расскажите, чем занимается ваш бизнес. В ответ получите понятный следующий шаг и ориентир по стоимости.</p><OrderLink>Написать @c0lddev</OrderLink><span className="cd-cta-note">Сайт / реклама / автоматизация</span></div></div></div></section>
       </main>
       <SiteFooter />
-    </>
+      <ColdMotion />
+    </div>
   );
 }

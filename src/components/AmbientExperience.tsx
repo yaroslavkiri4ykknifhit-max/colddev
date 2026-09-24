@@ -84,6 +84,8 @@ export function AmbientExperience() {
   const cursorRingRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    // The public redesign owns its motion. Keep the existing experience in the app.
+    if (pathname === "/" || pathname === "/cases" || pathname === "/cases/") return;
     const root = document.documentElement;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -360,6 +362,8 @@ export function AmbientExperience() {
       root.classList.remove("motion-ready", "motion-lite", "motion-paused", "pointer-is-visible");
     };
   }, [pathname]);
+
+  if (pathname === "/" || pathname === "/cases" || pathname === "/cases/") return null;
 
   return (
     <div className="experience-layer" aria-hidden="true">

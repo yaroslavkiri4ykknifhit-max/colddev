@@ -29,7 +29,7 @@ export function CaseGallery({ images = [], title, compact = false }: CaseGallery
       ) : (
         <div className="case-gallery-placeholder">
           <Images aria-hidden="true" />
-          <span>Добавьте фотографии кейса в админке</span>
+          <span>Фотографии проекта скоро появятся</span>
         </div>
       )}
 

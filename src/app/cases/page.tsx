@@ -41,7 +41,7 @@ export default function CasesPage() {
       .finally(() => setLoading(false));
   }, [caseId]);
 
-  return <>
+  return <div className="cold-site">
     <SiteHeader />
     <main className="case-article-page" id="main-content">
       <div className="shell">
@@ -56,7 +56,7 @@ export default function CasesPage() {
           <div className="case-article-body">
             <div className="case-article-copy">
               <span className="neo-kicker">Что сделали</span>
-              <p>{caseItem.description || "Описание кейса появится здесь после публикации в админке."}</p>
+              <p>{caseItem.description || "Подробности проекта можно обсудить с Ярославом."}</p>
             </div>
             <aside className="case-article-cta">
               <strong>Хотите такой же понятный результат?</strong>
@@ -68,5 +68,5 @@ export default function CasesPage() {
       </div>
     </main>
     <SiteFooter />
-  </>;
+  </div>;
 }

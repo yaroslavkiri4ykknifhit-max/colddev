@@ -2,16 +2,27 @@
 
 import { Menu, Send, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
 import { Logo } from "./Logo";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1001px)");
+    const closeOnDesktop = () => { if (desktop.matches) setOpen(false); };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape" && open) {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
     };
     document.addEventListener("keydown", closeOnEscape);
     document.body.classList.toggle("menu-is-open", open);
@@ -38,6 +49,9 @@ export function SiteHeader() {
           <Link href="/#portfolio" onClick={() => setOpen(false)}>
             Кейсы
           </Link>
+          <Link className="header-mobile-login" href="/login" onClick={() => setOpen(false)}>
+            Войти в кабинет
+          </Link>
           <a
             className="header-mobile-order"
             href={siteConfig.contacts.orderUrl}
@@ -61,6 +75,7 @@ export function SiteHeader() {
             <Send size={16} /> Получить расчёт
           </a>
           <button
+            ref={toggleRef}
             className="menu-toggle"
             type="button"
             aria-label={open ? "Закрыть меню" : "Открыть меню"}

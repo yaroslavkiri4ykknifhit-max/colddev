@@ -5,6 +5,7 @@ import { AmbientExperience } from "@/components/AmbientExperience";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 import "./polish.css";
+import "./cold-landing.css";
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#6457f5",
+  themeColor: "#d3e0e1",
   width: "device-width",
   initialScale: 1,
 };
