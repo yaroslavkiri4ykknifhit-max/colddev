@@ -86,7 +86,7 @@ body{font-size:18px;line-height:1.6}
 }
 @media(max-width:900px){
   :root{--header-height:82px}
-  .header-nav{top:var(--header-height);padding-block:16px 22px}
+  .header-nav{top:var(--header-height);padding-block:16px 22px;gap:0;max-height:calc(100svh - var(--header-height));overflow-y:auto}
   .header-nav>a{font-size:22px;padding-block:19px}
   .header-nav>a.mobile-contact{font-size:18px}
   .header-contact{font-size:15px}.brand{font-size:32px}
