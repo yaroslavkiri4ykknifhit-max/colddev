@@ -285,6 +285,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .benefit-strip svg{width:18px;height:18px;flex-shrink:0}
 
   .process-heading{margin-bottom:30px;gap:0}
+  .process h2{font-size:clamp(30px,9vw,54px)}
   .process-doodle{display:none}
   .process-grid{grid-template-columns:minmax(0,1fr);gap:26px}
   .process-grid article{padding:24px 0 0}
