@@ -192,7 +192,7 @@ body{font-size:18px;line-height:1.6}
 .scroll-scene{
   --scrub-distance:clamp(1000px,140svh,1600px);
   position:relative;
-  padding-bottom:var(--scrub-distance);
+  height:calc(var(--scene-pin-height,100svh - var(--header-height)) + var(--scrub-distance));
   overflow:clip;
   isolation:isolate;
 }
@@ -249,7 +249,7 @@ body{font-size:18px;line-height:1.6}
   .contact-copy .button{font-size:17px;min-height:64px}
 }
 @media(prefers-reduced-motion:reduce){
-  .scroll-scene{padding-bottom:0}
+  .scroll-scene{height:auto}
   .scroll-pin{position:relative;top:0}
   .scroll-video-cue{display:none}
 }
