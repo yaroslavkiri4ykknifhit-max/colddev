@@ -14,7 +14,7 @@ export function HandScene() {
     const root = rootRef.current;
     const video = videoRef.current;
     const scene = root?.closest<HTMLElement>(".scroll-scene");
-    const pin = scene?.querySelector<HTMLElement>(".contact-pin");
+    const pin = scene?.querySelector<HTMLElement>(".scroll-pin");
     if (!root || !video || !scene || !pin) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -36,7 +36,11 @@ export function HandScene() {
     const syncFrame = () => {
       animationFrame = 0;
       if (disposed || reduce.matches) return;
-      const stickyTop = Number.parseFloat(window.getComputedStyle(pin).top) || 0;
+      const headerHeight = Number.parseFloat(window.getComputedStyle(scene).getPropertyValue("--header-height")) || 0;
+      // A tall mobile hero scrolls far enough to reveal the hand before pinning.
+      // Keep the original type sizes instead of squeezing the whole hero on screen.
+      const stickyTop = Math.min(headerHeight, window.innerHeight - pin.offsetHeight);
+      pin.style.setProperty("--scene-pin-top", `${stickyTop}px`);
       const scrollDistance = Math.max(1, scene.offsetHeight - pin.offsetHeight);
       const progress = Math.min(1, Math.max(0, (stickyTop - scene.getBoundingClientRect().top) / scrollDistance));
       scene.style.setProperty("--video-progress", progress.toFixed(5));
@@ -104,6 +108,7 @@ export function HandScene() {
       video.removeEventListener("loadedmetadata", scheduleSync);
       video.removeEventListener("loadeddata", scheduleSync);
       video.removeEventListener("seeked", seekToLatest);
+      pin.style.removeProperty("--scene-pin-top");
       video.pause();
     };
   }, []);

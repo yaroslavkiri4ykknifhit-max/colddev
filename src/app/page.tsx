@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Crosshair, Globe2, MousePointer2, Search, Send } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Check, Crosshair, Globe2, Send } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CaseSection } from "@/components/CaseSection";
@@ -23,12 +23,12 @@ function ContactButton({ children = "Обсудить мой проект", ligh
 }
 export default function Home() {
   return <div className="site"><a className="skip-link" href="#main-content">Перейти к содержимому</a><SiteHeader /><main id="main-content">
-    <section className="hero" aria-labelledby="hero-title"><div className="shell">
+    <section className="hero scroll-scene" aria-labelledby="hero-title"><div className="hero-pin scroll-pin"><div className="shell hero-shell">
       <div className="hero-meta"><span><i className="status-dot" /> Независимая digital-студия</span><span>Сайты / Реклама / Рост</span></div>
       <div className="hero-grid"><div className="hero-copy"><span className="eyebrow">Хороший бизнес должны заметить</span><h1 id="hero-title">Ваш бизнес.<br /><em>На виду.</em><span className="hero-period" aria-hidden="true">*</span></h1><p>Делаем сайты и запускаем рекламу,<br className="desktop-break" /> чтобы к вам приходили клиенты.</p><ContactButton /><span className="hero-cta-note">Начнём с вашей задачи. В Telegram.</span></div>
-      <div className="hero-art" aria-hidden="true"><div className="art-grid" /><span className="art-coordinate coordinate-top">COLDDEV / ТОЧКА РОСТА</span><span className="art-plus plus-one">+</span><span className="art-plus plus-two">+</span><span className="art-plus plus-three">+</span><div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" /><div className="chrome-ring"><div className="ring-core"><MousePointer2 size={54} strokeWidth={1.3} /></div></div><span className="art-sticker">ДЕЛО ЗА ВАМИ.<br /><strong>ВНИМАНИЕ — ЗА НАМИ.</strong></span><div className="art-path"><span><Search size={14} /> Поиск</span><ArrowRight size={14} /><span>Сайт</span><ArrowRight size={14} /><strong><i /> Заявка</strong></div><span className="art-coordinate coordinate-bottom">55° / НАСТРОЕНЫ НА ВАШ РОСТ <ArrowUpRight size={15} /></span></div></div>
-      <div className="hero-bottom"><p><span className="person-initial">Я</span><span>Ярослав на связи.<br /><strong>От идеи до запуска.</strong></span></p><a href="#portfolio">Можно сразу к работам <span><ArrowDown size={18} /></span></a><span className="hero-index">SCROLL TO EXPLORE ↓</span></div>
-    </div></section>
+      <div className="hero-media"><HandScene /></div></div>
+      <div className="hero-bottom"><p><span className="person-initial">Я</span><span>Ярослав на связи.<br /><strong>От идеи до запуска.</strong></span></p><a href="#portfolio">Можно сразу к работам <span><ArrowDown size={18} /></span></a></div>
+    </div></div></section>
     <div className="client-strip"><div className="shell"><span className="client-strip-label">В хорошем<br />окружении</span><div className="client-logos">{projects.map((project) => <a href={project.url} target="_blank" rel="noreferrer" key={project.id}>{project.title}</a>)}</div></div></div>
     <CaseSection />
     <section className="services section" id="services" aria-labelledby="services-title"><div className="shell"><div className="section-caption"><span><i /> 02 / Что делаем</span><span>Всё работает на одну цель</span></div><div className="services-heading" data-reveal><h2 id="services-title">Не просто быть.<br /><em>Быть нужными.</em></h2><p>Сайт превращает интерес в доверие.<br />Реклама приводит тех, кому вы нужны.</p></div>
@@ -37,13 +37,10 @@ export default function Home() {
       <div className="service-footnote"><span>Рекламный бюджет оплачивается отдельно.<br />Стоимость Google Ads и сложных проектов — после обсуждения.</span><a href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Нужны сайт + реклама? Соберём вместе <ArrowUpRight size={19} /></a></div><div className="benefit-strip"><span><Check size={16} /> Стоимость до старта</span><span><Check size={16} /> Ваш сайт и доступы</span><span><Check size={16} /> На связи напрямую</span></div>
     </div></section>
     <section className="process section" id="process" aria-labelledby="process-title"><div className="shell"><div className="section-caption"><span><i /> 03 / Без лишних кругов</span><span>Напрямую. По делу.</span></div><div className="process-heading" data-reveal><h2 id="process-title">Меньше сложностей.<br /><em>Больше движения.</em></h2><span className="process-doodle" aria-hidden="true"><ArrowUpRight size={92} strokeWidth={1} /></span></div><div className="process-grid">{steps.map(([number, title, copy]) => <article key={number} data-reveal><div><span>{number}</span><ArrowUpRight size={22} /></div><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section>
-    <section className="contact-section scroll-scene" id="contact" aria-labelledby="contact-title">
-      <div className="contact-pin"><div className="shell contact-shell">
-        <div className="contact-copy"><span className="eyebrow"><span className="status-dot" /> Теперь ваш ход</span><h2 id="contact-title">Есть дело?<br /><em>Давайте руку.</em></h2><p>Расскажите о бизнесе.<br />Предложим, с чего начать.</p><ContactButton>Написать Ярославу</ContactButton><span className="contact-handle"><Send size={18} /> @c0lddev</span></div>
-        <HandScene />
-        <span className="contact-coordinate" aria-hidden="true">ОТ ХОРОШЕЙ ИДЕИ — К НОВЫМ КЛИЕНТАМ ↗</span>
-      </div></div>
-    </section>
+    <section className="contact-section" id="contact" aria-labelledby="contact-title"><div className="shell contact-shell">
+      <div className="contact-intro"><span className="eyebrow"><span className="status-dot" /> Теперь ваш ход</span><h2 id="contact-title">Есть дело?<br /><em>Давайте обсудим.</em></h2></div>
+      <div className="contact-copy"><p>Расскажите о бизнесе.<br />Предложим, с чего начать.</p><ContactButton>Написать Ярославу</ContactButton><span className="contact-handle"><Send size={18} /> @c0lddev</span></div>
+    </div></section>
     <section className="faq section" aria-labelledby="faq-title"><div className="shell faq-grid"><div><span className="eyebrow">04 / Кстати</span><h2 id="faq-title">Можно<br /><em>спросить.</em></h2></div><div className="faq-list">{faqs.map(([question, answer], index) => <details name="colddev-faq" key={question}><summary><span className="faq-number">0{index + 1}</span><span>{question}</span><span className="faq-plus" aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></div></section>
   </main><SiteFooter /><Experience /></div>;
 }
