@@ -339,3 +339,42 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .scroll-scene{height:auto}
   .scroll-pin{position:relative;top:0}
 }
+
+/* Personal Google Ads qualification, with the original verifiable badge. */
+.hero-certificate-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-size:15px;line-height:1.6}
+.hero-certificate-link svg{flex-shrink:0}
+.hero-certificate-link:hover{text-decoration:underline;text-underline-offset:4px}
+.certification{display:grid;grid-template-columns:112px minmax(0,1fr) auto;align-items:center;gap:26px;margin-block:30px;padding:26px 30px;border-radius:10px;background:#fff;color:var(--ink);scroll-margin-top:24px}
+.certification-badge{width:112px;height:112px;object-fit:contain}
+.certification-copy{min-width:0}
+.certification-label{display:block;font-size:12px;line-height:1.5;letter-spacing:.055em;text-transform:uppercase;color:var(--muted)}
+.certification-copy h3{font-size:28px;font-weight:550;line-height:1.2;letter-spacing:-.04em;margin-top:9px}
+.certification-copy p{font-size:17px;line-height:1.6;color:var(--muted);margin-top:8px}
+.certification-action{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:0}
+.certification-link{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;min-height:48px;padding:11px 15px;border:1px solid #cbd1dc;border-radius:5px;font-size:16px;font-weight:500;line-height:1.4;transition:background .2s,color .2s,border-color .2s}
+.certification-link svg{flex-shrink:0;color:var(--blue)}
+.certification-link:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+.certification-link:hover svg{color:inherit}
+.certification-date{font-size:14px;line-height:1.5;color:var(--muted)}
+.certification-date time{white-space:nowrap}
+@media(max-width:1000px){
+  .certification{grid-template-columns:88px minmax(0,1fr);gap:20px 24px;padding:26px}
+  .certification-badge{width:88px;height:88px}
+  .certification-action{grid-column:2;align-items:flex-start}
+}
+@media(max-width:700px){
+  .hero-certificate-link{font-size:15px}
+  .certification{grid-template-columns:72px minmax(0,1fr);align-items:start;gap:20px 16px;margin-block:28px;padding:20px}
+  .certification-badge{width:72px;height:72px}
+  .certification-label{font-size:11px;line-height:1.5;letter-spacing:.04em}
+  .certification-copy h3{font-size:24px;line-height:1.2;margin-top:7px}
+  .certification-copy p{font-size:16px;line-height:1.5;margin-top:8px}
+  .certification-action{grid-column:1/-1;align-items:stretch;gap:12px}
+  .certification-link{width:100%;min-height:50px;font-size:16px;padding:12px}
+  .certification-date{font-size:14px}
+}
+@media(max-width:360px){
+  .certification{grid-template-columns:64px minmax(0,1fr);gap:18px 14px;padding:18px}
+  .certification-badge{width:64px;height:64px}
+  .certification-copy h3{font-size:23px}
+}

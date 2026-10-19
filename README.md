@@ -22,6 +22,7 @@ Push в `main` запускает `.github/workflows/deploy.yml`: сборка `
 
 - Главная: `src/app/page.tsx`.
 - Портфолио: шесть проектов в `src/lib/cases.ts`; превью в `public/work/`. Карточки ведут напрямую на сайты проектов. `/cases/` — самостоятельная страница портфолио, старые ссылки с query-параметрами тоже открывают этот список.
+- Личный сертификат Ярослава Киричука Google Ads Search: `src/components/GoogleAdsCertificate.tsx`. Карточка находится под рекламными услугами; из первого экрана на неё ведёт ссылка. Проверка: https://skillshop.credential.net/6c2111d9-d037-44cd-8c4a-0b58b9592165. Выдан 19.10.2026, действует до 19.10.2027. Оригинальный знак сохранён в `public/certificates/google-ads-search-badge.png` со страницы сертификата (https://templates.images.credential.net/16692030476507846323162302235838.png).
 - Контакты и метаданные: `src/config/site.ts`.
 - Стили: `src/app/globals.css`.
 - Локальный шрифт Onest. Сайт не загружает шрифты с внешних сервисов.
