@@ -3,7 +3,7 @@ export const siteConfig = {
   title: "COLDDEV — сайты, реклама и автоматизация бизнеса",
   description: "Разрабатываем сайты, настраиваем рекламу и автоматизируем бизнес-процессы. 2 года опыта, 43 успешных проекта и сертификат Google Ads Search. Беларусь, работаем онлайн.",
   url: "https://colddev.pro",
-  experience: { years: 2, projects: 43 },
+  experience: { years: 2, projects: 43, clientRevenue: 316500 },
   legal: {
     fullName: "Киричук Ярослав Алексеевич",
     unp: "EE8706247",

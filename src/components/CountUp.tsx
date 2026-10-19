@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const numberFormat = new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 });
+
 export function CountUp({ value }: { value: number }) {
   const element = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState(value);
@@ -45,8 +47,8 @@ export function CountUp({ value }: { value: number }) {
 
   return (
     <span className="count-up" ref={element}>
-      <span aria-hidden="true">{display}</span>
-      <span className="sr-only">{value}</span>
+      <span aria-hidden="true">{numberFormat.format(display)}</span>
+      <span className="sr-only">{numberFormat.format(value)}</span>
     </span>
   );
 }

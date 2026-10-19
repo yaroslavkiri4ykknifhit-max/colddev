@@ -14,6 +14,13 @@ export function TrustSection() {
           <CountUp value={siteConfig.experience.projects} />
           <p>успешных проекта</p>
         </div>
+        <div className="trust-metric trust-metric-revenue">
+          <div className="trust-revenue-value">
+            <CountUp value={siteConfig.experience.clientRevenue} />
+            <span className="trust-currency">BYN</span>
+          </div>
+          <p>выручки клиентов благодаря нашей работе</p>
+        </div>
         <GoogleAdsCertificate />
       </div>
     </section>

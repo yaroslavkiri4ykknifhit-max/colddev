@@ -290,14 +290,18 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .marquee-toggle:hover{color:var(--blue);border-color:var(--blue)}
 @keyframes clients-left{to{transform:translateX(-50%)}}
 
-/* The two experience figures and the verifiable certificate precede the work. */
+/* Experience, client revenue and the verifiable certificate precede the work. */
 .hero-bottom>.hero-certificate-link{justify-content:flex-start;gap:9px;font-size:16px;min-height:44px}
 .trust-section{padding-top:72px}
-.trust-grid{display:grid;grid-template-columns:1fr 1fr 1.75fr;gap:16px;align-items:stretch}
+.trust-grid{display:grid;grid-template-columns:1fr 1fr 1.5fr 2fr;gap:16px;align-items:stretch}
 .trust-metric{display:flex;flex-direction:column;justify-content:space-between;min-width:0;min-height:280px;padding:30px;border:1px solid var(--line);border-radius:12px;background:#fff}
 .count-up{display:block;font-size:clamp(76px,8vw,116px);font-weight:500;line-height:1.05;letter-spacing:-.075em;font-variant-numeric:tabular-nums}
 .trust-metric p{font-size:20px;line-height:1.4;letter-spacing:-.025em;max-width:12ch;margin-top:28px}
 .trust-metric-projects{background:var(--blue);border-color:var(--blue);color:#fff}
+.trust-metric-revenue .count-up{font-size:clamp(44px,4.2vw,64px);letter-spacing:-.06em;white-space:nowrap}
+.trust-revenue-value{display:flex;flex-direction:column;gap:10px}
+.trust-currency{font-size:18px;font-weight:500;line-height:1.3;letter-spacing:.03em;color:var(--blue)}
+.trust-metric-revenue p{font-size:18px;max-width:23ch}
 .trust-grid>.certification{grid-template-columns:80px minmax(0,1fr);align-content:space-between;align-items:center;gap:24px 20px;margin:0;padding:28px;border:1px solid var(--line);border-radius:12px;scroll-margin-top:120px}
 .trust-grid .certification-badge{width:80px;height:80px}
 .trust-grid .certification-label{font-size:11px;letter-spacing:.03em}
@@ -330,6 +334,12 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .footer-contacts>a:hover{text-decoration:underline;text-underline-offset:4px}
 .footer-legal{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:20px;border-top:1px solid var(--line);font-size:16px;line-height:1.5}
 .footer-legal>span{overflow-wrap:anywhere}
+@media(max-width:1250px){
+  .trust-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trust-metric{min-height:230px}
+  .trust-grid>.certification{grid-column:auto}
+  .trust-metric-revenue .count-up{font-size:64px}
+}
 @media(max-width:1150px){
   .trust-metric{padding:24px}
   .trust-grid>.certification{padding:24px;gap:24px 16px}
@@ -344,8 +354,6 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .trust-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trust-metric{min-height:230px}
   .count-up{font-size:96px}
-  .trust-grid>.certification{grid-column:1/-1;grid-template-columns:80px minmax(0,1fr) minmax(230px,.8fr);align-content:normal}
-  .trust-grid .certification-action{grid-column:3;align-items:stretch}
   .tariff-grid{grid-template-columns:minmax(0,1fr);gap:14px}
   .tariff-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start;gap:12px 28px;padding:28px}
   .tariff-card h3{min-height:0;font-size:30px}
@@ -367,7 +375,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .trust-metric{min-height:196px;padding:22px 18px}
   .count-up{font-size:clamp(64px,19vw,94px)}
   .trust-metric p{font-size:17px;line-height:1.4;margin-top:22px}
-  .trust-grid>.certification{grid-template-columns:72px minmax(0,1fr);gap:22px 16px;padding:22px 20px;scroll-margin-top:100px}
+  .trust-metric-revenue{grid-column:1/-1;min-height:200px}
+  .trust-metric-revenue .count-up{font-size:clamp(44px,12vw,68px)}
+  .trust-revenue-value{gap:8px}
+  .trust-metric-revenue p{max-width:27ch}
+  .trust-grid>.certification{grid-column:1/-1;grid-template-columns:72px minmax(0,1fr);gap:22px 16px;padding:22px 20px;scroll-margin-top:100px}
   .trust-grid .certification-badge{width:72px;height:72px}
   .trust-grid .certification-copy h3{font-size:24px}
   .trust-grid .certification-action{grid-column:1/-1}
