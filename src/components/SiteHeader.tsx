@@ -23,8 +23,8 @@ export function SiteHeader() {
   }, [open]);
   return <header className="site-header"><div className="shell header-inner"><Logo />
     <nav className={`header-nav${open ? " is-open" : ""}`} id="site-navigation" aria-label="Основная навигация">
-      <Link href="/#portfolio" onClick={() => setOpen(false)}>Работы <sup>06</sup></Link>
-      <Link href="/#services" onClick={() => setOpen(false)}>Что делаем</Link>
+      <Link href="/#portfolio" onClick={() => setOpen(false)}>Работы</Link>
+      <Link href="/#services" onClick={() => setOpen(false)}>Тарифы</Link>
       <Link href="/#process" onClick={() => setOpen(false)}>Подход</Link>
       <a className="mobile-contact" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>Обсудить проект <ArrowUpRight size={18} /></a>
     </nav>

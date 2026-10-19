@@ -1,12 +1,12 @@
-import { ArrowDown, ArrowUpRight, BadgeCheck, Check, Crosshair, Globe2, Send } from "lucide-react";
+import { ArrowDown, ArrowUpRight, BadgeCheck, Phone, Send } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CaseSection } from "@/components/CaseSection";
+import { ClientsMarquee } from "@/components/ClientsMarquee";
+import { TrustSection } from "@/components/TrustSection";
 import { HandScene } from "@/components/HandScene";
 import { Experience } from "@/components/Experience";
-import { GoogleAdsCertificate } from "@/components/GoogleAdsCertificate";
 import { siteConfig } from "@/config/site";
-import { projects } from "@/lib/cases";
 
 const steps = [
   ["01", "Сначала — ваш бизнес.", "Что продаёте, кому и в каком городе. Выбираем решение под вашу задачу."],
@@ -14,35 +14,92 @@ const steps = [
   ["03", "И вот — вы в эфире.", "Запускаем, проверяем обращения и объясняем, как всё работает. Остаёмся на связи."],
 ];
 const faqs = [
-  ["Сколько стоит мой проект?", "Лендинг — от 899 BYN, настройка Яндекс Директа — от 399 BYN. Стоимость связки с рекламой и Google Ads рассчитываем под задачу. Напишите о своём бизнесе — зафиксируем состав работы и цену до начала."],
+  ["Сколько стоит мой проект?", "Сайт — от 899 BYN, настройка Яндекс Директа — от 399 BYN. Google Ads и автоматизация — по расчёту. Состав работы и цену согласуем до начала. Рекламный бюджет оплачивается отдельно."],
   ["А если сайт уже есть?", "Можно заказать только рекламу. Сначала посмотрим, удобно ли оставить заявку и готов ли сайт к трафику. Если нужны доработки — обсудим их заранее."],
   ["Как быстро можно запуститься?", "Ориентир для лендинга — 7–14 рабочих дней. Точный срок зависит от объёма и готовности материалов. Согласуем его перед стартом."],
-  ["Как будем общаться?", "Напрямую с Ярославом в Telegram. Обсудим задачу, согласуем этапы, покажем работу и передадим всё необходимое для дальнейшего использования."],
+  ["Как будем общаться?", "Напрямую с Ярославом в Telegram или по телефону. Обсудим задачу, согласуем этапы, покажем работу и передадим всё необходимое для дальнейшего использования."],
 ];
-function ContactButton({ children = "Обсудить мой проект", light = false }: { children?: React.ReactNode; light?: boolean }) {
-  return <a className={`button${light ? " button-light" : ""}`} href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer"><span>{children}</span><span className="button-icon"><ArrowUpRight size={21} /></span></a>;
+const tariffs = [
+  { title: "Разработка сайта", price: "899", currency: "BYN", from: true, detail: "Лендинги, сайты компаний, магазины." },
+  { title: "Настройка рекламы", price: "399", currency: "BYN", from: true, detail: "Яндекс Директ. Google Ads — по расчёту." },
+  { title: "Автоматизация бизнеса", price: "По расчёту", currency: "", from: false, detail: "Бизнес-процессы любой сложности." },
+];
+
+function ContactButton({ children = "Обсудить мой проект" }: { children?: React.ReactNode }) {
+  return <a className="button" href={siteConfig.contacts.orderUrl} target="_blank" rel="noopener noreferrer"><span>{children}</span><span className="button-icon"><ArrowUpRight size={21} aria-hidden="true" /></span></a>;
 }
+
 export default function Home() {
-  return <div className="site"><a className="skip-link" href="#main-content">Перейти к содержимому</a><SiteHeader /><main id="main-content">
-    <section className="hero scroll-scene" aria-labelledby="hero-title"><div className="hero-pin scroll-pin"><div className="shell hero-shell">
-      <div className="hero-meta"><span><i className="status-dot" /> Независимая digital-студия</span><span>Сайты / Реклама / Рост</span></div>
-      <div className="hero-grid"><div className="hero-copy"><span className="eyebrow">Хороший бизнес должны заметить</span><h1 id="hero-title">Ваш бизнес.<br /><em>На виду.</em><span className="hero-period" aria-hidden="true">*</span></h1><p>Делаем сайты и запускаем рекламу,<br className="desktop-break" /> чтобы к вам приходили клиенты.</p><ContactButton /><span className="hero-cta-note">Начнём с вашей задачи. В Telegram.</span></div>
-      <div className="hero-media"><HandScene /></div></div>
-      <div className="hero-bottom"><p><span className="person-initial">Я</span><span>Ярослав на связи.<br /><a className="hero-certificate-link" href="#google-ads-certificate"><BadgeCheck size={16} aria-hidden="true" /> Сертификат Google Ads</a></span></p><a href="#portfolio">Можно сразу к работам <span><ArrowDown size={18} /></span></a></div>
-    </div></div></section>
-    <div className="client-strip"><div className="shell"><span className="client-strip-label">В хорошем окружении</span><div className="client-logos">{projects.map((project) => <a href={project.url} target="_blank" rel="noreferrer" key={project.id}>{project.title}</a>)}</div></div></div>
-    <CaseSection />
-    <section className="services section" id="services" aria-labelledby="services-title"><div className="shell"><div className="section-caption"><span><i /> 02 / Что делаем</span><span>Всё работает на одну цель</span></div><div className="services-heading" data-reveal><h2 id="services-title">Не просто быть.<br /><em>Быть нужными.</em></h2><p>Сайт превращает интерес в доверие.<br />Реклама приводит тех, кому вы нужны.</p></div>
-      <div className="service-list"><a className="service-row" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer" data-reveal><span className="service-number">/ 01</span><div className="service-main"><h3>Сайты для бизнеса <Globe2 /></h3><p>Лендинги, корпоративные сайты, магазины.</p><div className="service-tags"><span>Дизайн</span><span>Разработка</span><span>SEO-основа</span><span>Мобильная версия</span></div></div><span className="service-price"><small>от</small> 899 <small>BYN</small></span><span className="service-arrow"><ArrowUpRight /></span></a>
-      <a className="service-row" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer" data-reveal><span className="service-number">/ 02</span><div className="service-main"><h3>Реклама в поиске <Crosshair /></h3><p>Яндекс Директ и Google Ads. От спроса до обращения.</p><div className="service-tags"><span>Поисковые запросы</span><span>Объявления</span><span>Аналитика</span><span>Цели</span></div></div><span className="service-price"><small>Директ от</small> 399 <small>BYN</small></span><span className="service-arrow"><ArrowUpRight /></span></a></div>
-      <GoogleAdsCertificate />
-      <div className="service-footnote"><span>Рекламный бюджет оплачивается отдельно.<br />Стоимость Google Ads и сложных проектов — после обсуждения.</span><a href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Нужны сайт + реклама? Соберём вместе <ArrowUpRight size={19} /></a></div><div className="benefit-strip"><span><Check size={16} /> Стоимость до старта</span><span><Check size={16} /> Ваш сайт и доступы</span><span><Check size={16} /> На связи напрямую</span></div>
-    </div></section>
-    <section className="process section" id="process" aria-labelledby="process-title"><div className="shell"><div className="section-caption"><span><i /> 03 / Без лишних кругов</span><span>Напрямую. По делу.</span></div><div className="process-heading" data-reveal><h2 id="process-title">Меньше сложностей.<br /><em>Больше движения.</em></h2><span className="process-doodle" aria-hidden="true"><ArrowUpRight size={92} strokeWidth={1} /></span></div><div className="process-grid">{steps.map(([number, title, copy]) => <article key={number} data-reveal><div><span>{number}</span><ArrowUpRight size={22} /></div><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section>
-    <section className="contact-section" id="contact" aria-labelledby="contact-title"><div className="shell contact-shell">
-      <div className="contact-intro"><span className="eyebrow"><span className="status-dot" /> Теперь ваш ход</span><h2 id="contact-title">Есть дело?<br /><em>Давайте обсудим.</em></h2></div>
-      <div className="contact-copy"><p>Расскажите о бизнесе.<br />Предложим, с чего начать.</p><ContactButton>Написать Ярославу</ContactButton><span className="contact-handle"><Send size={18} /> @c0lddev</span></div>
-    </div></section>
-    <section className="faq section" aria-labelledby="faq-title"><div className="shell faq-grid"><div><span className="eyebrow">04 / Кстати</span><h2 id="faq-title">Можно<br /><em>спросить.</em></h2></div><div className="faq-list">{faqs.map(([question, answer], index) => <details name="colddev-faq" key={question}><summary><span className="faq-number">0{index + 1}</span><span>{question}</span><span className="faq-plus" aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></div></section>
-  </main><SiteFooter /><Experience /></div>;
+  return (
+    <div className="site">
+      <a className="skip-link" href="#main-content">Перейти к содержимому</a>
+      <SiteHeader />
+      <main id="main-content">
+        <section className="hero scroll-scene" aria-labelledby="hero-title">
+          <div className="hero-pin scroll-pin"><div className="shell hero-shell">
+            <div className="hero-grid">
+              <div className="hero-copy">
+                <h1 id="hero-title">Ваш бизнес.<br /><em>На виду.</em><span className="hero-period" aria-hidden="true">*</span></h1>
+                <p>Делаем сайты и запускаем рекламу,<br className="desktop-break" /> чтобы к вам приходили клиенты.</p>
+                <ContactButton />
+              </div>
+              <div className="hero-media"><HandScene /></div>
+            </div>
+            <div className="hero-bottom">
+              <a className="hero-certificate-link" href="#google-ads-certificate"><BadgeCheck size={20} aria-hidden="true" />Сертификат Google Ads</a>
+              <a href="#portfolio">Можно сразу к работам <span><ArrowDown size={18} aria-hidden="true" /></span></a>
+            </div>
+          </div></div>
+        </section>
+        <ClientsMarquee />
+        <TrustSection />
+        <CaseSection />
+        <section className="services section" id="services" aria-labelledby="services-title">
+          <div className="shell">
+            <h2 id="services-title">Тарифы</h2>
+            <div className="tariff-grid">
+              {tariffs.map((tariff) => (
+                <article className="tariff-card" key={tariff.title}>
+                  <h3>{tariff.title}</h3>
+                  <p className={`tariff-price${tariff.from ? "" : " tariff-price-custom"}`}>
+                    {tariff.from && <small>от </small>}<strong>{tariff.price}</strong>{tariff.currency && <small> {tariff.currency}</small>}
+                  </p>
+                  <p className="tariff-detail">{tariff.detail}</p>
+                  <a className="tariff-link" href={siteConfig.contacts.orderUrl} target="_blank" rel="noopener noreferrer" aria-label={`Обсудить: ${tariff.title}`}>Обсудить <ArrowUpRight size={22} aria-hidden="true" /></a>
+                </article>
+              ))}
+            </div>
+            <p className="tariff-note">Рекламный бюджет оплачивается отдельно.</p>
+          </div>
+        </section>
+        <section className="process section" id="process" aria-labelledby="process-title">
+          <div className="shell">
+            <div className="process-heading" data-reveal><h2 id="process-title">Меньше сложностей.<br /><em>Больше движения.</em></h2><span className="process-doodle" aria-hidden="true"><ArrowUpRight size={92} strokeWidth={1} /></span></div>
+            <div className="process-grid">{steps.map(([number, title, copy]) => <article key={number} data-reveal><div><span>{number}</span><ArrowUpRight size={22} aria-hidden="true" /></div><h3>{title}</h3><p>{copy}</p></article>)}</div>
+          </div>
+        </section>
+        <section className="contact-section" id="contact" aria-labelledby="contact-title">
+          <div className="shell contact-shell">
+            <div className="contact-intro"><h2 id="contact-title">Есть дело?<br /><em>Давайте обсудим.</em></h2></div>
+            <div className="contact-copy">
+              <p>Расскажите о бизнесе.<br />Предложим, с чего начать.</p>
+              <ContactButton>Написать Ярославу</ContactButton>
+              <div className="contact-details">
+                <a href={`tel:${siteConfig.contacts.phone}`}><Phone size={18} aria-hidden="true" />{siteConfig.contacts.phoneDisplay}</a>
+                <a href={siteConfig.contacts.telegramUrl} target="_blank" rel="noopener noreferrer"><Send size={18} aria-hidden="true" />@{siteConfig.contacts.telegramUsername}</a>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="faq section" aria-labelledby="faq-title">
+          <div className="shell faq-grid">
+            <div><h2 id="faq-title">Можно<br /><em>спросить.</em></h2></div>
+            <div className="faq-list">{faqs.map(([question, answer], index) => <details name="colddev-faq" key={question}><summary><span className="faq-number">0{index + 1}</span><span>{question}</span><span className="faq-plus" aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div>
+          </div>
+        </section>
+      </main>
+      <SiteFooter />
+      <Experience />
+    </div>
+  );
 }
