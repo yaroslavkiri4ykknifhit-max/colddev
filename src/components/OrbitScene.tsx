@@ -22,6 +22,7 @@ export function OrbitScene() {
     const finePointer = window.matchMedia("(min-width: 701px) and (hover: hover) and (pointer: fine)");
     let width = 0;
     let height = 0;
+    let markerBottom = 0;
     let scale = 1;
     let frame = 0;
     let lastTime = 0;
@@ -49,7 +50,8 @@ export function OrbitScene() {
       const dot = rotatePoint(marker, state);
       if (dot.z > 0) {
         const x = cx + dot.x * radius;
-        const y = cy - dot.y * radius;
+        // Keep the decorative disc above the copy at every tilt angle.
+        const y = Math.min(cy - dot.y * radius, markerBottom - disc / 2);
         const direction = state.heading * Math.PI / 180;
         const spread = 17 * Math.PI / 180;
         const reach = disc * 2.5;
@@ -107,7 +109,8 @@ export function OrbitScene() {
         target.pitch = 30 - ((pointer.y - rect.top) / rect.height - 0.5) * 18;
         const layout = orbitLayout(width, height);
         const dot = rotatePoint(layout.marker, state);
-        target.heading = (Math.atan2(pointer.y - rect.top - (layout.cy - dot.y * layout.radius), pointer.x - rect.left - (layout.cx + dot.x * layout.radius)) * 180 / Math.PI + 360) % 360;
+        const markerY = Math.min(layout.cy - dot.y * layout.radius, markerBottom - layout.disc / 2);
+        target.heading = (Math.atan2(pointer.y - rect.top - markerY, pointer.x - rect.left - (layout.cx + dot.x * layout.radius)) * 180 / Math.PI + 360) % 360;
       } else {
         const rect = panel.getBoundingClientRect();
         const progress = finePointer.matches ? 0 : clamp((window.innerHeight / 2 - rect.top - rect.height / 2) / window.innerHeight, -1, 1);
@@ -118,8 +121,11 @@ export function OrbitScene() {
       schedule();
     };
     const resize = () => {
+      if (disposed) return;
       width = panel.clientWidth; height = panel.clientHeight;
       if (!width || !height) return;
+      const heading = panel.querySelector("h2");
+      markerBottom = heading ? heading.getBoundingClientRect().top - panel.getBoundingClientRect().top - 24 : height * 0.23;
       scale = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * scale); canvas.height = Math.round(height * scale);
       paint(); setTarget();
@@ -146,6 +152,7 @@ export function OrbitScene() {
     }, { rootMargin: "100px 0px" });
     const sizing = new ResizeObserver(resize);
     resize(); observer.observe(panel); sizing.observe(panel);
+    void document.fonts.ready.then(resize);
     panel.addEventListener("pointermove", movePointer, { passive: true });
     panel.addEventListener("pointerleave", leavePointer);
     window.addEventListener("scroll", scroll, { passive: true });
@@ -168,7 +175,7 @@ export function OrbitScene() {
     {staticGrids.map(({ name, width, height, paths, layout }) => {
       const dot = rotatePoint(layout.marker, { yaw: 0, pitch: 30 });
       const x = layout.cx + dot.x * layout.radius;
-      const y = layout.cy - dot.y * layout.radius;
+      const y = Math.min(layout.cy - dot.y * layout.radius, height * 0.23 - layout.disc / 2);
       const reach = layout.disc * 2.5;
       const start = 124 * Math.PI / 180;
       const end = 158 * Math.PI / 180;
