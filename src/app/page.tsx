@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUpRight, BadgeCheck, Phone, Send } from "lucide-react";
+import { ArrowDown, ArrowUpRight, BadgeCheck } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CaseSection } from "@/components/CaseSection";
@@ -6,6 +6,7 @@ import { ClientsMarquee } from "@/components/ClientsMarquee";
 import { TrustSection } from "@/components/TrustSection";
 import { HandScene } from "@/components/HandScene";
 import { Experience } from "@/components/Experience";
+import { OrbitContact } from "@/components/OrbitContact";
 import { siteConfig } from "@/config/site";
 
 const steps = [
@@ -78,19 +79,7 @@ export default function Home() {
             <div className="process-grid">{steps.map(([number, title, copy]) => <article key={number} data-reveal><div><span>{number}</span><ArrowUpRight size={22} aria-hidden="true" /></div><h3>{title}</h3><p>{copy}</p></article>)}</div>
           </div>
         </section>
-        <section className="contact-section" id="contact" aria-labelledby="contact-title">
-          <div className="shell contact-shell">
-            <div className="contact-intro"><h2 id="contact-title">Есть дело?<br /><em>Давайте обсудим.</em></h2></div>
-            <div className="contact-copy">
-              <p>Расскажите о бизнесе.<br />Предложим, с чего начать.</p>
-              <ContactButton>Написать Ярославу</ContactButton>
-              <div className="contact-details">
-                <a href={`tel:${siteConfig.contacts.phone}`}><Phone size={18} aria-hidden="true" />{siteConfig.contacts.phoneDisplay}</a>
-                <a href={siteConfig.contacts.telegramUrl} target="_blank" rel="noopener noreferrer"><Send size={18} aria-hidden="true" />@{siteConfig.contacts.telegramUsername}</a>
-              </div>
-            </div>
-          </div>
-        </section>
+        <OrbitContact />
         <section className="faq section" aria-labelledby="faq-title">
           <div className="shell faq-grid">
             <div><h2 id="faq-title">Можно<br /><em>спросить.</em></h2></div>
