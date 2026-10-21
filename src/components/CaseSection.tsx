@@ -10,19 +10,18 @@ export function CaseSection({ archive = false }: { archive?: boolean }) {
         <span className={styles.label}>{project.label}</span>
         <div className={styles.desktop}>
           <div className={styles.browserBar} aria-hidden="true"><span className={styles.dots}><i /><i /><i /></span><span className={styles.address}>{project.domain}</span><ArrowUpRight /></div>
-          <div className={`${styles.desktopScreen}${project.mobile ? "" : ` ${styles.originalCover}`}`}>
-            <Image src={project.cover} alt={project.mobile ? `Сайт ${project.title} на компьютере` : `Обложка проекта ${project.title}`} width={1348} height={936} sizes="(max-width: 700px) 78vw, 38vw" />
-            {!project.mobile && <strong className={styles.originalTitle}>PROD<span>SIMON</span></strong>}
+          <div className={styles.desktopScreen}>
+            <Image src={project.cover} alt={`Сайт ${project.title} на компьютере`} width={1348} height={936} sizes="(max-width: 700px) 78vw, 38vw" />
           </div>
         </div>
-        {project.mobile && <div className={styles.phone}>
+        <div className={styles.phone}>
           <span className={styles.phoneMute} aria-hidden="true" /><span className={styles.phoneVolume} aria-hidden="true" /><span className={styles.phonePower} aria-hidden="true" />
           <div className={styles.phoneScreen}>
             <div className={styles.phoneStatus} aria-hidden="true"><span>9:41</span><span className={styles.phoneIcons}><Signal /><Wifi /><BatteryFull /></span></div>
             <div className={styles.phoneViewport}><Image src={project.mobile} alt={`Мобильная версия сайта ${project.title} в макете iPhone`} width={390} height={project.mobileHeight ?? 844} sizes="(max-width: 700px) 27vw, 14vw" /></div>
             <span className={styles.phoneIsland} aria-hidden="true" /><span className={styles.phoneHome} aria-hidden="true" />
           </div>
-        </div>}
+        </div>
         <span className={styles.open} aria-hidden="true"><ArrowUpRight /></span>
       </a>
       <div className={styles.caption}><h3><a href={project.url} target="_blank" rel="noreferrer">{project.title}</a></h3><p>{project.description}</p></div>
