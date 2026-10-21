@@ -1,9 +1,16 @@
 "use client";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
 import { Logo } from "./Logo";
+
+// Native anchors keep repeated section navigation reliable in the static export.
+const navigation = [
+  { href: "/#portfolio", label: "Работы" },
+  { href: "/#advertising-cases", label: "Реклама" },
+  { href: "/#services", label: "Тарифы" },
+  { href: "/#process", label: "Подход" },
+];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -23,10 +30,7 @@ export function SiteHeader() {
   }, [open]);
   return <header className="site-header"><div className="shell header-inner"><Logo />
     <nav className={`header-nav${open ? " is-open" : ""}`} id="site-navigation" aria-label="Основная навигация">
-      <Link href="/#portfolio" onClick={() => setOpen(false)}>Работы</Link>
-      <Link href="/#advertising-cases" onClick={() => setOpen(false)}>Реклама</Link>
-      <Link href="/#services" onClick={() => setOpen(false)}>Тарифы</Link>
-      <Link href="/#process" onClick={() => setOpen(false)}>Подход</Link>
+      {navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setOpen(false)}>{item.label}</a>)}
       <a className="mobile-contact" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>Обсудить проект <ArrowUpRight size={18} /></a>
     </nav>
     <div className="header-actions"><a className="header-contact" href={siteConfig.contacts.orderUrl} target="_blank" rel="noreferrer">Обсудить проект <ArrowUpRight size={17} /></a><button className="menu-toggle" ref={toggleRef} type="button" aria-label={open ? "Закрыть меню" : "Открыть меню"} aria-expanded={open} aria-controls="site-navigation" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></div>
