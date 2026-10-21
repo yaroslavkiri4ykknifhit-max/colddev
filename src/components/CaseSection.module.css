@@ -1,4 +1,5 @@
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 28px}
+.caseLinks{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-left:24px}.caseLinks>a{display:inline-flex;align-items:center;gap:9px;min-height:48px;padding:10px 16px;border:1px solid var(--line);border-radius:7px;font-size:16px;line-height:1.4}.caseLinks>a:first-child{background:var(--ink);color:#fff;border-color:var(--ink)}.caseLinks>a:hover{border-color:var(--blue);color:var(--blue)}.caseLinks>a:first-child:hover{background:var(--blue);color:#fff}.caseLinks svg{flex-shrink:0}@media(max-width:700px){.caseLinks{margin-left:0;gap:8px}.caseLinks>a{padding:10px 13px;font-size:15px}}
 .card{min-width:0}
 .visual{--stage:#e9e4de;position:relative;display:block;aspect-ratio:1.25;overflow:hidden;isolation:isolate;container-type:inline-size;border:1px solid #18203108;border-radius:18px;background:radial-gradient(ellipse at 28% 12%,#ffffffa6,transparent 70%),var(--stage)}
 .floor .visual{--stage:#e9e4de}.climate .visual{--stage:#deecf2}.nwo .visual{--stage:#e8e5d9}.aks .visual{--stage:#e6e9dc}.simon .visual{--stage:#dce1ee}.bakatkin .visual{--stage:#e8e6ed}

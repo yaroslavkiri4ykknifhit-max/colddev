@@ -2,6 +2,7 @@ import { ArrowDown, ArrowUpRight, BadgeCheck } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CaseSection } from "@/components/CaseSection";
+import { AdvertisingCaseSection } from "@/components/AdvertisingCaseSection";
 import { ClientsMarquee } from "@/components/ClientsMarquee";
 import { TrustSection } from "@/components/TrustSection";
 import { HandScene } from "@/components/HandScene";
@@ -55,6 +56,7 @@ export default function Home() {
         <ClientsMarquee />
         <TrustSection />
         <CaseSection />
+        <AdvertisingCaseSection />
         <section className="services section" id="services" aria-labelledby="services-title">
           <div className="shell">
             <h2 id="services-title">Тарифы</h2>

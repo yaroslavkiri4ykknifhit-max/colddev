@@ -4,7 +4,7 @@ import { projects } from "@/lib/cases";
 import styles from "./CaseSection.module.css";
 export function CaseSection({ archive = false }: { archive?: boolean }) {
   return <section className={`portfolio section${archive ? " portfolio-archive" : ""}`} id="portfolio" aria-labelledby="portfolio-title"><div className="shell">
-    <div className="portfolio-heading">{archive ? <h1 id="portfolio-title">Работы говорят<br /><em>за нас.</em></h1> : <h2 id="portfolio-title">Нам доверяют<br /><em>свой бизнес.</em></h2>}</div>
+    <div className="portfolio-heading">{archive ? <h1 id="portfolio-title">Работы говорят<br /><em>за нас.</em></h1> : <h2 id="portfolio-title">Нам доверяют<br /><em>свой бизнес.</em></h2>}<nav className={styles.caseLinks} aria-label="Разделы портфолио"><a href="#portfolio" aria-current="location">Сайты</a><a href="#advertising-cases">Кейсы по рекламе <ArrowUpRight size={18} aria-hidden="true" /></a></nav></div>
     <div className={styles.grid}>{projects.map((project) => <article className={`${styles.card} ${styles[project.theme]}`} key={project.id} data-project={project.id}>
       <a className={styles.visual} href={project.url} target="_blank" rel="noreferrer" aria-label={`Открыть сайт ${project.title} — в новой вкладке`}>
         <span className={styles.label}>{project.label}</span>
