@@ -8,7 +8,7 @@ import { Logo } from "./Logo";
 const navigation = [
   { href: "/#portfolio", label: "Работы" },
   { href: "/#advertising-cases", label: "Реклама" },
-  { href: "/#services", label: "Тарифы" },
+  { href: "/#services", label: "Направления" },
   { href: "/#process", label: "Подход" },
 ];
 

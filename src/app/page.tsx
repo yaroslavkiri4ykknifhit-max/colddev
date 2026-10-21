@@ -9,6 +9,9 @@ import { HandScene } from "@/components/HandScene";
 import { Experience } from "@/components/Experience";
 import { OrbitContact } from "@/components/OrbitContact";
 import { siteConfig } from "@/config/site";
+import { ServiceDirections } from "@/components/ServiceDirections";
+import { StructuredData } from "@/components/StructuredData";
+import { homeStructuredData } from "@/lib/seo";
 
 const steps = [
   ["01", "Сначала — ваш бизнес.", "Что продаёте, кому и в каком городе. Выбираем решение под вашу задачу."],
@@ -16,15 +19,10 @@ const steps = [
   ["03", "И вот — вы в эфире.", "Запускаем, проверяем обращения и объясняем, как всё работает. Остаёмся на связи."],
 ];
 const faqs = [
-  ["Сколько стоит мой проект?", "Сайт — от 899 BYN, настройка Яндекс Директа — от 399 BYN. Google Ads и автоматизация — по расчёту. Состав работы и цену согласуем до начала. Рекламный бюджет оплачивается отдельно."],
+  ["Как рассчитывается стоимость?", "Обсудим задачу, объём работ и нужные функции. После этого согласуем стоимость и этапы до начала проекта. Рекламный бюджет оплачивается отдельно."],
   ["А если сайт уже есть?", "Можно заказать только рекламу. Сначала посмотрим, удобно ли оставить заявку и готов ли сайт к трафику. Если нужны доработки — обсудим их заранее."],
   ["Как быстро можно запуститься?", "Ориентир для лендинга — 7–14 рабочих дней. Точный срок зависит от объёма и готовности материалов. Согласуем его перед стартом."],
   ["Как будем общаться?", "Напрямую с Ярославом в Telegram или по телефону. Обсудим задачу, согласуем этапы, покажем работу и передадим всё необходимое для дальнейшего использования."],
-];
-const tariffs = [
-  { title: "Разработка сайта", price: "899", currency: "BYN", from: true, detail: "Лендинги, сайты компаний, магазины." },
-  { title: "Настройка рекламы", price: "399", currency: "BYN", from: true, detail: "Яндекс Директ. Google Ads — по расчёту." },
-  { title: "Автоматизация бизнеса", price: "По расчёту", currency: "", from: false, detail: "Бизнес-процессы любой сложности." },
 ];
 
 function ContactButton({ children = "Обсудить мой проект" }: { children?: React.ReactNode }) {
@@ -37,6 +35,7 @@ export default function Home() {
       <a className="skip-link" href="#main-content">Перейти к содержимому</a>
       <SiteHeader />
       <main id="main-content">
+        <StructuredData data={homeStructuredData} />
         <section className="hero scroll-scene" aria-labelledby="hero-title">
           <div className="hero-pin scroll-pin"><div className="shell hero-shell">
             <div className="hero-grid">
@@ -57,24 +56,7 @@ export default function Home() {
         <TrustSection />
         <CaseSection />
         <AdvertisingCaseSection />
-        <section className="services section" id="services" aria-labelledby="services-title">
-          <div className="shell">
-            <h2 id="services-title">Тарифы</h2>
-            <div className="tariff-grid">
-              {tariffs.map((tariff) => (
-                <article className="tariff-card" key={tariff.title}>
-                  <h3>{tariff.title}</h3>
-                  <p className={`tariff-price${tariff.from ? "" : " tariff-price-custom"}`}>
-                    {tariff.from && <small>от </small>}<strong>{tariff.price}</strong>{tariff.currency && <small> {tariff.currency}</small>}
-                  </p>
-                  <p className="tariff-detail">{tariff.detail}</p>
-                  <a className="tariff-link" href={siteConfig.contacts.orderUrl} target="_blank" rel="noopener noreferrer" aria-label={`Обсудить: ${tariff.title}`}>Обсудить <ArrowUpRight size={22} aria-hidden="true" /></a>
-                </article>
-              ))}
-            </div>
-            <p className="tariff-note">Рекламный бюджет оплачивается отдельно.</p>
-          </div>
-        </section>
+        <ServiceDirections />
         <section className="process section" id="process" aria-labelledby="process-title">
           <div className="shell">
             <div className="process-heading" data-reveal><h2 id="process-title">Меньше сложностей.<br /><em>Больше движения.</em></h2><span className="process-doodle" aria-hidden="true"><ArrowUpRight size={92} strokeWidth={1} /></span></div>
