@@ -15,7 +15,7 @@ export function ClientsMarquee() {
             <div className="client-marquee-group" key={String(duplicate)} aria-hidden={duplicate || undefined}>
               {projects.map((project) => (
                 <a href={project.url} target="_blank" rel="noopener noreferrer" key={project.id} tabIndex={duplicate ? -1 : undefined}>
-                  {project.title}<span aria-hidden="true">✳</span>
+                  {project.title}<svg className="client-marquee-mark" width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false"><path d="M16 1v30M1 16h30M5.4 5.4l21.2 21.2M5.4 26.6 26.6 5.4" stroke="currentColor" strokeWidth="2.5" /></svg>
                 </a>
               ))}
             </div>
