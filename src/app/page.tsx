@@ -12,6 +12,7 @@ import { siteConfig } from "@/config/site";
 import { ServiceDirections } from "@/components/ServiceDirections";
 import { StructuredData } from "@/components/StructuredData";
 import { homeStructuredData } from "@/lib/seo";
+import { FounderSection } from "@/components/FounderSection";
 
 const steps = [
   ["01", "Сначала — ваш бизнес.", "Что продаёте, кому и в каком городе. Выбираем решение под вашу задачу."],
@@ -54,6 +55,7 @@ export default function Home() {
         </section>
         <ClientsMarquee />
         <TrustSection />
+        <FounderSection />
         <CaseSection />
         <AdvertisingCaseSection />
         <ServiceDirections />

@@ -16,7 +16,7 @@ export function SiteFooter() {
         </div>
       </div>
       <nav className="shell footer-services" aria-label="Направления работы">{services.map((service) => <Link key={service.slug} href={servicePath(service)}>{service.title}<ArrowUpRight size={18} aria-hidden="true" /></Link>)}</nav>
-      <div className="shell footer-legal"><span>{siteConfig.legal.fullName}</span><span>УНП {siteConfig.legal.unp}</span></div>
+      <div className="shell footer-legal"><span><Link href={siteConfig.founder.path}>{siteConfig.legal.fullName}</Link></span><span>УНП {siteConfig.legal.unp}</span></div>
       <div className="shell footer-bottom"><span>© {new Date().getFullYear()} COLDDEV</span><span>Минск, Беларусь · Работаем онлайн</span><a href="#main-content">Наверх ↑</a></div>
     </footer>
   );

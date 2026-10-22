@@ -35,14 +35,18 @@ export function AdvertisingCaseSection() {
                     <h4>Результаты{item.period ? ` ${item.period.toLowerCase()}` : ""}</h4>
                     <dl className={styles.metrics}>{item.metrics.map((metric) => <div key={metric.label}><dt>{metric.label}</dt><dd>{metric.value}</dd></div>)}</dl>
                   </div>
-                  <div className={styles.gallery}>{item.images.map((screenshot) => (
+                  <div className={styles.gallery}>{item.images.map((screenshot) => {
+                    const width = screenshot.width ?? 1363;
+                    const height = screenshot.height ?? 936;
+                    const crop = screenshot.crop ?? { x: 0, y: 0, width, height };
+                    return (
                     <figure key={screenshot.src}>
-                      <a className={styles.screenshot} style={{ aspectRatio: `${screenshot.crop.width} / ${screenshot.crop.height}` }} href={screenshot.src} target="_blank" rel="noreferrer" aria-label={`${screenshot.caption} — открыть в полном размере`}>
-                        <Image src={screenshot.src} alt={screenshot.alt} width={1363} height={936} sizes="(max-width: 700px) 90vw, 45vw" style={{ width: `${1363 / screenshot.crop.width * 100}%`, transform: `translate(${-screenshot.crop.x / 1363 * 100}%, ${-screenshot.crop.y / 936 * 100}%)` }} />
+                      <a className={styles.screenshot} style={{ aspectRatio: `${crop.width} / ${crop.height}` }} href={screenshot.src} target="_blank" rel="noreferrer" aria-label={`${screenshot.caption} — открыть в полном размере`}>
+                        <Image src={screenshot.src} alt={screenshot.alt} width={width} height={height} sizes="(max-width: 700px) 90vw, 45vw" style={{ width: `${width / crop.width * 100}%`, transform: `translate(${-crop.x / width * 100}%, ${-crop.y / height * 100}%)` }} />
                       </a>
                       <figcaption>{screenshot.caption}<ArrowUpRight size={17} aria-hidden="true" /></figcaption>
                     </figure>
-                  ))}</div>
+                  ); })}</div>
                 </div>
               </details>
             </article>

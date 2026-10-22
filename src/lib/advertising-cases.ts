@@ -4,8 +4,10 @@ type CaseImage = {
   src: string;
   alt: string;
   caption: string;
+  width?: number;
+  height?: number;
   // Bounds of the source image inside the captured browser viewport.
-  crop: { x: number; y: number; width: number; height: number };
+  crop?: { x: number; y: number; width: number; height: number };
 };
 
 export type AdvertisingCase = {
@@ -88,16 +90,16 @@ export const advertisingCases: AdvertisingCase[] = [
     ],
     images: [
       {
-        src: "/work/ads/greenhouses-overview.webp",
+        src: "/work/ads/greenhouses-overview-20261022.webp",
         alt: "Обзор Google Ads магазина теплиц: 33,2 тысячи кликов и средняя цена клика 0,06 доллара",
         caption: "Обзор рекламного кабинета",
-        crop: { x: 0, y: 161, width: 1363, height: 614 },
+        width: 2048, height: 923,
       },
       {
-        src: "/work/ads/greenhouses-campaigns.webp",
+        src: "/work/ads/greenhouses-campaigns-20261022.webp",
         alt: "Показатели рекламных кампаний магазина теплиц в Google Ads",
         caption: "Показатели кампаний",
-        crop: { x: 0, y: 155, width: 1363, height: 626 },
+        width: 2048, height: 942,
       },
     ],
   },
