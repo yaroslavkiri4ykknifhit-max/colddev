@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowDown, ArrowUpRight, BadgeCheck } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -13,6 +14,8 @@ import { ServiceDirections } from "@/components/ServiceDirections";
 import { StructuredData } from "@/components/StructuredData";
 import { homeStructuredData } from "@/lib/seo";
 import { FounderSection } from "@/components/FounderSection";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const steps = [
   ["01", "Сначала — ваш бизнес.", "Что продаёте, кому и в каком городе. Выбираем решение под вашу задачу."],
@@ -42,7 +45,7 @@ export default function Home() {
             <div className="hero-grid">
               <div className="hero-copy">
                 <h1 id="hero-title">Ваш бизнес.<br /><em>На виду.</em><span className="hero-period" aria-hidden="true">*</span></h1>
-                <p>Делаем сайты и запускаем рекламу,<br className="desktop-break" /> чтобы к вам приходили клиенты.</p>
+                <p>Делаем сайты и помогаем бизнесу в Беларуси находить клиентов через рекламу и поиск.</p>
                 <ContactButton />
               </div>
               <div className="hero-media"><HandScene /></div>

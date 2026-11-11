@@ -1,0 +1,68 @@
+query_id,cluster_id,target_url,role,status
+q001,seo-audit,,research,подсказка
+q002,seo-audit,,research,подсказка
+q003,seo-audit,,research,подсказка
+q004,seo-audit,,research,выдача наблюдалась
+q005,seo-audit,,research,подсказка
+q006,seo-audit,,research,подсказка
+q007,seo-audit,,research,подсказка
+q008,seo-audit,,research,подсказка
+q009,seo-audit,,research,подсказка
+q010,seo-audit,,research,подсказка
+q011,seo,/seo-prodvizhenie/,secondary,подсказка
+q012,seo,/seo-prodvizhenie/,secondary,выдача наблюдалась
+q013,seo,/seo-prodvizhenie/,secondary,подсказка
+q014,seo,/seo-prodvizhenie/,secondary,подсказка
+q015,automation,/avtomatizaciya-biznesa/,secondary,подсказка
+q016,automation,/avtomatizaciya-biznesa/,secondary,подсказка
+q017,automation,/avtomatizaciya-biznesa/,secondary,подсказка
+q018,automation,/avtomatizaciya-biznesa/,secondary,подсказка
+q019,automation,/avtomatizaciya-biznesa/,secondary,подсказка
+q020,automation,,research,подсказка
+q021,automation,/avtomatizaciya-biznesa/,secondary,подсказка
+q022,automation,,research,подсказка
+q023,ad-audit,/kontekstnaya-reklama/,secondary,подсказка
+q024,ad-audit,/kontekstnaya-reklama/,secondary,подсказка
+q025,ad-audit,/kontekstnaya-reklama/,secondary,проверка без выборки
+q026,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q027,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q028,web-fixes,/razrabotka-saitov/,secondary,выдача наблюдалась
+q029,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q030,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q031,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q032,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q033,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q034,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q035,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q036,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q037,web-fixes,/razrabotka-saitov/,secondary,подсказка
+q038,web-fixes,,research,подсказка
+q039,google-ads,/kontekstnaya-reklama/,secondary,подсказка
+q040,google-ads,/kontekstnaya-reklama/,secondary,выдача наблюдалась
+q041,google-ads,/kontekstnaya-reklama/,secondary,подсказка
+q042,analytics,,research,подсказка
+q043,google-ads,/kontekstnaya-reklama/,secondary,подсказка
+q044,analytics,,research,подсказка
+q045,google-ads,/kontekstnaya-reklama/,secondary,подсказка
+q046,google-ads,,research,подсказка
+q047,google-ads,/kontekstnaya-reklama/,secondary,подсказка
+q048,google-ads,,research,подсказка
+q049,web,/razrabotka-saitov/,secondary,подсказка
+q050,web,/razrabotka-saitov/,secondary,подсказка
+q051,web,/razrabotka-saitov/,secondary,выдача наблюдалась
+q052,web,/razrabotka-saitov/,secondary,подсказка
+q053,web,/razrabotka-saitov/,secondary,подсказка
+q054,web,/razrabotka-saitov/,secondary,подсказка
+q055,web,/razrabotka-saitov/,secondary,подсказка
+q056,web,/razrabotka-saitov/,secondary,подсказка
+q057,web,/razrabotka-saitov/,secondary,выдача наблюдалась
+q058,web,/razrabotka-saitov/,secondary,подсказка
+q059,web,/razrabotka-saitov/,secondary,подсказка
+q060,web,/razrabotka-saitov/,secondary,подсказка
+q061,web,/razrabotka-saitov/,secondary,подсказка
+q062,web,/razrabotka-saitov/,secondary,подсказка
+q063,web,/razrabotka-saitov/,secondary,подсказка
+q064,web,/razrabotka-saitov/,secondary,подсказка
+q065,web,,research,подсказка
+q066,web,,research,подсказка
+q067,web,/razrabotka-saitov/,secondary,подсказка
