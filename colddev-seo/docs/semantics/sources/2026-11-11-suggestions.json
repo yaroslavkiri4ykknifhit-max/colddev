@@ -1,0 +1,295 @@
+[
+  {
+    "id": "google-0",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5+%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2",
+    "seed": "создание сайтов",
+    "suggestions": [
+      "создание сайтов",
+      "создание сайтов работа",
+      "создание сайтов с помощью ии",
+      "создание сайтов обучение",
+      "создание сайтов на тильде",
+      "создание сайтов астана",
+      "создание сайтов алматы",
+      "создание сайтов вакансии",
+      "создание сайтов с нуля",
+      "создание сайтов на тильде requestdesign"
+    ]
+  },
+  {
+    "id": "google-1",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0+%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2",
+    "seed": "разработка сайтов",
+    "suggestions": [
+      "разработка сайтов",
+      "разработка сайтов минск",
+      "разработка сайтов беларусь",
+      "разработка сайтов гродно",
+      "разработка сайтов гомель",
+      "разработка сайтов вакансии",
+      "разработка сайтов астана",
+      "разработка сайтов алматы",
+      "разработка сайтов бишкек",
+      "разработка сайтов в ташкенте"
+    ]
+  },
+  {
+    "id": "google-2",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D0%B4%D0%BE%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0+%D1%81%D0%B0%D0%B9%D1%82%D0%B0",
+    "seed": "доработка сайта",
+    "suggestions": [
+      "доработка сайта на wordpress",
+      "доработка сайта бухгалтерский учет",
+      "доработка сайта на laravel",
+      "доработка сайта на opencart",
+      "доработка сайта это"
+    ]
+  },
+  {
+    "id": "google-3",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0+google+ads",
+    "seed": "настройка google ads",
+    "suggestions": [
+      "настройка google ads",
+      "настройка google ads цена",
+      "настройка google ads 2025",
+      "настройка гугл ads",
+      "настройка конверсий google ads",
+      "настройка рекламы google ads",
+      "настройка контекстной рекламы google ads",
+      "настройка ремаркетинга в google ads",
+      "настройка на google ads 2026"
+    ]
+  },
+  {
+    "id": "google-4",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D0%B0%D1%83%D0%B4%D0%B8%D1%82+%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D0%BE%D0%B9+%D1%80%D0%B5%D0%BA%D0%BB%D0%B0%D0%BC%D1%8B",
+    "seed": "аудит контекстной рекламы",
+    "suggestions": []
+  },
+  {
+    "id": "google-5",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=seo+%D0%BF%D1%80%D0%BE%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5+%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2",
+    "seed": "seo продвижение сайтов",
+    "suggestions": []
+  },
+  {
+    "id": "google-6",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=seo+%D0%B0%D1%83%D0%B4%D0%B8%D1%82+%D1%81%D0%B0%D0%B9%D1%82%D0%B0",
+    "seed": "seo аудит сайта",
+    "suggestions": [
+      "seo аудит сайта онлайн",
+      "seo аудит сайта онлайн бесплатно",
+      "seo аудит сайта пример",
+      "seo аудит сайта бесплатно",
+      "аудит сео сайта undefined"
+    ]
+  },
+  {
+    "id": "google-7",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0+%D0%B2%D0%B5%D0%B1+%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B8",
+    "seed": "настройка веб аналитики",
+    "suggestions": [
+      "настройка веб аналитики"
+    ]
+  },
+  {
+    "id": "google-8",
+    "engine": "Google",
+    "date": "2026-11-11",
+    "region_parameters": "gl=by; hl=ru",
+    "url": "https://suggestqueries.google.com/complete/search?client=firefox&hl=ru&gl=by&q=%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F+%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%D0%B0",
+    "seed": "автоматизация бизнеса",
+    "suggestions": [
+      "автоматизация бизнеса",
+      "автоматизация бизнеса с помощью ии",
+      "автоматизация бизнеса краснодар",
+      "автоматизация бизнеса челябинск",
+      "автоматизация бизнеса это",
+      "автоматизация бизнеса ооо",
+      "автоматизация бизнеса компания",
+      "автоматизация бизнеса бишкек",
+      "автоматизация бизнеса сочи",
+      "автоматизация бизнеса под ключ"
+    ]
+  },
+  {
+    "id": "yandex-0",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5+%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2&lr=149&uil=ru",
+    "seed": "создание сайтов",
+    "suggestions": [
+      "создание сайтов продвижение",
+      "создание сайтов поисковое продвижение сайта",
+      "создание сайтов seo",
+      "создание сайтов беларусь",
+      "создание сайтов сео продвижение",
+      "создание сайтов гомель",
+      "создание сайтов и продвижение организаций",
+      "создание сайтов",
+      "создание сайтов под ключ",
+      "создание сайтов в минске"
+    ]
+  },
+  {
+    "id": "yandex-1",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0+%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2&lr=149&uil=ru",
+    "seed": "разработка сайтов",
+    "suggestions": [
+      "разработка сайтов seo продвижение сайта пушка",
+      "разработка сайтов и продвижение novelit",
+      "разработка сайтов seo продвижение сайта",
+      "разработка сайтов в москве novelit",
+      "разработка сайтов novelit",
+      "разработка сайтов и продвижение seo fortuna",
+      "разработка сайтов беларусь",
+      "разработка сайтов гомель",
+      "разработка сайтов минск",
+      "разработка сайтов"
+    ]
+  },
+  {
+    "id": "yandex-2",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D0%B4%D0%BE%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0+%D1%81%D0%B0%D0%B9%D1%82%D0%B0&lr=149&uil=ru",
+    "seed": "доработка сайта",
+    "suggestions": [
+      "доработка сайта",
+      "доработка сайта на wordpress",
+      "доработка сайта битрикс",
+      "доработка сайта на битрикс",
+      "доработка сайта на 1с битрикс",
+      "доработка сайта бухгалтерский и налоговый учет",
+      "доработка сайта на тильде",
+      "доработка сайта на modx",
+      "доработка сайта стоимость",
+      "доработка сайта на joomla"
+    ]
+  },
+  {
+    "id": "yandex-3",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0+google+ads&lr=149&uil=ru",
+    "seed": "настройка google ads",
+    "suggestions": [
+      "настройка google ads",
+      "настройка google ads 2025"
+    ]
+  },
+  {
+    "id": "yandex-4",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D0%B0%D1%83%D0%B4%D0%B8%D1%82+%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D0%BE%D0%B9+%D1%80%D0%B5%D0%BA%D0%BB%D0%B0%D0%BC%D1%8B&lr=149&uil=ru",
+    "seed": "аудит контекстной рекламы",
+    "suggestions": [
+      "аудит контекстной рекламы",
+      "аудит контекстной рекламы заказать"
+    ]
+  },
+  {
+    "id": "yandex-5",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=seo+%D0%BF%D1%80%D0%BE%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5+%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2&lr=149&uil=ru",
+    "seed": "seo продвижение сайтов",
+    "suggestions": [
+      "seo продвижение сайтов",
+      "seo продвижение сайтов novelit",
+      "seo продвижение сайтов в москве novelit",
+      "seo продвижение сайтов в 10 novelit",
+      "seo продвижение сайтов kavgroup ru",
+      "seo продвижение сайтов спб",
+      "seo продвижение сайтов калининград",
+      "seo продвижение сайтов по лидам санкт петербург",
+      "seo продвижение сайтов в москве агентство",
+      "seo продвижение сайтов под ключ"
+    ]
+  },
+  {
+    "id": "yandex-6",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=seo+%D0%B0%D1%83%D0%B4%D0%B8%D1%82+%D1%81%D0%B0%D0%B9%D1%82%D0%B0&lr=149&uil=ru",
+    "seed": "seo аудит сайта",
+    "suggestions": [
+      "seo аудит сайта",
+      "seo аудит сайта в москве",
+      "seo аудит сайта онлайн",
+      "seo аудит сайта бесплатно",
+      "seo аудит сайта онлайн бесплатно",
+      "seo аудит сайта цена",
+      "seo аудит сайта заказать",
+      "seo аудит сайта это",
+      "seo аудит сайта стоимость",
+      "seo аудит сайта москва"
+    ]
+  },
+  {
+    "id": "yandex-7",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0+%D0%B2%D0%B5%D0%B1+%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B8&lr=149&uil=ru",
+    "seed": "настройка веб аналитики",
+    "suggestions": [
+      "настройка веб аналитики"
+    ]
+  },
+  {
+    "id": "yandex-8",
+    "engine": "Яндекс",
+    "date": "2026-11-11",
+    "region_parameters": "lr=149; uil=ru",
+    "url": "https://suggest.yandex.by/suggest-ya.cgi?v=4&part=%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F+%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%D0%B0&lr=149&uil=ru",
+    "seed": "автоматизация бизнеса",
+    "suggestions": [
+      "автоматизация бизнеса",
+      "автоматизация бизнеса с помощью ии",
+      "автоматизация бизнеса ии",
+      "автоматизация бизнеса с помощью ии курсы",
+      "автоматизация бизнеса с ии",
+      "автоматизация бизнеса краснодар",
+      "автоматизация бизнеса пятигорск",
+      "автоматизация бизнеса вакансии",
+      "автоматизация бизнеса через ии",
+      "автоматизация бизнеса это"
+    ]
+  }
+]
