@@ -1,3 +1,3 @@
-:HL["/_next/static/css/8aa342622e7458d3.css","style"]
+:HL["/_next/static/css/7aa30e91444a8241.css","style"]
 :HL["/_next/static/css/0e4e7cad8f40fb34.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"service","param":{"type":"d","key":"kontekstnaya-reklama","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"oL7v_-Ch0MwGu5lviKa7_"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"service","param":{"type":"d","key":"kontekstnaya-reklama","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"7GUa3ObjSL1PCP0rbizLW"}
